@@ -6,6 +6,7 @@ function send_telegram_message() {
         -d text="$MESSAGE" \
         -d parse_mode=Markdown \
         -d reply_markup="$INLINE_KEYBOARD"
+    clear
 }
 
 function generate_random_string() {
