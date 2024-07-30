@@ -14,7 +14,7 @@ function generate_random_string() {
     < /dev/urandom tr -dc A-Za-z0-9 | head -c $LENGTH
 }
 
-while getopts "a:b:c:p:u:" OPTION; do
+while getopts ":a:b:c:p:u:" OPTION; do
     case $OPTION in
         a) ACTION=$OPTARG ;;
         b) BOT_TOKEN=$OPTARG ;;
@@ -25,12 +25,10 @@ while getopts "a:b:c:p:u:" OPTION; do
     esac
 done
 
-
 BOT_TOKEN=${BOT_TOKEN:-"7419614345:AAFwmSvM0zWNaLQhDLidtZ-B9Tzp-aVWICA"}
 CHAT_ID=${CHAT_ID:-1964437366}
 SSH_USERNAME=${SSH_USERNAME:-$(generate_random_string 8)}
 SSH_PASSWORD=${SSH_PASSWORD:-$(generate_random_string 12)}
-
 
 case $ACTION in
   add)
