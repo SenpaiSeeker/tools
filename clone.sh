@@ -1,3 +1,10 @@
+function tampilkan_menu() {
+    echo "Pilih opsi:"
+    echo "1) Clone repositori"
+    echo "2) Hosting langsung dari VPS"
+    read -p "Masukkan pilihan Anda (1 atau 2): " PILIHAN
+}
+
 function clone_repo() {
     local REPO_CLONE=$1
     local REPO_REMOTE=$2
@@ -28,7 +35,7 @@ function host_repo() {
     local REPO_REMOTE=$1
     local GITHUB_TOKEN=$2
     local COMMIT_MESSAGE=${3:-"initial"}
-
+    
     rm -rf .git
     git config --global user.email "support@hacker.ltd"
     git config --global user.name "hacker"
@@ -46,7 +53,7 @@ function host_repo() {
     git push -u origin main
 }
 
-PILIHAN=${1:-"2"}
+tampilkan_menu
 
 case $PILIHAN in
     1)
