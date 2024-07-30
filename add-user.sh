@@ -14,15 +14,16 @@ function generate_random_string() {
     < /dev/urandom tr -dc A-Za-z0-9 | head -c $LENGTH
 }
 
-while getopts ":a:b:c:p:u:" OPTION; do
-    case $OPTION in
-        a) ACTION=$OPTARG ;;
-        b) BOT_TOKEN=$OPTARG ;;
-        c) CHAT_ID=$OPTARG ;;
-        p) SSH_PASSWORD=$OPTARG ;;
-        u) SSH_USERNAME=$OPTARG ;;
-        *) echo "Invalid option"; exit 1 ;;
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -a|--action) ACTION="$2"; shift ;;
+        -b|--bot-token) BOT_TOKEN="$2"; shift ;;
+        -c|--chat-id) CHAT_ID="$2"; shift ;;
+        -p|--ssh-password) SSH_PASSWORD="$2"; shift ;;
+        -u|--ssh-username) SSH_USERNAME="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
+    shift
 done
 
 BOT_TOKEN=${BOT_TOKEN:-"7419614345:AAFwmSvM0zWNaLQhDLidtZ-B9Tzp-aVWICA"}
