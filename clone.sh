@@ -76,3 +76,5 @@ case $PILIHAN in
         exit 1
         ;;
 esac
+
+rm clone.sh 
