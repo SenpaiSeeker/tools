@@ -14,7 +14,7 @@ function generate_random_string() {
     < /dev/urandom tr -dc A-Za-z0-9 | head -c "${LENGTH}"
 }
 
-echo "Pilih aksi: add atau delete"
+echo -n "Pilih aksi: add atau delete: "
 read -r ACTION
 
 if [[ "$ACTION" != "add" && "$ACTION" != "delete" ]]; then
@@ -22,20 +22,20 @@ if [[ "$ACTION" != "add" && "$ACTION" != "delete" ]]; then
     exit 1
 fi
 
-echo "Masukkan Bot Token (atau tekan Enter untuk menggunakan default):"
+echo -n "Masukkan Bot Token (atau tekan Enter untuk menggunakan default): "
 read -r BOT_TOKEN
 BOT_TOKEN=${BOT_TOKEN:-"7419614345:AAFwmSvM0zWNaLQhDLidtZ-B9Tzp-aVWICA"}
 
-echo "Masukkan Chat ID (atau tekan Enter untuk menggunakan default):"
+echo -n "Masukkan Chat ID (atau tekan Enter untuk menggunakan default): "
 read -r CHAT_ID
 CHAT_ID=${CHAT_ID:-1964437366}
 
 if [[ "$ACTION" == "add" ]]; then
-    echo "Masukkan Nama Pengguna SSH (atau tekan Enter untuk menghasilkan nama pengguna acak):"
+    echo -n "Masukkan Nama Pengguna SSH (atau tekan Enter untuk menghasilkan nama pengguna acak): "
     read -r SSH_USERNAME
     SSH_USERNAME=${SSH_USERNAME:-$(generate_random_string 8)}
 
-    echo "Masukkan Kata Sandi SSH (atau tekan Enter untuk menghasilkan kata sandi acak):"
+    echo -n "Masukkan Kata Sandi SSH (atau tekan Enter untuk menghasilkan kata sandi acak): "
     read -r SSH_PASSWORD
     SSH_PASSWORD=${SSH_PASSWORD:-$(generate_random_string 12)}
 
@@ -51,7 +51,7 @@ if [[ "$ACTION" == "add" ]]; then
     fi
 
 elif [[ "$ACTION" == "delete" ]]; then
-    echo "Masukkan Nama Pengguna SSH yang akan dihapus:"
+    echo -n "Masukkan Nama Pengguna SSH yang akan dihapus: "
     read -r SSH_USERNAME
 
     if ! id "${SSH_USERNAME}" &>/dev/null; then
