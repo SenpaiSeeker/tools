@@ -1,5 +1,5 @@
 function compress_and_encode() {
-    echo -n "$1" | gzip | base64
+    echo -n "$1" | gzip | base64 | tr -d '='
 }
 
 function decode_and_decompress() {
@@ -24,7 +24,7 @@ function decrypt_code() {
     
     if [[ "$encoded_code" != "${encoded_key}"* ]]; then
         echo "Invalid key" >&2
-        return 1
+        exit 1
     fi
     
     local compressed_code="${encoded_code:${#encoded_key}}"
