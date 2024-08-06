@@ -47,8 +47,8 @@ if [[ "$ACTION" == "add" ]]; then
         sudo usermod -aG sudo "${SSH_USERNAME}"
 
         HOSTNAME=$(hostname -I | cut -d' ' -f1)
-        MESSAGE="*Informasi login SSH:*\n\n*Nama Pengguna:* ${SSH_USERNAME}\n*Kata Sandi:* ${SSH_PASSWORD}\n*Hostname:* ${HOSTNAME}\n\n_Gunakan informasi di atas untuk terhubung menggunakan PuTTY atau klien SSH lainnya._"
-    fi
+        MESSAGE="*SSH login information:*%0A%0A*Username:* $SSH_USERNAME%0A*Password:* $SSH_PASSWORD%0A*Hostname:* $HOSTNAME%0A%0A_Use the above information to connect using PuTTY or any SSH client ._"MESSAGE="*Informasi login SSH:*%0A%0A*Nama Pengguna:* $SSH_USERNAME%0A*Kata Sandi:* $SSH_PASSWORD%0A*Nama Host:* $HOSTNAME%0A%0A_Gunakan informasi di atas untuk terhubung menggunakan PuTTY atau klien SSH apa pun._"
+    fi 
 
 elif [[ "$ACTION" == "delete" ]]; then
     echo -n "Masukkan Nama Pengguna SSH yang akan dihapus: "
