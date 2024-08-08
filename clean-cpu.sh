@@ -1,8 +1,8 @@
-log_info() {
+function log_info() {
     echo -e "\033[1;32m[INFO]: $1\033[0m"
 }
 
-log_error() {
+function log_error() {
     echo -e "\033[1;31m[ERROR]: $1\033[0m"
 }
 
