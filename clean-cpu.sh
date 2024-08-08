@@ -1,38 +1,28 @@
 log_info() {
-    echo -e "\033[1;32mINFO:\033[0m $1"
-}
-
-log_warning() {
-    echo -e "\033[1;33mWARNING:\033[0m $1"
+    echo -e "\033[1;32m[INFO]: $1\033[0m"
 }
 
 log_error() {
-    echo -e "\033[1;31mERROR:\033[0m $1"
+    echo -e "\033[1;31m[ERROR]: $1\033[0m"
 }
 
-log_info "Mendapatkan daftar proses yang menggunakan CPU lebih dari 10%..."
-PROCESSES=$(ps -eo pid,comm,%cpu --sort=-%cpu | awk '$3 > 10 {print $1":"$2":"$3}')
+log_info "Mulai proses pembersihan penggunaan CPU..."
 
-if [ -z "$PROCESSES" ]; then
-    log_info "Tidak ada proses yang menggunakan CPU lebih dari 10%."
-    exit 0
-fi
+top_processes=$(ps -eo pid,%cpu,cmd --sort=-%cpu | head -n 10)
 
-log_warning "Menghapus proses yang menggunakan CPU secara signifikan:"
-IFS=$'\n'
-for process in $PROCESSES; do
-    PID=$(echo $process | cut -d: -f1)
-    COMMAND=$(echo $process | cut -d: -f2)
-    CPU=$(echo $process | cut -d: -f3)
-    
-    log_info "Menghapus proses PID $PID (Command: $COMMAND, CPU: $CPU%)..."
-    kill -9 $PID
-    
-    if [ $? -eq 0 ]; then
-        log_info "Proses PID $PID berhasil dihapus."
-    else
-        log_error "Gagal menghapus proses PID $PID."
+log_info "Proses dengan penggunaan CPU tinggi:"
+echo "$top_processes"
+
+echo "$top_processes" | while read -r pid cpu cmd; do
+    if [[ "$pid" =~ ^[0-9]+$ ]]; then
+        log_info "Menghentikan proses PID: $pid ($cmd) dengan penggunaan CPU: $cpu%"
+        kill -9 "$pid" 2>/dev/null
+        if [[ $? -eq 0 ]]; then
+            log_info "Proses PID: $pid berhasil dihentikan."
+        else
+            log_error "Gagal menghentikan proses PID: $pid."
+        fi
     fi
 done
 
-log_info "Pembersihan penggunaan CPU selesai."
+log_info "Pembersihan selesai. Penggunaan CPU telah dikurangi."
