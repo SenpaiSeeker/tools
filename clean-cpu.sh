@@ -1,5 +1,3 @@
-#!/bin/bash
-
 function cetak_berwarna() {
     local tipe="$1"
     local pesan="$2"
