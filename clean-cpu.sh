@@ -32,11 +32,13 @@ function bersihkan_ram_cpu_penggunaan() {
 function cek_penggunaan_ram_cpu() {
     RAM=$(free | awk '/Mem:/ {print $3/$2 * 100.0}')
     CPU=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
-    echo $RAM $CPU
+    echo "Penggunaan RAM: $RAM%"
+    echo "Penggunaan CPU: $CPU%"
 }
 
 while true; do
     bersihkan_ram_cpu_penggunaan
+    cek_penggunaan_ram_cpu
 
     if (( $(echo "$RAM < 30.0" | bc -l) && $(echo "$CPU < 25.0" | bc -l) )); then
         cetak_berwarna INFO "Penggunaan RAM dan CPU sudah di bawah 50%"
