@@ -7,43 +7,43 @@
     <link
       rel="icon"
       type="image/x-icon"
-      href="https://i.ibb.co/HnbPv9J/keyword.png"
+      href="https://telegra.ph/file/49b4af9495ae146418c47.jpg"
     />
     <style>
       :root {
-        --color-text: #f5f5f5; /* Light gray text for better readability */
-        --color-body-background: #000000; /* Black background for body */
-        --color-container-background: #000000; /* Slightly lighter black for containers */
-        --color-main-items: #ff0000; /* Vibrant red for main items */
-        --color-first-items: #ff0000; /* Darker red for secondary items */
-        --color-form-container-background: #000000; /* Dark gray for form containers */
-        --color-main-hover: #f1faee; /* Light background for hover effects */
-        --color-alternative-text: #f5f5f5; /* Light gray for alternative text */
-        --color-button-disabled: #666666; /* Gray for disabled buttons */
-        --color-accept: #ff0000; /* Red for accept actions */
-        --color-copy-all: #f1faee; /* Light color for copy actions */
-        --color-button-text: #ffffff; /* White text on buttons */
-        --color-switch-mode-background: #333333; /* Dark gray for switch mode background */
-        --color-switch-mode-after: #ff0000; /* Red for switch mode active state */
-        --color-switch-glow: #ff0000; /* Red glow for switch mode */
+        --color-text: #f5f5f5; 
+        --color-body-background: #000000;
+        --color-container-background: #000000;
+        --color-main-items: #ff0000;
+        --color-first-items: #ff0000;
+        --color-form-container-background: #000000;
+        --color-main-hover: #f1faee;
+        --color-alternative-text: #f5f5f5;
+        --color-button-disabled: #666666;
+        --color-accept: #ff0000;
+        --color-copy-all: #f1faee;
+        --color-button-text: #ffffff;
+        --color-switch-mode-background: #333333;
+        --color-switch-mode-after: #ff0000;
+        --color-switch-glow: #ff0000;
       }
 
       :root[data-theme="dark"] {
-        --color-text: #f5f5f5; /* Light gray text for better readability */
-        --color-body-background: #000000; /* Black background for body */
-        --color-container-background: #000000; /* Slightly lighter black for containers */
-        --color-main-items: #ff0000; /* Vibrant red for main items */
-        --color-first-items: #ff0000; /* Darker red for secondary items */
-        --color-form-container-background: #000000; /* Dark gray for form containers */
-        --color-main-hover: #f1faee; /* Light background for hover effects */
-        --color-alternative-text: #f5f5f5; /* Light gray for alternative text */
-        --color-button-disabled: #666666; /* Gray for disabled buttons */
-        --color-accept: #ff0000; /* Red for accept actions */
-        --color-copy-all: #f1faee; /* Light color for copy actions */
-        --color-button-text: #ffffff; /* White text on buttons */
-        --color-switch-mode-background: #333333; /* Dark gray for switch mode background */
-        --color-switch-mode-after: #ff0000; /* Red for switch mode active state */
-        --color-switch-glow: #ff0000; /* Red glow for switch mode */
+        --color-text: #f5f5f5;
+        --color-body-background: #000000;
+        --color-container-background: #000000;
+        --color-main-items: #ff0000;
+        --color-first-items: #ff0000;
+        --color-form-container-background: #000000;
+        --color-main-hover: #f1faee;
+        --color-alternative-text: #f5f5f5;
+        --color-button-disabled: #666666;
+        --color-accept: #ff0000;
+        --color-copy-all: #f1faee;
+        --color-button-text: #ffffff;
+        --color-switch-mode-background: #333333;
+        --color-switch-mode-after: #ff0000;
+        --color-switch-glow: #ff0000;
       }
       body {
         background-color: var(--color-body-background);
@@ -118,14 +118,12 @@
         transition: opacity 0.15s ease-in-out;
         cursor: pointer;
         outline: none;
-        /*  slider progress trick  */
         overflow: hidden;
         border-radius: 16px;
         transition:
           background-color 0.5s,
           color 0.5s;
-      }
-      /* Track: webkit browsers */
+      }/
       .form-container input[type="range"]::-webkit-slider-runnable-track {
         height: 15px;
         background: var(--color-first-items);
@@ -133,7 +131,6 @@
           background-color 0.5s,
           color 0.5s;
       }
-      /* Track: Mozilla Firefox */
       .form-container input[type="range"]::-moz-range-track {
         height: 15px;
         background: var(--color-first-items);
@@ -141,31 +138,25 @@
           background-color 0.5s,
           color 0.5s;
       }
-      /* Thumb: webkit */
       .form-container input[type="range"]::-webkit-slider-thumb {
-        /* removing default appearance */
         -webkit-appearance: none;
         appearance: none;
-        /* creating a custom design */
         height: 15px;
         width: 15px;
         background-color: var(--color-button-text);
         border-radius: 50%;
         border: 2px solid var(--color-main-items);
-        /*  slider progress trick  */
         box-shadow: -407px 0 0 400px var(--color-main-items);
         transition:
           background-color 0.5s,
           color 0.5s;
       }
-      /* Thumb: Firefox */
       input[type="range"]::-moz-range-thumb {
         height: 15px;
         width: 15px;
         background-color: var(--color-button-text);
         border-radius: 50%;
         border: 1px solid var(--color-main-items);
-        /*  slider progress trick  */
         box-shadow: -407px 0 0 400px var(--color-main-items);
         transition:
           background-color 0.5s,
@@ -241,7 +232,7 @@
         background-color: var(--color-first-items);
         border-radius: 8px;
         position: relative;
-        overflow: hidden; /* Додано для приховування псевдоелемента */
+        overflow: hidden;
         transition:
           background-color 0.5s,
           color 0.5s;
@@ -306,7 +297,6 @@
           background-color 0.5s,
           color 0.5s;
       }
-      /* Custom scrollbar */
       .code-list::-webkit-scrollbar {
         width: 12px;
       }
@@ -347,13 +337,13 @@
       }
       @keyframes copy-animation {
         0% {
-          color: var(--color-text); /* Початковий колір */
+          color: var(--color-text);
         }
         50% {
-          color: var(--color-accept); /* Колір при копіюванні */
+          color: var(--color-accept);
         }
         100% {
-          color: var(--color-text); /* Кінцевий колір */
+          color: var(--color-text);
         }
       }
       .codes-container {
@@ -622,8 +612,8 @@
               return result.promoCode;
             }
           } catch (error) {
-            console.error("Помилка при створенні коду:", error.message);
-            console.error("Тіло відповіді:", await error.response?.text());
+            console.error("Error generating code:", error.message);
+            console.error("The body of the response:", await error.response?.text());
             updateProgress(20 / keyCount, "Generating key...");
             await new Promise((resolve) => setTimeout(resolve, 4000));
           }
@@ -637,8 +627,8 @@
           .map((len, idx) => {
             return Array.from({ length: len }, (_, i) => {
               const r = (Math.random() * 16) | 0;
-              if (idx === 2 && i === 0) return "4"; // третя група починається з "4"
-              if (idx === 3 && i === 0) return ((r & 0x3) | 0x8).toString(16); // четверта група починається з "8", "9", "A", "B"
+              if (idx === 2 && i === 0) return "4";
+              if (idx === 3 && i === 0) return ((r & 0x3) | 0x8).toString(16);
               return chars[r];
             }).join("");
           })
@@ -653,7 +643,7 @@
         document.execCommand("copy");
         document.body.removeChild(textArea);
         element.classList.add("copied");
-        setTimeout(() => element.classList.remove("copied"), 2000); // Видалаємо клас через 2 секунди
+        setTimeout(() => element.classList.remove("copied"), 2000);
       }
 
       async function startProcess() {
@@ -669,14 +659,14 @@
         keyCount = parseInt(keyCountInput.value);
         progress = 0;
 
-        startButton.disabled = true; // Блокуємо кнопку
+        startButton.disabled = true;
         startButton.textContent = "Processing...";
         document.getElementById("progressContainer").style.display = "block";
         document.getElementById("copyAllButton").style.display = "none";
-        progressBar.classList.add("show-progress"); // Додаємо клас для показу псевдоелемента
+        progressBar.classList.add("show-progress");
         progressBarFill.style.width = `${progress}%`;
         progressPercentage.textContent = `${Math.round(progress)}%`;
-        codeList.innerHTML = ""; // Очищення списку кодів перед початком процесу
+        codeList.innerHTML = "";
         args = selectedGame;
 
         const generateKeyProcess = async () => {
@@ -708,8 +698,8 @@
           Array.from({ length: keyCount }, generateKeyProcess),
         );
         updateProgress(100, "Completed");
-        progressBar.classList.remove("show-progress"); // Видаляємо клас після завершення
-        startButton.disabled = false; // Розблоковуємо кнопку
+        progressBar.classList.remove("show-progress");
+        startButton.disabled = false;
         startButton.textContent = "Start Process";
       }
 
