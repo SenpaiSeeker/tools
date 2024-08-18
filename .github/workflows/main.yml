@@ -1,0 +1,31 @@
+name: Commit changes
+
+on: push
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js (untuk perbaikan JS jika diperlukan)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          npm install -g prettier 
+
+      - name: Format HTML, JS, and Shell scripts
+        run: |
+          prettier --write "**/*.html"
+          prettier --write "**/*.js"
+          prettier --write "**/*.sh"
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Auto-fix HTML, JS, and Shell scripts"
