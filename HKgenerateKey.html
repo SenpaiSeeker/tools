@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HKgenerateKey</title>
     <link
       rel="icon"
@@ -10,458 +10,498 @@
       href="https://telegra.ph/file/30ee27002787724ea7f4d.jpg"
     />
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: grid;
-            place-items: center;
-            font-family: "Arial", sans-serif;
-            background-color: #1f2636;
-            background: url("https://i.imgur.com/YshhWL5.gif") no-repeat center center fixed;
-            background-size: cover;
-        }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        font-family: "Arial", sans-serif;
+        background-color: #1f2636;
+        background: url("https://i.imgur.com/YshhWL5.gif") no-repeat center
+          center fixed;
+        background-size: cover;
+      }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+      }
 
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
-        }
+      .main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+      }
 
-        .container {
-            background: linear-gradient(145deg, #2b2b38, #22222c);
-            border-radius: 16px;
-            box-shadow: 5px 5px 10px #1a1a23, -5px -5px 10px #30303b;
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-            box-sizing: border-box;
-        }
+      .container {
+        background: linear-gradient(145deg, #2b2b38, #22222c);
+        border-radius: 16px;
+        box-shadow:
+          5px 5px 10px #1a1a23,
+          -5px -5px 10px #30303b;
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+        box-sizing: border-box;
+      }
 
-        h1 {
-            margin-bottom: 20px;
-            color: #ffffff;
-            font-size: 24px;
-        }
+      h1 {
+        margin-bottom: 20px;
+        color: #ffffff;
+        font-size: 24px;
+      }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #dcdcdc;
-            font-size: 14px;
-        }
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #dcdcdc;
+        font-size: 14px;
+      }
 
-        select, .button {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 8px;
-            background-color: #37374a;
-            color: #ffffff;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
+      select,
+      .button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 8px;
+        background-color: #37374a;
+        color: #ffffff;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
 
-        select:focus, .button:focus {
-            outline: none;
-        }
+      select:focus,
+      .button:focus {
+        outline: none;
+      }
 
-        .button {
-            cursor: pointer;
-            background-color: #008075;
-        }
+      .button {
+        cursor: pointer;
+        background-color: #008075;
+      }
 
-        .button:hover {
-            background-color: #005a56;
-        }
+      .button:hover {
+        background-color: #005a56;
+      }
 
-        .progress-container {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-            width: 100%;
-        }
+      .progress-container {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        width: 100%;
+      }
 
-        .progress-bar {
-            width: 0%;
-            height: 20px;
-            background-color: #008075;
-            border-radius: 4px;
-            transition: width 0.3s;
-        }
+      .progress-bar {
+        width: 0%;
+        height: 20px;
+        background-color: #008075;
+        border-radius: 4px;
+        transition: width 0.3s;
+      }
 
-        .progress-text {
-            margin-left: 10px;
-            font-weight: bold;
-            color: #ffffff;
-        }
+      .progress-text {
+        margin-left: 10px;
+        font-weight: bold;
+        color: #ffffff;
+      }
 
-        .key-container {
-            margin-top: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
+      .key-container {
+        margin-top: 20px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
 
-        .key-container::-webkit-scrollbar {
-            display: none;
-        }
+      .key-container::-webkit-scrollbar {
+        display: none;
+      }
 
-        h2{
-            color:white;
-        }
+      h2 {
+        color: white;
+      }
 
-        .key-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            background-color: #37374a;
-            padding: 10px;
-            border-radius: 8px;
-        }
+      .key-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        background-color: #37374a;
+        padding: 10px;
+        border-radius: 8px;
+      }
 
-        .key-item input {
-            flex-grow: 1;
-            margin: 8px;
-            outline: none;
-            background: transparent;
-            color: #ffffff;
-            font-size: 16px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+      .key-item input {
+        flex-grow: 1;
+        margin: 8px;
+        outline: none;
+        background: transparent;
+        color: #ffffff;
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-        .key-number, .copyKeyBtn {
-            background-color: #008075;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 5px;
-            transition: background-color 0.3s;
-        }
+      .key-number,
+      .copyKeyBtn {
+        background-color: #008075;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 5px;
+        transition: background-color 0.3s;
+      }
 
-        .copyKeyBtn:hover {
-            background-color: #005e56;
-        }
-        .keyContainer{
-            color:white;
-        }
+      .copyKeyBtn:hover {
+        background-color: #005e56;
+      }
+      .keyContainer {
+        color: white;
+      }
 
-        .hidden {
-            display: none;
-        }
+      .hidden {
+        display: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="main-container">
-        <div class="container">
-            <h1>Hamster Kombat Key Generate</h1>
-            <label for="gameSelect">Pilih Permainan </label>
-            <select id="gameSelect">
-                <option value="MyCloneArmy">My Clone Army</option>
-                <option value="ChainCube2048">Chain Cube 2048</option>
-                <option value="TrainMiner">Train Miner</option>
-                <option value="BikeRide3D">Bike Ride 3D</option>
-                <option value="MergeAway">Merge Away</option>
-                <option value="TwerkRace">Twerk Race</option>
-            </select>
-            <label for="keyCountSelect" id="CountLabel">Pilih Jumlah Kunci:</label>
-            <select id="keyCountSelect">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-            </select>
-            <button id="startBtn" class="button">f37ch Keys</button>
-            <div id="progressContainer" class="progress-container hidden">
-                <div id="progressBar" class="progress-bar"></div>
-                <span id="progressText" class="progress-text">0%</span>
-            </div>
-            <div id="keyContainer" class="key-container hidden">
-                <h2>Fetched Keys:</h2>
-                <button id="copyAllBtn" class="button hidden">Copy All Keys</button>
-                <div id="keysList"></div>
-            </div>
+      <div class="container">
+        <h1>Hamster Kombat Key Generate</h1>
+        <label for="gameSelect">Pilih Permainan </label>
+        <select id="gameSelect">
+          <option value="MyCloneArmy">My Clone Army</option>
+          <option value="ChainCube2048">Chain Cube 2048</option>
+          <option value="TrainMiner">Train Miner</option>
+          <option value="BikeRide3D">Bike Ride 3D</option>
+          <option value="MergeAway">Merge Away</option>
+          <option value="TwerkRace">Twerk Race</option>
+        </select>
+        <label for="keyCountSelect" id="CountLabel">Pilih Jumlah Kunci:</label>
+        <select id="keyCountSelect">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+        <button id="startBtn" class="button">f37ch Keys</button>
+        <div id="progressContainer" class="progress-container hidden">
+          <div id="progressBar" class="progress-bar"></div>
+          <span id="progressText" class="progress-text">0%</span>
         </div>
+        <div id="keyContainer" class="key-container hidden">
+          <h2>Fetched Keys:</h2>
+          <button id="copyAllBtn" class="button hidden">Copy All Keys</button>
+          <div id="keysList"></div>
+        </div>
+      </div>
     </div>
     <script>
-        const DELAY_MS = 20000;
-        const configs = {
-            MyCloneArmy: {
-                token: "74ee0b5b-775e-4bee-974f-63e7f4d5bacb",
-                promoId: "fe693b26-b342-4159-8808-15e3ff7f8767",
-                delay: 120000,
-                simulations:12
-            },
-            ChainCube2048: {
-                token: "d1690a07-3780-4068-810f-9b5bbf2931b2",
-                promoId: "b4170868-cef0-424f-8eb9-be0622e8e8e3",
-                delay: 20000,
-                simulations:7
-            },
-            TrainMiner: {
-                token: "82647f43-3f87-402d-88dd-09a90025313f",
-                promoId: "c4480ac7-e178-4973-8061-9ed5b2e17954",
-                delay: 20000,
-                simulations:7
-            },
-            BikeRide3D: {
-                token: "d28721be-fd2d-4b45-869e-9f253b554e50",
-                promoId: "43e35910-c168-4634-ad4f-52fd764a843f",
-                delay: 20000,
-                simulations:7
-            },
-            MergeAway: {
-                token: "8d1cc2ad-e097-4b86-90ef-7a27e19fb833",
-                promoId: "dc128d28-c45b-411c-98ff-ac7726fbaea4",
-                delay: 20000,
-                simulations:7
-            },
-            TwerkRace: {
-                token: "61308365-9d16-4040-8bb0-2f4a4c69074c",
-                promoId: "61308365-9d16-4040-8bb0-2f4a4c69074c",
-                delay: 20000,
-                simulations:12
+      const DELAY_MS = 20000;
+      const configs = {
+        MyCloneArmy: {
+          token: "74ee0b5b-775e-4bee-974f-63e7f4d5bacb",
+          promoId: "fe693b26-b342-4159-8808-15e3ff7f8767",
+          delay: 120000,
+          simulations: 12,
+        },
+        ChainCube2048: {
+          token: "d1690a07-3780-4068-810f-9b5bbf2931b2",
+          promoId: "b4170868-cef0-424f-8eb9-be0622e8e8e3",
+          delay: 20000,
+          simulations: 7,
+        },
+        TrainMiner: {
+          token: "82647f43-3f87-402d-88dd-09a90025313f",
+          promoId: "c4480ac7-e178-4973-8061-9ed5b2e17954",
+          delay: 20000,
+          simulations: 7,
+        },
+        BikeRide3D: {
+          token: "d28721be-fd2d-4b45-869e-9f253b554e50",
+          promoId: "43e35910-c168-4634-ad4f-52fd764a843f",
+          delay: 20000,
+          simulations: 7,
+        },
+        MergeAway: {
+          token: "8d1cc2ad-e097-4b86-90ef-7a27e19fb833",
+          promoId: "dc128d28-c45b-411c-98ff-ac7726fbaea4",
+          delay: 20000,
+          simulations: 7,
+        },
+        TwerkRace: {
+          token: "61308365-9d16-4040-8bb0-2f4a4c69074c",
+          promoId: "61308365-9d16-4040-8bb0-2f4a4c69074c",
+          delay: 20000,
+          simulations: 12,
+        },
+      };
+
+      let currentConfig = configs.MyCloneArmy;
+      let keygenActive = false;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("gameSelect")
+          .addEventListener("change", (e) => {
+            currentConfig = configs[e.target.value];
+          });
+      });
+
+      document
+        .getElementById("startBtn")
+        .addEventListener("click", async () => {
+          const btn = document.getElementById("startBtn");
+          const keyCountElem = document.getElementById("keyCountSelect");
+          const progressElem = document.getElementById("progressContainer");
+          const progressBar = document.getElementById("progressBar");
+          const progressText = document.getElementById("progressText");
+          const keyContainer = document.getElementById("keyContainer");
+          const keyCount = parseInt(keyCountElem.value);
+
+          document.getElementById("gameSelect").disabled = true;
+          progressBar.style.width = "0%";
+          progressText.innerText = "0%";
+          progressElem.classList.remove("hidden");
+          keyContainer.classList.add("hidden");
+          document.getElementById("keysList").innerHTML = "";
+          keyCountElem.classList.add("hidden");
+          btn.classList.add("hidden");
+          document.getElementById("copyAllBtn").classList.add("hidden");
+          document.getElementById("CountLabel").innerHTML =
+            `Mengambil: ${keyCount} kunci...`;
+
+          keygenActive = true;
+
+          const updateProgress = (percentage) => {
+            const steps = 10;
+            const increment = percentage / steps;
+            let currentStep = 0;
+
+            const incrementProgress = () => {
+              if (!keygenActive) return;
+              if (currentStep < steps) {
+                let currentWidth = parseFloat(progressBar.style.width);
+                progressBar.style.width = `${Math.min(100, currentWidth + increment)}%`;
+                progressText.innerText = `${Math.round(currentWidth + increment)}%`;
+                currentStep++;
+                setTimeout(
+                  incrementProgress,
+                  2000 / steps + Math.random() * 1000,
+                );
+              }
+            };
+
+            incrementProgress();
+          };
+
+          const generateKey = async () => {
+            const clientId = createClientId();
+            let token;
+
+            try {
+              token = await loginClient(clientId);
+            } catch (err) {
+              alert(`Login gagal: ${err.message}`);
+              btn.disabled = false;
+              return null;
             }
-        };
 
-        let currentConfig = configs.MyCloneArmy;
-        let keygenActive = false;
+            for (let i = 0; i < currentConfig.simulations; i++) {
+              await delay(currentConfig.delay * randomMultiplier());
+              const hasKey = await checkProgress(token);
+              updateProgress(6 / keyCount);
+              if (hasKey) break;
+            }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("gameSelect").addEventListener("change",(e)=>{
-                currentConfig=configs[e.target.value];
-            });
-        });
+            try {
+              const key = await fetchKey(token);
+              updateProgress(30 / keyCount);
+              return key;
+            } catch (err) {
+              alert(`Pembuatan kunci gagal: ${err.message}`);
+              return null;
+            }
+          };
 
-        document.getElementById("startBtn").addEventListener("click",async()=>{
-            const btn=document.getElementById("startBtn");
-            const keyCountElem=document.getElementById("keyCountSelect");
-            const progressElem=document.getElementById("progressContainer");
-            const progressBar=document.getElementById("progressBar");
-            const progressText=document.getElementById("progressText");
-            const keyContainer=document.getElementById("keyContainer");
-            const keyCount=parseInt(keyCountElem.value);
-        
-            document.getElementById("gameSelect").disabled = true;
-            progressBar.style.width="0%";
-            progressText.innerText="0%";
-            progressElem.classList.remove("hidden");
-            keyContainer.classList.add("hidden");
-            document.getElementById("keysList").innerHTML="";
-            keyCountElem.classList.add("hidden");
-            btn.classList.add("hidden");
-            document.getElementById("copyAllBtn").classList.add("hidden");
-            document.getElementById("CountLabel").innerHTML=`Mengambil: ${keyCount} kunci...`;
-        
-            keygenActive=true;
-        
-            const updateProgress=(percentage)=>{
-                const steps=10;
-                const increment=percentage/steps;
-                let currentStep=0;
-            
-                const incrementProgress=()=> {
-                    if (!keygenActive) return;
-                    if (currentStep<steps) {
-                        let currentWidth=parseFloat(progressBar.style.width);
-                        progressBar.style.width=`${Math.min(100,currentWidth+increment)}%`;
-                        progressText.innerText=`${Math.round(currentWidth+increment)}%`;
-                        currentStep++;
-                        setTimeout(incrementProgress,2000/steps+Math.random()*1000);
-                    }
-                };
-            
-                incrementProgress();
-            };
-        
-            const generateKey=async()=>{
-                const clientId=createClientId();
-                let token;
-            
-                try {
-                    token = await loginClient(clientId);
-                } catch (err) {
-                    alert(`Login gagal: ${err.message}`);
-                    btn.disabled=false;
-                    return null;
-                }
-            
-                for (let i=0;i<currentConfig.simulations;i++) {
-                    await delay(currentConfig.delay*randomMultiplier());
-                    const hasKey = await checkProgress(token);
-                    updateProgress(6/keyCount);
-                    if (hasKey) break;
-                }
-            
-                try {
-                    const key=await fetchKey(token);
-                    updateProgress(30/keyCount);
-                    return key;
-                } catch (err) {
-                    alert(`Pembuatan kunci gagal: ${err.message}`);
-                    return null;
-                }
-            };
-        
-            const keys=await Promise.all(Array.from({length:keyCount},generateKey));
-        
-            keygenActive=false;
-        
-            progressBar.style.width="100%";
-            progressText.innerText="100%";
-            document.getElementById("CountLabel").innerHTML="Pilih Jumlah Kunci:";
-        
-            const keyList=document.getElementById("keysList");
-            if (keys.length>0) {
-                keyList.innerHTML=keys.map((key,i)=> `
+          const keys = await Promise.all(
+            Array.from({ length: keyCount }, generateKey),
+          );
+
+          keygenActive = false;
+
+          progressBar.style.width = "100%";
+          progressText.innerText = "100%";
+          document.getElementById("CountLabel").innerHTML =
+            "Pilih Jumlah Kunci:";
+
+          const keyList = document.getElementById("keysList");
+          if (keys.length > 0) {
+            keyList.innerHTML = keys
+              .map(
+                (key, i) => `
                     <div class="key-item">
                         <div class="key-number">${i + 1}</div>
                         <input type="text" value="${key}" readonly>
                         <button class="copyKeyBtn" data-key="${key}">Copy</button>
                     </div>
-                `).join('');
-                document.getElementById("copyAllBtn").classList.remove("hidden");
-            }
-        
-            keyContainer.classList.remove("hidden");
-            btn.classList.remove("hidden");
-            keyCountElem.classList.remove("hidden");
-            btn.disabled = false;
-            document.getElementById("gameSelect").disabled=false;
-        
-            document.querySelectorAll(".copyKeyBtn").forEach(button => {
-                button.addEventListener("click",(e)=>{
-                    const key = e.target.dataset.key;
-                    navigator.clipboard.writeText(key).then(()=>{
-                        e.target.innerText="Salin!";
-                        setTimeout(()=>e.target.innerText="Salin",1000);
-                    });
-                });
+                `,
+              )
+              .join("");
+            document.getElementById("copyAllBtn").classList.remove("hidden");
+          }
+
+          keyContainer.classList.remove("hidden");
+          btn.classList.remove("hidden");
+          keyCountElem.classList.remove("hidden");
+          btn.disabled = false;
+          document.getElementById("gameSelect").disabled = false;
+
+          document.querySelectorAll(".copyKeyBtn").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const key = e.target.dataset.key;
+              navigator.clipboard.writeText(key).then(() => {
+                e.target.innerText = "Salin!";
+                setTimeout(() => (e.target.innerText = "Salin"), 1000);
+              });
             });
-        
-            document.getElementById("copyAllBtn").addEventListener("click",()=>{
-                const allKeys = Array.from(document.querySelectorAll(".key-item input")).map(input=>input.value).join("\n");
-                navigator.clipboard.writeText(allKeys).then(() => {
-                    const copyBtn=document.getElementById("copyAllBtn");
-                    copyBtn.innerText="Salin!";
-                    setTimeout(()=>copyBtn.innerText="Salin Semua Kunci ",1000);
-                });
+          });
+
+          document
+            .getElementById("copyAllBtn")
+            .addEventListener("click", () => {
+              const allKeys = Array.from(
+                document.querySelectorAll(".key-item input"),
+              )
+                .map((input) => input.value)
+                .join("\n");
+              navigator.clipboard.writeText(allKeys).then(() => {
+                const copyBtn = document.getElementById("copyAllBtn");
+                copyBtn.innerText = "Salin!";
+                setTimeout(
+                  () => (copyBtn.innerText = "Salin Semua Kunci "),
+                  1000,
+                );
+              });
             });
         });
 
-        function createClientId() {
-            const now=Date.now();
-            const randomDigits=Array.from({length:19},()=>Math.floor(Math.random()*10)).join("");
-            return `${now}-${randomDigits}`;
+      function createClientId() {
+        const now = Date.now();
+        const randomDigits = Array.from({ length: 19 }, () =>
+          Math.floor(Math.random() * 10),
+        ).join("");
+        return `${now}-${randomDigits}`;
+      }
+
+      async function loginClient(id) {
+        const res = await fetch("https://api.gamepromo.io/promo/login-client", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            appToken: currentConfig.token,
+            clientId: id,
+            clientOrigin: "id perangkat",
+          }),
+        });
+        const result = await res.json();
+        if (!res.ok) {
+          const msg =
+            result.error_code === "TooManyIpRequest"
+              ? "Batasan tarif terlampaui. Silakan coba lagi nanti."
+              : result.error_message || "Login gagal";
+          throw new Error(msg);
+        }
+        return result.clientToken;
+      }
+
+      function generateUniqueID() {
+        if (crypto.randomUUID) {
+          try {
+            return crypto.randomUUID();
+          } catch {
+            console.warn("Pengganti untuk crypto.randomUUID()");
+          }
         }
 
-        async function loginClient(id) {
-            const res=await fetch("https://api.gamepromo.io/promo/login-client",{
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body: JSON.stringify({
-                    appToken: currentConfig.token,
-                    clientId: id,
-                    clientOrigin: "id perangkat"
-                })
-            });
-            const result = await res.json();
-            if (!res.ok) {
-                const msg = result.error_code==="TooManyIpRequest"
-                    ? "Batasan tarif terlampaui. Silakan coba lagi nanti."
-                    : result.error_message || "Login gagal";
-                throw new Error(msg);
-            }
-            return result.clientToken;
+        const cryptoObj = window.crypto || window.msCrypto;
+        if (cryptoObj && cryptoObj.getRandomValues) {
+          const bytes = new Uint8Array(16);
+          cryptoObj.getRandomValues(bytes);
+          bytes[6] = (bytes[6] & 0x0f) | 0x40;
+          bytes[8] = (bytes[8] & 0x3f) | 0x80;
+          return [...bytes]
+            .map(
+              (b, i) =>
+                (i === 4 || i === 6 || i === 8 || i === 10 ? "-" : "") +
+                b.toString(16).padStart(2, "0"),
+            )
+            .join("");
         }
 
-        function generateUniqueID() {
-            if (crypto.randomUUID) {
-                try {
-                    return crypto.randomUUID();
-                } catch {
-                    console.warn("Pengganti untuk crypto.randomUUID()");
-                }
-            }
-    
-            const cryptoObj=window.crypto||window.msCrypto;
-            if (cryptoObj&&cryptoObj.getRandomValues) {
-                const bytes=new Uint8Array(16);
-                cryptoObj.getRandomValues(bytes);
-                bytes[6]=(bytes[6]&0x0f)|0x40;
-                bytes[8]=(bytes[8]&0x3f)|0x80;
-                return [...bytes].map((b,i)=>(
-                    (i=== 4||i===6||i===8||i===10?"-":"")+
-                    b.toString(16).padStart(2,"0")
-                )).join("");
-            }
+        console.warn("Menggunakan pembuatan UUID fallback.");
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) =>
+          ((Math.random() * 16) | 0).toString(16),
+        );
+      }
 
-            console.warn("Menggunakan pembuatan UUID fallback.");
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c => (
-                (Math.random()*16|0).toString(16)
-            ));
-        }
+      async function checkProgress(token) {
+        const res = await fetch(
+          "https://api.gamepromo.io/promo/register-event",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              promoId: currentConfig.promoId,
+              eventId: generateUniqueID(),
+              eventOrigin: "belum diartikan",
+            }),
+          },
+        );
+        const result = await res.json();
+        return result.hasCode;
+      }
 
-        async function checkProgress(token) {
-            const res=await fetch("https://api.gamepromo.io/promo/register-event",{
-                method:"POST",
-                headers: {
-                    'Content-Type':"application/json",
-                    'Authorization':`Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    promoId: currentConfig.promoId,
-                    eventId: generateUniqueID(),
-                    eventOrigin:"belum diartikan"
-                })
-            });
-            const result = await res.json();
-            return result.hasCode;
+      async function fetchKey(token) {
+        const res = await fetch("https://api.gamepromo.io/promo/create-code", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ promoId: currentConfig.promoId }),
+        });
+        const result = await res.json();
+        if (!res.ok) {
+          throw new Error(result.error_message || "Pengambilan kunci gagal");
         }
+        return result.promoCode;
+      }
 
-        async function fetchKey(token) {
-            const res = await fetch("https://api.gamepromo.io/promo/create-code",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    "Authorization":`Bearer ${token}`
-                },
-                body: JSON.stringify({promoId:currentConfig.promoId})
-            });
-            const result = await res.json();
-            if (!res.ok) {
-                throw new Error(result.error_message||"Pengambilan kunci gagal");
-            }
-            return result.promoCode;
-        }
+      function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
 
-        function delay(ms) {
-            return new Promise(resolve=>setTimeout(resolve,ms));
-        }
-
-        function randomMultiplier(){
-            return Math.random()/3+1;
-        }
+      function randomMultiplier() {
+        return Math.random() / 3 + 1;
+      }
     </script>
-</body>
+  </body>
 </html>
