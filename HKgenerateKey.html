@@ -1,660 +1,734 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Made by NorSodikin</title>
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/HnbPv9J/keyword.png">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://i.ibb.co/HnbPv9J/keyword.png"
+    />
     <style>
-   :root {
-    --color-text: #f5f5f5; /* Light gray text for better readability */
-    --color-body-background: #000000; /* Black background for body */
-    --color-container-background: #000000; /* Slightly lighter black for containers */
-    --color-main-items: #FF0000; /* Vibrant red for main items */
-    --color-first-items: #FF0000; /* Darker red for secondary items */
-    --color-form-container-background: #000000; /* Dark gray for form containers */
-    --color-main-hover: #f1faee; /* Light background for hover effects */
-    --color-alternative-text: #f5f5f5; /* Light gray for alternative text */
-    --color-button-disabled: #666666; /* Gray for disabled buttons */
-    --color-accept: #FF0000; /* Red for accept actions */
-    --color-copy-all: #f1faee; /* Light color for copy actions */
-    --color-button-text: #ffffff; /* White text on buttons */
-    --color-switch-mode-background: #333333; /* Dark gray for switch mode background */
-    --color-switch-mode-after: #FF0000; /* Red for switch mode active state */
-    --color-switch-glow: #FF0000; /* Red glow for switch mode */
-}
+      :root {
+        --color-text: #f5f5f5; /* Light gray text for better readability */
+        --color-body-background: #000000; /* Black background for body */
+        --color-container-background: #000000; /* Slightly lighter black for containers */
+        --color-main-items: #ff0000; /* Vibrant red for main items */
+        --color-first-items: #ff0000; /* Darker red for secondary items */
+        --color-form-container-background: #000000; /* Dark gray for form containers */
+        --color-main-hover: #f1faee; /* Light background for hover effects */
+        --color-alternative-text: #f5f5f5; /* Light gray for alternative text */
+        --color-button-disabled: #666666; /* Gray for disabled buttons */
+        --color-accept: #ff0000; /* Red for accept actions */
+        --color-copy-all: #f1faee; /* Light color for copy actions */
+        --color-button-text: #ffffff; /* White text on buttons */
+        --color-switch-mode-background: #333333; /* Dark gray for switch mode background */
+        --color-switch-mode-after: #ff0000; /* Red for switch mode active state */
+        --color-switch-glow: #ff0000; /* Red glow for switch mode */
+      }
 
-:root[data-theme="dark"] {
-    --color-text: #f5f5f5; /* Light gray text for better readability */
-    --color-body-background: #000000; /* Black background for body */
-    --color-container-background: #000000; /* Slightly lighter black for containers */
-    --color-main-items: #FF0000; /* Vibrant red for main items */
-    --color-first-items: #FF0000; /* Darker red for secondary items */
-    --color-form-container-background: #000000; /* Dark gray for form containers */
-    --color-main-hover: #f1faee; /* Light background for hover effects */
-    --color-alternative-text: #f5f5f5; /* Light gray for alternative text */
-    --color-button-disabled: #666666; /* Gray for disabled buttons */
-    --color-accept: #FF0000; /* Red for accept actions */
-    --color-copy-all: #f1faee; /* Light color for copy actions */
-    --color-button-text: #ffffff; /* White text on buttons */
-    --color-switch-mode-background: #333333; /* Dark gray for switch mode background */
-    --color-switch-mode-after: #FF0000; /* Red for switch mode active state */
-    --color-switch-glow: #FF0000; /* Red glow for switch mode */
-}
-        body {
-            background-color: var(--color-body-background);
-            color: var(--color-text);
-            font-family: Arial, sans-serif;
-            height: 90vh;
-            transition: background-color .5s, color .5s;
-        }
-        .body {
-            background-color: var(--color-body-background);
-            color: var(--color-text);
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color .5s, color .5s;
-        }
-        .container {
-            background-color: var(--color-container-background);
-            padding: 0 20px 20px 20px;
-            border-radius: 10px;
-            width: 640px;
-            text-align: center;
-            transition: background-color .5s, color .5s;
-        }
-        h1 {
-            font-size: 26px;
-            margin-bottom: 20px;
-            color: var(--color-main-items);
-            transition: background-color .5s, color .5s;
-        }
-        .form-container label {
-            display: block;
-            margin: 10px;
-            font-size: 16px;
-        }
-        .form-container select, .form-container input[type="number"] {
-            width: 90%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 2px solid var(--color-first-items);
-            border-radius: 8px;
-            background-color: var(--color-form-container-background);
-            color: var(--color-text);
-            font-size: 15px;
-            transition: background-color .5s, color .5s;
-        }
-        select:hover {
-            background-color: var(--color-first-items);
-            cursor: pointer;
-        }
-        .form-container input[type="number"] {
-            width: calc(90% - 22px);
-        }
+      :root[data-theme="dark"] {
+        --color-text: #f5f5f5; /* Light gray text for better readability */
+        --color-body-background: #000000; /* Black background for body */
+        --color-container-background: #000000; /* Slightly lighter black for containers */
+        --color-main-items: #ff0000; /* Vibrant red for main items */
+        --color-first-items: #ff0000; /* Darker red for secondary items */
+        --color-form-container-background: #000000; /* Dark gray for form containers */
+        --color-main-hover: #f1faee; /* Light background for hover effects */
+        --color-alternative-text: #f5f5f5; /* Light gray for alternative text */
+        --color-button-disabled: #666666; /* Gray for disabled buttons */
+        --color-accept: #ff0000; /* Red for accept actions */
+        --color-copy-all: #f1faee; /* Light color for copy actions */
+        --color-button-text: #ffffff; /* White text on buttons */
+        --color-switch-mode-background: #333333; /* Dark gray for switch mode background */
+        --color-switch-mode-after: #ff0000; /* Red for switch mode active state */
+        --color-switch-glow: #ff0000; /* Red glow for switch mode */
+      }
+      body {
+        background-color: var(--color-body-background);
+        color: var(--color-text);
+        font-family: Arial, sans-serif;
+        height: 90vh;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .body {
+        background-color: var(--color-body-background);
+        color: var(--color-text);
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .container {
+        background-color: var(--color-container-background);
+        padding: 0 20px 20px 20px;
+        border-radius: 10px;
+        width: 640px;
+        text-align: center;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      h1 {
+        font-size: 26px;
+        margin-bottom: 20px;
+        color: var(--color-main-items);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .form-container label {
+        display: block;
+        margin: 10px;
+        font-size: 16px;
+      }
+      .form-container select,
+      .form-container input[type="number"] {
+        width: 90%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 2px solid var(--color-first-items);
+        border-radius: 8px;
+        background-color: var(--color-form-container-background);
+        color: var(--color-text);
+        font-size: 15px;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      select:hover {
+        background-color: var(--color-first-items);
+        cursor: pointer;
+      }
+      .form-container input[type="number"] {
+        width: calc(90% - 22px);
+      }
 
-        .form-container input[type="range"] {
-            appearance: none;
-            width: 90%;
-            height: 14px;
-            border-radius: 8px;
-            transition: opacity .15s ease-in-out;
-            cursor: pointer;
-            outline: none;
-            /*  slider progress trick  */
-            overflow: hidden;
-            border-radius: 16px;
-            transition: background-color .5s, color .5s;
-        }
-        /* Track: webkit browsers */
-        .form-container input[type="range"]::-webkit-slider-runnable-track {
-            height: 15px;
-            background: var(--color-first-items);
-            transition: background-color .5s, color .5s;
-        }
-        /* Track: Mozilla Firefox */
-        .form-container input[type="range"]::-moz-range-track {
-            height: 15px;
-            background: var(--color-first-items);
-            transition: background-color .5s, color .5s;
-        }
-        /* Thumb: webkit */
-        .form-container input[type="range"]::-webkit-slider-thumb {
-            /* removing default appearance */
-            -webkit-appearance: none;
-            appearance: none; 
-            /* creating a custom design */
-            height: 15px;
-            width: 15px;
-            background-color: var(--color-button-text);
-            border-radius: 50%;
-            border: 2px solid var(--color-main-items);
-            /*  slider progress trick  */
-            box-shadow: -407px 0 0 400px var(--color-main-items);
-            transition: background-color .5s, color .5s;
-        }
-        /* Thumb: Firefox */
-        input[type="range"]::-moz-range-thumb {
-            height: 15px;
-            width: 15px;
-            background-color: var(--color-button-text);
-            border-radius: 50%;
-            border: 1px solid var(--color-main-items);
-            /*  slider progress trick  */
-            box-shadow: -407px 0 0 400px var(--color-main-items);
-            transition: background-color .5s, color .5s;
-        }
-        
-        .range-labels-container {
-            padding: 0 3%;
-            margin-bottom: 20px;
-            transition: background-color .5s, color .5s;
-        }
-        .range-labels {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--color-alternative-text);
-            text-align: left;
-            transition: background-color .5s, color .5s;
-        }
-        .range-labels div:nth-of-type(1) {
-            flex: 3.4;
-        }
-        .range-labels div:nth-of-type(2) {
-            flex: 7.1;
-        }
-        .range-labels div:nth-of-type(3) {
-            flex: 10;
-        }
-        .range-labels div:nth-of-type(4) {
-            flex: 2;
-            text-align: right;
-        }
-        
-        button {
-            width: 90%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: var(--color-main-items);
-            color: var(--color-button-text);
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:disabled {
-            background-color: var(--color-button-disabled);
-            cursor: not-allowed;
-            transition: background-color .5s, color .5s;
-        }
-        button:hover:not(:disabled) {
-            background-color: var(--color-main-hover);
-            transition: background-color .5s, color .5s;
-        }
-        .progress-container {
-            width: 100%;
-            margin-top: 26px;
-            overflow: hidden;
-            text-align: center;
-            position: relative;
-        }
-        .progress-bar {
-            height: 4px;
-            width: 100%;
-            background-color: var(--color-first-items);
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden; /* Додано для приховування псевдоелемента */
-            transition: background-color .5s, color .5s;
-        }
-        .progress-bar.show-progress::after {
-            content: '';
-            width: 25%;
-            height: 4px;
-            background: var(--color-main-hover);
-            opacity: 0.5;
-            border-radius: 18px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            box-sizing: border-box;
-            animation: animloader 3s ease-in infinite;
-            transition: background-color .5s, color .5s;
-        }
-        @keyframes animloader {
-            0% {
-                left: 0;
-                transform: translateX(-100%);
-            }
-            100% {
-                left: 100%;
-                transform: translateX(0%);
-            }
-        }
-        .progress-bar-fill {
-            height: 100%;
-            width: 0;
-            background-color: var(--color-main-items);
-            text-align: center;
-            line-height: 25px;
-            border-radius: 5px;
-            transition: width 0.4s;
-        }
-        .progress-percentage {
-            color: var(--color-alternative-text);
-            font-size: 14px;
-            margin-top: 10px;
-            transition: background-color .5s, color .5s;
-        }
-        #progressLog {
-            color: var(--color-alternative-text);
-            font-size: 12px;
-            transition: background-color .5s, color .5s;
-        }
-        .code-list {
-            margin-top: 20px;
-            margin-left: 15%;
-            text-align: center;
-            max-height: 260px;
-            overflow-y: auto;
-            transition: background-color .5s, color .5s;
-        }
-        /* Custom scrollbar */
-        .code-list::-webkit-scrollbar {
-            width: 12px;
-        }
-        .code-list::-webkit-scrollbar-track {
-            background: var(--color-first-items);
-            border-radius: 10px;
-            transition: background-color .5s, color .5s;
-        }
-        .code-list::-webkit-scrollbar-thumb {
-            background-color: var(--color-main-items);
-            border-radius: 10px;
-            border: 2px solid var(--color-first-items);
-            transition: background-color .5s, color .5s;
-        }
-        .code-list::-webkit-scrollbar-thumb:active {
-            background-color: var(--color-main-hover);
-        }
-        .code-item {
-            width: 80%;
-            padding: 5px;
-            margin: 0 auto;
-        }
-        .code-text {
-            font-size: 18px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            color: var(--color-text);
-        }
-        .code-text:hover {
-            color: var(--color-alternative-text);
-        }
-        .code-text.copied {
-            animation: copy-animation 3s ease;
-        }
-        @keyframes copy-animation {
-            0% {
-                color: var(--color-text); /* Початковий колір */
-            }
-            50% {
-                color: var(--color-accept); /* Колір при копіюванні */
-            }
-            100% {
-                color: var(--color-text); /* Кінцевий колір */
-            }
-        }
-        .codes-container {
-            padding: 0 5%;
-            display: flex;
-            justify-content: center;
-            align-items: self-start;
-        }
-        .codes-container div:nth-of-type(1) {
-            flex: 8;
-        }
-        .codes-container button:nth-of-type(2) {
-            flex: 1;
-        }
+      .form-container input[type="range"] {
+        appearance: none;
+        width: 90%;
+        height: 14px;
+        border-radius: 8px;
+        transition: opacity 0.15s ease-in-out;
+        cursor: pointer;
+        outline: none;
+        /*  slider progress trick  */
+        overflow: hidden;
+        border-radius: 16px;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      /* Track: webkit browsers */
+      .form-container input[type="range"]::-webkit-slider-runnable-track {
+        height: 15px;
+        background: var(--color-first-items);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      /* Track: Mozilla Firefox */
+      .form-container input[type="range"]::-moz-range-track {
+        height: 15px;
+        background: var(--color-first-items);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      /* Thumb: webkit */
+      .form-container input[type="range"]::-webkit-slider-thumb {
+        /* removing default appearance */
+        -webkit-appearance: none;
+        appearance: none;
+        /* creating a custom design */
+        height: 15px;
+        width: 15px;
+        background-color: var(--color-button-text);
+        border-radius: 50%;
+        border: 2px solid var(--color-main-items);
+        /*  slider progress trick  */
+        box-shadow: -407px 0 0 400px var(--color-main-items);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      /* Thumb: Firefox */
+      input[type="range"]::-moz-range-thumb {
+        height: 15px;
+        width: 15px;
+        background-color: var(--color-button-text);
+        border-radius: 50%;
+        border: 1px solid var(--color-main-items);
+        /*  slider progress trick  */
+        box-shadow: -407px 0 0 400px var(--color-main-items);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
 
-        .copy-all-button {
-            display: none;
-            margin-top: 20px;
-            margin-left: 5px;
-            width: 90px;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            background-color: var(--color-first-items);
-            color: var(--color-copy-all);
-            font-size: 10px;
-            cursor: pointer;
-            transition: background-color .5s;
-        }
-        #copyAllButton:hover {
-            background-color: var(--color-main-items);
-            color: var(--color-button-text);
-        }
-        .copy-all-button.copied {
-            animation: copy-all-animation 3s ease;
-        }
-        @keyframes copy-all-animation {
-            0% {
-                background-color: var(--color-alternative-text);
-                color: var(--color-copy-all);
-            }
-            50% {
-                background-color: var(--color-accept);
-                color: var(--color-body-background);
-            }
-            100% {
-                background-color: var(--color-alternative-text);
-                color: var(--color-copy-all);
-            }
-        }
+      .range-labels-container {
+        padding: 0 3%;
+        margin-bottom: 20px;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .range-labels {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--color-alternative-text);
+        text-align: left;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .range-labels div:nth-of-type(1) {
+        flex: 3.4;
+      }
+      .range-labels div:nth-of-type(2) {
+        flex: 7.1;
+      }
+      .range-labels div:nth-of-type(3) {
+        flex: 10;
+      }
+      .range-labels div:nth-of-type(4) {
+        flex: 2;
+        text-align: right;
+      }
 
-      
+      button {
+        width: 90%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: var(--color-main-items);
+        color: var(--color-button-text);
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:disabled {
+        background-color: var(--color-button-disabled);
+        cursor: not-allowed;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      button:hover:not(:disabled) {
+        background-color: var(--color-main-hover);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .progress-container {
+        width: 100%;
+        margin-top: 26px;
+        overflow: hidden;
+        text-align: center;
+        position: relative;
+      }
+      .progress-bar {
+        height: 4px;
+        width: 100%;
+        background-color: var(--color-first-items);
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden; /* Додано для приховування псевдоелемента */
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .progress-bar.show-progress::after {
+        content: "";
+        width: 25%;
+        height: 4px;
+        background: var(--color-main-hover);
+        opacity: 0.5;
+        border-radius: 18px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+        animation: animloader 3s ease-in infinite;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      @keyframes animloader {
+        0% {
+          left: 0;
+          transform: translateX(-100%);
+        }
+        100% {
+          left: 100%;
+          transform: translateX(0%);
+        }
+      }
+      .progress-bar-fill {
+        height: 100%;
+        width: 0;
+        background-color: var(--color-main-items);
+        text-align: center;
+        line-height: 25px;
+        border-radius: 5px;
+        transition: width 0.4s;
+      }
+      .progress-percentage {
+        color: var(--color-alternative-text);
+        font-size: 14px;
+        margin-top: 10px;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      #progressLog {
+        color: var(--color-alternative-text);
+        font-size: 12px;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .code-list {
+        margin-top: 20px;
+        margin-left: 15%;
+        text-align: center;
+        max-height: 260px;
+        overflow-y: auto;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      /* Custom scrollbar */
+      .code-list::-webkit-scrollbar {
+        width: 12px;
+      }
+      .code-list::-webkit-scrollbar-track {
+        background: var(--color-first-items);
+        border-radius: 10px;
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .code-list::-webkit-scrollbar-thumb {
+        background-color: var(--color-main-items);
+        border-radius: 10px;
+        border: 2px solid var(--color-first-items);
+        transition:
+          background-color 0.5s,
+          color 0.5s;
+      }
+      .code-list::-webkit-scrollbar-thumb:active {
+        background-color: var(--color-main-hover);
+      }
+      .code-item {
+        width: 80%;
+        padding: 5px;
+        margin: 0 auto;
+      }
+      .code-text {
+        font-size: 18px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        color: var(--color-text);
+      }
+      .code-text:hover {
+        color: var(--color-alternative-text);
+      }
+      .code-text.copied {
+        animation: copy-animation 3s ease;
+      }
+      @keyframes copy-animation {
+        0% {
+          color: var(--color-text); /* Початковий колір */
+        }
+        50% {
+          color: var(--color-accept); /* Колір при копіюванні */
+        }
+        100% {
+          color: var(--color-text); /* Кінцевий колір */
+        }
+      }
+      .codes-container {
+        padding: 0 5%;
+        display: flex;
+        justify-content: center;
+        align-items: self-start;
+      }
+      .codes-container div:nth-of-type(1) {
+        flex: 8;
+      }
+      .codes-container button:nth-of-type(2) {
+        flex: 1;
+      }
+
+      .copy-all-button {
+        display: none;
+        margin-top: 20px;
+        margin-left: 5px;
+        width: 90px;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        background-color: var(--color-first-items);
+        color: var(--color-copy-all);
+        font-size: 10px;
+        cursor: pointer;
+        transition: background-color 0.5s;
+      }
+      #copyAllButton:hover {
+        background-color: var(--color-main-items);
+        color: var(--color-button-text);
+      }
+      .copy-all-button.copied {
+        animation: copy-all-animation 3s ease;
+      }
+      @keyframes copy-all-animation {
+        0% {
+          background-color: var(--color-alternative-text);
+          color: var(--color-copy-all);
+        }
+        50% {
+          background-color: var(--color-accept);
+          color: var(--color-body-background);
+        }
+        100% {
+          background-color: var(--color-alternative-text);
+          color: var(--color-copy-all);
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="body">
-        <div class="container">
-            <h1>Made by NorSodikin</h1>
-            
-            <div class="form-container">
-                <form>
-                    <label>Select Game:</label>
-                        <select id="gameSelect">
-                            <option value="1">Riding Extreme 3D</option>
-                            <option value="2">Chain Cube 2048</option>
-                            <option value="3">My Clone Army</option>
-                            <option value="4">Train Miner</option>
-                            <option value="5">Merge Away</option>
-                            <option value="6">Twerk Race 3D</option>
-                        </select>
-                    <label>Select Number of Keys to Generate:</label>
-                    <input type="number" id="keyCount" min="1" max="24" value="1" oninput="updateRange()">
-                    <input type="range" id="keyRange" min="1" max="24" value="1" step="1" oninput="updateCount()">
-                    <div class="range-labels-container">
-                        <div class="range-labels">
-                            <div>Min (1)</div>
-                            <div>4</div>
-                            <div>12</div>
-                            <div>Max (24)</div>
-                        </div>
-                    </div>
-                </form>
+      <div class="container">
+        <h1>Made by NorSodikin</h1>
+
+        <div class="form-container">
+          <form>
+            <label>Select Game:</label>
+            <select id="gameSelect">
+              <option value="1">Riding Extreme 3D</option>
+              <option value="2">Chain Cube 2048</option>
+              <option value="3">My Clone Army</option>
+              <option value="4">Train Miner</option>
+              <option value="5">Merge Away</option>
+              <option value="6">Twerk Race 3D</option>
+            </select>
+            <label>Select Number of Keys to Generate:</label>
+            <input
+              type="number"
+              id="keyCount"
+              min="1"
+              max="24"
+              value="1"
+              oninput="updateRange()"
+            />
+            <input
+              type="range"
+              id="keyRange"
+              min="1"
+              max="24"
+              value="1"
+              step="1"
+              oninput="updateCount()"
+            />
+            <div class="range-labels-container">
+              <div class="range-labels">
+                <div>Min (1)</div>
+                <div>4</div>
+                <div>12</div>
+                <div>Max (24)</div>
+              </div>
             </div>
-    
-            <button id="startButton" onclick="startProcess()">Start Process</button>
-    
-            <div style="display: none;" id="progressContainer" class="progress-container">
-                <div id="progressBar" class="progress-bar">
-                    <div id="progressBarFill" class="progress-bar-fill"></div>
-                </div>
-                <div id="progressPercentage" class="progress-percentage">0%</div>
-                <div id="progressLog"></div>
-            </div>
-            <div class="codes-container">
-                <div id="codeList" class="code-list">
-                </div>
-                <button class="copy-all-button" id="copyAllButton">Copy all</button>
-            </div>
+          </form>
         </div>
+
+        <button id="startButton" onclick="startProcess()">Start Process</button>
+
+        <div
+          style="display: none"
+          id="progressContainer"
+          class="progress-container"
+        >
+          <div id="progressBar" class="progress-bar">
+            <div id="progressBarFill" class="progress-bar-fill"></div>
+          </div>
+          <div id="progressPercentage" class="progress-percentage">0%</div>
+          <div id="progressLog"></div>
+        </div>
+        <div class="codes-container">
+          <div id="codeList" class="code-list"></div>
+          <button class="copy-all-button" id="copyAllButton">Copy all</button>
+        </div>
+      </div>
     </div>
 
     <script>
-        function updateRange() {
-            document.getElementById('keyRange').value = document.getElementById('keyCount').value;
-        }
-        function updateCount() {
-            document.getElementById('keyCount').value = document.getElementById('keyRange').value;
-        }
-        const EVENTS_DELAY = 20000;
-        let progress = 0;
-        let keyCount;
+      function updateRange() {
+        document.getElementById("keyRange").value =
+          document.getElementById("keyCount").value;
+      }
+      function updateCount() {
+        document.getElementById("keyCount").value =
+          document.getElementById("keyRange").value;
+      }
+      const EVENTS_DELAY = 20000;
+      let progress = 0;
+      let keyCount;
 
-        const updateProgress = (increment, message) => {
-            progress += increment;
-            if (progress > 100) progress = 100;
-            progressBarFill.style.width = `${progress}%`;
-            progressPercentage.textContent = `${Math.round(progress)}%`;
-            progressLog.innerText = message;
+      const updateProgress = (increment, message) => {
+        progress += increment;
+        if (progress > 100) progress = 100;
+        progressBarFill.style.width = `${progress}%`;
+        progressPercentage.textContent = `${Math.round(progress)}%`;
+        progressLog.innerText = message;
+      };
+
+      const games = {
+        1: {
+          name: "Riding Extreme 3D",
+          appToken: "d28721be-fd2d-4b45-869e-9f253b554e50",
+          promoId: "43e35910-c168-4634-ad4f-52fd764a843f",
+        },
+        2: {
+          name: "Chain Cube 2048",
+          appToken: "d1690a07-3780-4068-810f-9b5bbf2931b2",
+          promoId: "b4170868-cef0-424f-8eb9-be0622e8e8e3",
+        },
+        3: {
+          name: "My Clone Army",
+          appToken: "74ee0b5b-775e-4bee-974f-63e7f4d5bacb",
+          promoId: "fe693b26-b342-4159-8808-15e3ff7f8767",
+        },
+        4: {
+          name: "Train Miner",
+          appToken: "82647f43-3f87-402d-88dd-09a90025313f",
+          promoId: "c4480ac7-e178-4973-8061-9ed5b2e17954",
+        },
+        5: {
+          name: "Merge Away",
+          appToken: "8d1cc2ad-e097-4b86-90ef-7a27e19fb833",
+          promoId: "dc128d28-c45b-411c-98ff-ac7726fbaea4",
+        },
+        6: {
+          name: "Twerk Race 3D",
+          appToken: "61308365-9d16-4040-8bb0-2f4a4c69074c",
+          promoId: "61308365-9d16-4040-8bb0-2f4a4c69074c",
+        },
+      };
+
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const delayRandom = () => Math.random() / 5 + 1;
+
+      function generateClientId() {
+        const timestamp = Date.now();
+        const randomNumbers = Array.from({ length: 19 }, () =>
+          Math.floor(Math.random() * 10),
+        ).join("");
+        return `${timestamp}-${randomNumbers}`;
+      }
+
+      async function loginClient() {
+        const clientId = generateClientId();
+        const url = "https://api.gamepromo.io/promo/login-client";
+        const data = {
+          appToken: games[args].appToken,
+          clientId: clientId,
+          clientOrigin: "deviceid",
+        };
+        const headers = {
+          "Content-Type": "application/json; charset=utf-8",
+        };
+        while (true) {
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: headers,
+              body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            return result.clientToken;
+          } catch (error) {
+            console.error("Error logging in to the client:", error.message);
+            await new Promise((resolve) => setTimeout(resolve, 4000));
+          }
+        }
+      }
+
+      async function registerEvent(token, keyCount) {
+        const eventId = generateRandomUUID();
+        const url = "https://api.gamepromo.io/promo/register-event";
+        const data = {
+          promoId: games[args].promoId,
+          eventId: eventId,
+          eventOrigin: "undefined",
+        };
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+        while (true) {
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: headers,
+              body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            if (result.hasCode) {
+              updateProgress(75 / (keyCount * 5), "Emulating progress...");
+              return true;
+            }
+            console.log("Retry register event");
+            updateProgress(75 / (keyCount * 5), "Emulating progress...");
+            await sleep(EVENTS_DELAY * delayRandom());
+          } catch (error) {
+            console.error("Event registration error :", error.message);
+            console.error("Response body: ", await error.response?.text());
+            updateProgress(75 / (keyCount * 5), "Emulating progress...");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+          }
+        }
+      }
+
+      async function createCode(token) {
+        const url = "https://api.gamepromo.io/promo/create-code";
+        const data = {
+          promoId: games[args].promoId,
+        };
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json; charset=utf-8",
         };
 
-        const games = {
-            1: {
-                name: 'Riding Extreme 3D',
-                appToken: 'd28721be-fd2d-4b45-869e-9f253b554e50',
-                promoId: '43e35910-c168-4634-ad4f-52fd764a843f',
-            },
-            2: {
-                name: 'Chain Cube 2048',
-                appToken: 'd1690a07-3780-4068-810f-9b5bbf2931b2',
-                promoId: 'b4170868-cef0-424f-8eb9-be0622e8e8e3',
-            },
-            3: {
-                name: 'My Clone Army',
-                appToken: '74ee0b5b-775e-4bee-974f-63e7f4d5bacb',
-                promoId: 'fe693b26-b342-4159-8808-15e3ff7f8767',
-            },
-            4: {
-                name: 'Train Miner',
-                appToken: '82647f43-3f87-402d-88dd-09a90025313f',
-                promoId: 'c4480ac7-e178-4973-8061-9ed5b2e17954',
-            },
-            5: {
-                name: 'Merge Away',
-                appToken: '8d1cc2ad-e097-4b86-90ef-7a27e19fb833',
-                promoId: 'dc128d28-c45b-411c-98ff-ac7726fbaea4',
-            },
-            6: {
-                name: 'Twerk Race 3D',
-                appToken: '61308365-9d16-4040-8bb0-2f4a4c69074c',
-                promoId: '61308365-9d16-4040-8bb0-2f4a4c69074c',
+        while (true) {
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: headers,
+              body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            if (result.promoCode) {
+              updateProgress(20 / keyCount, "Generating key...");
+              return result.promoCode;
             }
+          } catch (error) {
+            console.error("Помилка при створенні коду:", error.message);
+            console.error("Тіло відповіді:", await error.response?.text());
+            updateProgress(20 / keyCount, "Generating key...");
+            await new Promise((resolve) => setTimeout(resolve, 4000));
+          }
+        }
+      }
+
+      function generateRandomUUID() {
+        const chars = "0123456789abcdef";
+        const uuidTemplate = [8, 4, 4, 4, 12];
+        return uuidTemplate
+          .map((len, idx) => {
+            return Array.from({ length: len }, (_, i) => {
+              const r = (Math.random() * 16) | 0;
+              if (idx === 2 && i === 0) return "4"; // третя група починається з "4"
+              if (idx === 3 && i === 0) return ((r & 0x3) | 0x8).toString(16); // четверта група починається з "8", "9", "A", "B"
+              return chars[r];
+            }).join("");
+          })
+          .join("-");
+      }
+
+      function copyToClipboard(text, element) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        element.classList.add("copied");
+        setTimeout(() => element.classList.remove("copied"), 2000); // Видалаємо клас через 2 секунди
+      }
+
+      async function startProcess() {
+        const startButton = document.getElementById("startButton");
+        const progressBar = document.getElementById("progressBar");
+        const progressBarFill = document.getElementById("progressBarFill");
+        const progressPercentage =
+          document.getElementById("progressPercentage");
+        const codeList = document.getElementById("codeList");
+        const gameSelect = document.getElementById("gameSelect");
+        const keyCountInput = document.getElementById("keyCount");
+        const selectedGame = parseInt(gameSelect.value);
+        keyCount = parseInt(keyCountInput.value);
+        progress = 0;
+
+        startButton.disabled = true; // Блокуємо кнопку
+        startButton.textContent = "Processing...";
+        document.getElementById("progressContainer").style.display = "block";
+        document.getElementById("copyAllButton").style.display = "none";
+        progressBar.classList.add("show-progress"); // Додаємо клас для показу псевдоелемента
+        progressBarFill.style.width = `${progress}%`;
+        progressPercentage.textContent = `${Math.round(progress)}%`;
+        codeList.innerHTML = ""; // Очищення списку кодів перед початком процесу
+        args = selectedGame;
+
+        const generateKeyProcess = async () => {
+          try {
+            const token = await loginClient();
+            updateProgress(progress, "Starting...");
+            await sleep(EVENTS_DELAY * delayRandom());
+            await registerEvent(token, keyCount);
+            const codeData = await createCode(token);
+
+            const codeItem = document.createElement("div");
+            codeItem.className = "code-item";
+            const codeText = document.createElement("code");
+            codeText.className = "code-text";
+            codeText.textContent = codeData;
+            codeText.onclick = () => copyToClipboard(codeData, codeText);
+            codeItem.appendChild(codeText);
+            codeList.appendChild(codeItem);
+            document.getElementById("copyAllButton").style.display = "block";
+          } catch (error) {
+            const errorItem = document.createElement("div");
+            errorItem.className = "code-item";
+            errorItem.textContent = `Process ${i + 1} - Error: ${error.message}`;
+            codeList.appendChild(errorItem);
+          }
         };
 
-        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-        const delayRandom = () => Math.random() / 5 + 1;
+        const keys = await Promise.all(
+          Array.from({ length: keyCount }, generateKeyProcess),
+        );
+        updateProgress(100, "Completed");
+        progressBar.classList.remove("show-progress"); // Видаляємо клас після завершення
+        startButton.disabled = false; // Розблоковуємо кнопку
+        startButton.textContent = "Start Process";
+      }
 
-        function generateClientId() {
-            const timestamp = Date.now();
-            const randomNumbers = Array.from({ length: 19 }, () => Math.floor(Math.random() * 10)).join('');
-            return `${timestamp}-${randomNumbers}`;
+      document.getElementById("copyAllButton").addEventListener("click", () => {
+        const codes = Array.from(document.querySelectorAll(".code-text"))
+          .map((el) => el.textContent)
+          .join("\n");
+        if (codes) {
+          navigator.clipboard.writeText(codes).then(() => {
+            const copyButton = document.getElementById("copyAllButton");
+            copyButton.textContent = "Copied!";
+            copyButton.classList.add("copied");
+            setTimeout(() => {
+              copyButton.textContent = "Copy all";
+              copyButton.classList.remove("copied");
+            }, 2000);
+          });
         }
-
-        async function loginClient() {
-            const clientId = generateClientId();
-            const url = 'https://api.gamepromo.io/promo/login-client';
-            const data = {
-                appToken: games[args].appToken,
-                clientId: clientId,
-                clientOrigin: 'deviceid'
-            };
-            const headers = {
-                'Content-Type': 'application/json; charset=utf-8',
-            };
-            while (true) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(data)
-                    });
-                    const result = await response.json();
-                    return result.clientToken;
-                } catch (error) {
-                    console.error('Error logging in to the client:', error.message);
-                    await new Promise(resolve => setTimeout(resolve, 4000));
-                }
-            }
-        }
-
-        async function registerEvent(token, keyCount) {
-            const eventId = generateRandomUUID();
-            const url = 'https://api.gamepromo.io/promo/register-event';
-            const data = {
-                promoId: games[args].promoId,
-                eventId: eventId,
-                eventOrigin: 'undefined'
-            };
-            const headers = {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            };
-            while (true) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(data)
-                    });
-                    const result = await response.json();
-                    if (result.hasCode) {
-                        updateProgress(75 / (keyCount * 5), 'Emulating progress...');
-                        return true;
-                    }
-                    console.log('Retry register event');
-                    updateProgress(75 / (keyCount * 5), 'Emulating progress...');
-                    await sleep(EVENTS_DELAY * delayRandom());
-                } catch (error) {
-                    console.error('Event registration error :', error.message);
-                    console.error('Response body: ', await error.response?.text());
-                    updateProgress(75 / (keyCount * 5), 'Emulating progress...');
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                }
-            }
-        }
-
-        async function createCode(token) {
-            const url = 'https://api.gamepromo.io/promo/create-code';
-            const data = {
-                promoId: games[args].promoId
-            };
-            const headers = {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json; charset=utf-8',
-            };
-            
-            while (true) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(data)
-                    });
-                    const result = await response.json();
-                    if (result.promoCode) {
-                        updateProgress(20 / keyCount, 'Generating key...');
-                        return result.promoCode;
-                    }
-                } catch (error) {
-                    console.error('Помилка при створенні коду:', error.message);
-                    console.error('Тіло відповіді:', await error.response?.text());
-                    updateProgress(20 / keyCount, 'Generating key...');
-                    await new Promise(resolve => setTimeout(resolve, 4000));
-                }
-            }
-        }
-
-        function generateRandomUUID() {
-            const chars = '0123456789abcdef';
-            const uuidTemplate = [8, 4, 4, 4, 12];
-            return uuidTemplate.map((len, idx) => {
-                return Array.from({ length: len }, (_, i) => {
-                    const r = Math.random() * 16 | 0;
-                    if (idx === 2 && i === 0) return '4'; // третя група починається з "4"
-                    if (idx === 3 && i === 0) return (r & 0x3 | 0x8).toString(16); // четверта група починається з "8", "9", "A", "B"
-                    return chars[r];
-                }).join('');
-            }).join('-');
-        }
-
-        function copyToClipboard(text, element) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            element.classList.add('copied');
-            setTimeout(() => element.classList.remove('copied'), 2000); // Видалаємо клас через 2 секунди
-        }
-
-        async function startProcess() {
-            const startButton = document.getElementById('startButton');
-            const progressBar = document.getElementById('progressBar');
-            const progressBarFill = document.getElementById('progressBarFill');
-            const progressPercentage = document.getElementById('progressPercentage');
-            const codeList = document.getElementById('codeList');
-            const gameSelect = document.getElementById('gameSelect');
-            const keyCountInput = document.getElementById('keyCount');
-            const selectedGame = parseInt(gameSelect.value);
-            keyCount = parseInt(keyCountInput.value);
-            progress = 0;
-
-            startButton.disabled = true; // Блокуємо кнопку
-            startButton.textContent = 'Processing...';
-            document.getElementById('progressContainer').style.display = "block";
-            document.getElementById('copyAllButton').style.display = "none";
-            progressBar.classList.add('show-progress'); // Додаємо клас для показу псевдоелемента
-            progressBarFill.style.width = `${progress}%`;
-            progressPercentage.textContent = `${Math.round(progress)}%`;
-            codeList.innerHTML = ""; // Очищення списку кодів перед початком процесу
-            args = selectedGame;
-
-            const generateKeyProcess = async () => {
-                try {
-                    const token = await loginClient();
-                    updateProgress(progress, 'Starting...');
-                    await sleep(EVENTS_DELAY * delayRandom());
-                    await registerEvent(token, keyCount);
-                    const codeData = await createCode(token);
-
-                    const codeItem = document.createElement('div');
-                    codeItem.className = 'code-item';
-                    const codeText = document.createElement('code');
-                    codeText.className = 'code-text';
-                    codeText.textContent = codeData;
-                    codeText.onclick = () => copyToClipboard(codeData, codeText);
-                    codeItem.appendChild(codeText);
-                    codeList.appendChild(codeItem);
-                    document.getElementById('copyAllButton').style.display = "block";
-                } catch (error) {
-                    const errorItem = document.createElement('div');
-                    errorItem.className = 'code-item';
-                    errorItem.textContent = `Process ${i + 1} - Error: ${error.message}`;
-                    codeList.appendChild(errorItem);
-                }
-            };
-
-            const keys = await Promise.all(Array.from({ length: keyCount }, generateKeyProcess));
-            updateProgress(100, 'Completed');
-            progressBar.classList.remove('show-progress'); // Видаляємо клас після завершення
-            startButton.disabled = false; // Розблоковуємо кнопку
-            startButton.textContent = 'Start Process';
-        }
-
-        document.getElementById('copyAllButton').addEventListener('click', () => {
-            const codes = Array.from(document.querySelectorAll('.code-text')).map(el => el.textContent).join('\n');
-            if (codes) {
-                navigator.clipboard.writeText(codes).then(() => {
-                    const copyButton = document.getElementById('copyAllButton');
-                    copyButton.textContent = 'Copied!';
-                    copyButton.classList.add('copied');
-                    setTimeout(() => {
-                        copyButton.textContent = 'Copy all';
-                        copyButton.classList.remove('copied');
-                    }, 2000);
-                });
-            }
-        });
+      });
     </script>
-</body>
+  </body>
 </html>
