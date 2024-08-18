@@ -11,7 +11,7 @@
     />
     <style>
       :root {
-        --color-text: #f5f5f5; 
+        --color-text: #f5f5f5;
         --color-body-background: #000000;
         --color-container-background: #000000;
         --color-main-items: #ff0000;
@@ -123,8 +123,8 @@
         transition:
           background-color 0.5s,
           color 0.5s;
-      }/
-      .form-container input[type="range"]::-webkit-slider-runnable-track {
+      }
+      / .form-container input[type="range"]::-webkit-slider-runnable-track {
         height: 15px;
         background: var(--color-first-items);
         transition:
@@ -613,7 +613,10 @@
             }
           } catch (error) {
             console.error("Error generating code:", error.message);
-            console.error("The body of the response:", await error.response?.text());
+            console.error(
+              "The body of the response:",
+              await error.response?.text(),
+            );
             updateProgress(20 / keyCount, "Generating key...");
             await new Promise((resolve) => setTimeout(resolve, 4000));
           }
