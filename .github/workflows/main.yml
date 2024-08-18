@@ -17,13 +17,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install -g prettier 
+          npm install -g prettier
+
+      - name: Debug file list
+        run: |
+          echo "Listing all HTML, JS, and Shell script files:"
+          find . -name "*.html" -o -name "*.js" -o -name "*.sh"
 
       - name: Format HTML, JS, and Shell scripts
         run: |
-          prettier --write "*.html"
-          prettier --write "*.js"
-          prettier --write "*.sh"
+          npx prettier --write "**/*.html"
+          npx prettier --write "**/*.js"
+          npx prettier --write "**/*.sh"
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
