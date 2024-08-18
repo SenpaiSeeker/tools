@@ -21,9 +21,9 @@ jobs:
 
       - name: Format HTML, JS, and Shell scripts
         run: |
-          prettier --write "**/*.html"
-          prettier --write "**/*.js"
-          prettier --write "**/*.sh"
+          prettier --write "*.html"
+          prettier --write "*.js"
+          prettier --write "*.sh"
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
