@@ -364,7 +364,7 @@
 <body>
     <div class="body">
         <div class="container">
-            <h1>Made by Spyman</h1>
+            <h1>Made by NorSodikin</h1>
             
             <div class="form-container">
                 <form>
@@ -490,7 +490,7 @@
                     const result = await response.json();
                     return result.clientToken;
                 } catch (error) {
-                    console.error('Помилка при вході клієнта:', error.message);
+                    console.error('Error logging in to the client:', error.message);
                     await new Promise(resolve => setTimeout(resolve, 4000));
                 }
             }
@@ -524,8 +524,8 @@
                     updateProgress(75 / (keyCount * 5), 'Emulating progress...');
                     await sleep(EVENTS_DELAY * delayRandom());
                 } catch (error) {
-                    console.error('Помилка реєстрації події:', error.message);
-                    console.error('Тіло відповіді:', await error.response?.text());
+                    console.error('Event registration error :', error.message);
+                    console.error('Response body: ', await error.response?.text());
                     updateProgress(75 / (keyCount * 5), 'Emulating progress...');
                     await new Promise(resolve => setTimeout(resolve, 2000));
                 }
