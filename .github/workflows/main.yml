@@ -22,12 +22,11 @@ jobs:
       - name: Debug file list
         run: |
           echo "Listing all HTML, JS, and Shell script files:"
-          find . -name "*.html" -o -name "*.js" -o -name "*.sh"
+          find . -name "*.html" -o -name "*.sh"
 
       - name: Format HTML, JS, and Shell scripts
         run: |
           npx prettier --write "**/*.html"
-          npx prettier --write "**/*.js"
           npx prettier --write "**/*.sh"
 
       - name: Commit changes
