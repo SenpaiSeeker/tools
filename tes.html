@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSH User Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .btn-add {
+            background-color: #28a745;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            width: 100%;
+            margin-top: 10px;
+        }
+        #resultMessage {
+            margin-top: 20px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>SSH User Management</h2>
+        
+        <label for="botToken">Masukkan Bot Token (atau tekan Enter untuk menggunakan default):</label>
+        <input type="text" id="botToken" name="botToken" placeholder="7419614345:AAFwmSvM0zWNaLQhDLidtZ-B9Tzp-aVWICA">
+
+        <label for="chatId">Masukkan Chat ID (atau tekan Enter untuk menggunakan default):</label>
+        <input type="text" id="chatId" name="chatId" placeholder="1964437366">
+
+        <div class="button-group">
+            <button class="btn-add" onclick="setAction('add')">Add User</button>
+            <button class="btn-delete" onclick="setAction('delete')">Delete User</button>
+        </div>
+
+        <div id="addSection" style="display: none;">
+            <label for="sshUsernameAdd">Nama Pengguna SSH (atau tekan Enter untuk acak):</label>
+            <input type="text" id="sshUsernameAdd" name="sshUsernameAdd">
+
+            <label for="sshPasswordAdd">Kata Sandi SSH (atau tekan Enter untuk acak):</label>
+            <input type="text" id="sshPasswordAdd" name="sshPasswordAdd">
+        </div>
+
+        <div id="deleteSection" style="display: none;">
+            <label for="sshUsernameDelete">Nama Pengguna SSH yang akan dihapus:</label>
+            <input type="text" id="sshUsernameDelete" name="sshUsernameDelete">
+        </div>
+
+        <button class="btn-submit" onclick="handleAction()">Submit</button>
+
+        <p id="resultMessage"></p>
+    </div>
+
+    <script>
+        let currentAction = '';
+
+        function setAction(action) {
+            currentAction = action;
+            document.getElementById("addSection").style.display = action === "add" ? "block" : "none";
+            document.getElementById("deleteSection").style.display = action === "delete" ? "block" : "none";
+        }
+
+        function generateRandomString(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        function getHostAddress() {
+            // Replace this with your actual domain
+            return window.location.hostname;
+        }
+
+        function sendTelegramMessage(message, botToken, chatId) {
+            const inlineKeyboard = JSON.stringify({
+                inline_keyboard: [[{text: "Powered By", url: "https://t.me/NorSodikin"}]]
+            });
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'Markdown',
+                    reply_markup: inlineKeyboard
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function handleAction() {
+            let botToken = document.getElementById("botToken").value;
+            let chatId = document.getElementById("chatId").value;
+            let message = '';
+            const hostAddress = getHostAddress();
+
+            if (!botToken) {
+                botToken = "7419614345:AAFwmSvM0zWNaLQhDLidtZ-B9Tzp-aVWICA";
+            }
+
+            if (!chatId) {
+                chatId = "1964437366";
+            }
+
+            if (currentAction === "add") {
+                const sshUsername = document.getElementById("sshUsernameAdd").value || generateRandomString(8);
+                const sshPassword = document.getElementById("sshPasswordAdd").value || generateRandomString(12);
+                message = `*Informasi login SSH:*\n\n*Nama Pengguna:* ${sshUsername}\n*Kata Sandi:* ${sshPassword}\n*Nama Host:* ${hostAddress}\n\n_Gunakan informasi di atas untuk terhubung menggunakan PuTTY atau klien SSH apa pun._`;
+            } else if (currentAction === "delete") {
+                const sshUsername = document.getElementById("sshUsernameDelete").value;
+                if (!sshUsername) {
+                    alert("Nama Pengguna SSH tidak boleh kosong.");
+                    return;
+                }
+                message = `Pengguna ${sshUsername} telah dihapus dari sistem dan tidak dapat lagi masuk.`;
+            } else {
+                alert("Aksi tidak valid. Silakan pilih 'add' atau 'delete'.");
+                return;
+            }
+
+            document.getElementById("resultMessage").textContent = message;
+            sendTelegramMessage(message, botToken, chatId);
+        }
+    </script>
+</body>
+</html>
