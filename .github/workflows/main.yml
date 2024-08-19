@@ -1,25 +1,32 @@
-name: Auto Format and Commit
+name: Auto Format and Commit Changes
 
 on: push
 
 jobs:
-  format:
+  format-and-commit:
+    name: Format and Commit Changes
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      - name: Install Prettier
-        run: npm install --save-dev prettier
+    - name: Install Prettier (for HTML, CSS, JS)
+      run: npm install --global prettier
 
-      - name: Run Prettier on HTML, Shell, JavaScript, and CSS files
-        run: npx prettier --write "**/*.{html,js,css,sh}"
+    - name: Install ShellCheck (for Shell scripts)
+      run: sudo apt-get install -y shellcheck
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+    - name: Format HTML, CSS, JS files
+      run: prettier --write "**/*.{html,css,js}"
+
+    - name: Lint Shell scripts
+      run: find . -name "*.sh" -exec shellcheck {} \;
+
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v4
