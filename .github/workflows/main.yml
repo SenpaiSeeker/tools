@@ -16,7 +16,7 @@ jobs:
         sudo apt-get install -y tidy
 
     - name: Lint and Fix HTML
-      run: find . -name "*.html" -exec tidy -quiet -modify -indent -wrap 100 {} \;
+      run: find . -name "*.html" -exec tidy -quiet -modify -indent -wrap 250 {} \;
 
     - name: Check for changes
       run: git diff --exit-code || echo "Changes detected"
