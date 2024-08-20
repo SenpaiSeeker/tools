@@ -1,24 +1,25 @@
-name: Auto Format and Commit Changes
+name: Fix and Lint HTML
 
 on: push
 
 jobs:
-  format-and-commit:
-    name: Format and Commit Changes
+  lint-html:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: Install HTML Linter
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tidy
 
-    - name: Install ShellCheck (for Shell scripts)
-      run: sudo apt-get install -y shellcheck
+    - name: Lint and Fix HTML
+      run: find . -name "*.html" -exec tidy -quiet -modify -indent -wrap 100 {} \;
 
-    - name: Lint Shell scripts
-      run: find . -name "*.sh" -exec shellcheck {} \;
+    - name: Check for changes
+      run: git diff --exit-code || echo "Changes detected"
 
-    - name: Commit Changes
+    - name: Commit and Push changes
       uses: stefanzweifel/git-auto-commit-action@v4
