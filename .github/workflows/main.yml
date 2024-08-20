@@ -13,17 +13,9 @@ jobs:
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
-      with:
-        node-version: 18
-
-    - name: Install Prettier (for HTML, CSS, JS)
-      run: npm install --global prettier
 
     - name: Install ShellCheck (for Shell scripts)
       run: sudo apt-get install -y shellcheck
-
-    - name: Format HTML, CSS, JS files
-      run: prettier --write "**/*.{html,css,js}"
 
     - name: Lint Shell scripts
       run: find . -name "*.sh" -exec shellcheck {} \;
