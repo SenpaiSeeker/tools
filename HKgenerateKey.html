@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HKgenerateKey</title>
-    <style>
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.6.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HKgenerateKey</title>
+  <style>
       html,
       body {
         margin: 0;
@@ -167,47 +168,70 @@
       .hidden {
         display: none;
       }
-    </style>
-  </head>
-  <body>
-    <div class="main-container">
-      <div class="container">
-        <h1>Hamters Kombat Key Generate</h1>
-        <label for="gameSelect">Pilih Games:</label>
-        <select id="gameSelect">
-          <option value="MyCloneArmy">My Clone Army</option>
-          <option value="ChainCube2048">Chain Cube 2048</option>
-          <option value="TrainMiner">Train Miner</option>
-          <option value="BikeRide3D">Bike Ride 3D</option>
-          <option value="MergeAway">Merge Away</option>
-          <option value="TwerkRace">Twerk Race</option>
-        </select>
-        <label for="keyCountSelect" id="CountLabel">Pilih Jumlah Kunci:</label>
-        <select id="keyCountSelect">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-        </select>
-        <button id="startBtn" class="button">Generate Keys</button>
-        <div id="progressContainer" class="progress-container hidden">
-          <div id="progressBar" class="progress-bar"></div>
-          <span id="progressText" class="progress-text">0%</span>
-        </div>
-        <div id="keyContainer" class="key-container hidden">
-          <h2>Semua Kunci Berhasil Dibuat:</h2>
-          <button id="copyAllBtn" class="button hidden">
-            Copy Semua Kunci
-          </button>
-          <div id="keysList"></div>
-        </div>
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="container">
+      <h1>Hamters Kombat Key Generate</h1><label for="gameSelect">Pilih Games:</label> <select id=
+      "gameSelect">
+        <option value="MyCloneArmy">
+          My Clone Army
+        </option>
+        <option value="ChainCube2048">
+          Chain Cube 2048
+        </option>
+        <option value="TrainMiner">
+          Train Miner
+        </option>
+        <option value="BikeRide3D">
+          Bike Ride 3D
+        </option>
+        <option value="MergeAway">
+          Merge Away
+        </option>
+        <option value="TwerkRace">
+          Twerk Race
+        </option>
+      </select> <label for="keyCountSelect" id="CountLabel">Pilih Jumlah Kunci:</label> <select id=
+      "keyCountSelect">
+        <option value="1">
+          1
+        </option>
+        <option value="2">
+          2
+        </option>
+        <option value="3">
+          3
+        </option>
+        <option value="4">
+          4
+        </option>
+        <option value="5">
+          5
+        </option>
+        <option value="6">
+          6
+        </option>
+        <option value="7">
+          7
+        </option>
+        <option value="8">
+          8
+        </option>
+      </select> <button id="startBtn" class="button">Generate Keys</button>
+      <div id="progressContainer" class="progress-container hidden">
+        <div id="progressBar" class="progress-bar"></div><span id="progressText" class=
+        "progress-text">0%</span>
+      </div>
+      <div id="keyContainer" class="key-container hidden">
+        <h2>Semua Kunci Berhasil Dibuat:</h2><button id="copyAllBtn" class="button hidden">Copy
+        Semua Kunci</button>
+        <div id="keysList"></div>
       </div>
     </div>
-    <script>
+  </div>
+  <script>
       const DELAY_MS = 30000;
       const configs = {
         MyCloneArmy: {
@@ -499,6 +523,6 @@
       function randomMultiplier() {
         return Math.random() / 3 + 1;
       }
-    </script>
-  </body>
+  </script>
+</body>
 </html>
