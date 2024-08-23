@@ -1,14 +1,15 @@
 import base64
 import hashlib
+import random 
 import textwrap
 
-from cryptography.fernet import Fernet, InvalidToken
+from cryptography import fernet
 
 
-class EN2DE: 
-    def ____init____(self, key):
+class FARNET: 
+    def __init__(self, key):
         self.key = hashlib.sha256(key.encode()).digest()
-        self.cipher_suite = Fernet(base64.urlsafe_b64encode(self.key))
+        self.cipher_suite = fernet.Fernet(base64.urlsafe_b64encode(self.key))
                                    
     def en(self, data):
         serialized_data = textwrap.dedent(data).encode('utf-8')
@@ -20,24 +21,28 @@ class EN2DE:
             decrypted_data = self.cipher_suite.decrypt(encrypted_data)
             data = decrypted_data.decode('utf-8')
             return data
-        except InvalidToken:
+        except fernet.InvalidToken:
             raise Exception(f"[ERROR]: KUNCI - [{self.key}] - TIDAK COCOK")
 
-    def run(self, decrypted_data):
+    def logs(self, text):
+        random_color = random.choice(
+            [
+                "\033[91m", 
+                "\033[92m", 
+                "\033[93m", 
+                "\033[94m",
+                "\033[95m", 
+                "\033[96m",
+            ]
+        )
+        reset_color = "\033[0m"
+        print(f"{random_color}{text}{reset_color}")
+
+    def run(self, decrypted_data, is_return=False):
         try:
-            exec(self.de(decrypted_data))
+            if is_return:
+                return self.de(decrypted_data)
+            else:
+                exec(self.de(decrypted_data))
         except Exception as error:
-            print(error)
-
-
-# CONTOH PENGGUNAAN 
-a = EN2DE("KUNCI_ANDA")
-
-b = a.en("""
-def ab():
-    print('halo')
-
-ab()
-""")
-
-a.run(b)
+            self.logs(error)
