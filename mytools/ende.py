@@ -38,11 +38,8 @@ class FARNET:
         reset_color = "\033[0m"
         print(f"{random_color}{text}{reset_color}")
 
-    def run(self, decrypted_data, is_return=False):
+    def run(self, decrypted_data):
         try:
-            if is_return:
-                return self.de(decrypted_data)
-            else:
-                exec(self.de(decrypted_data))
+            exec(self.de(decrypted_data))
         except Exception as error:
             self.logs(error)
