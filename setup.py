@@ -2,9 +2,9 @@ from setuptools import find_packages, setup
 
 setup(
     name="NS_tools",
-    version="0.1",
+    version="0.5",
     description="Library of @NorSodikin",
-    long_description="",
+    long_description="A collection of useful tools and utilities.",
     long_description_content_type="text/markdown",
     author="NorSodikin",
     author_email="admin@NorSodikin.com",
@@ -13,9 +13,13 @@ setup(
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.*",
-    install_requires="",
+    python_requires=">=3.9, <3.13",
+    install_requires=[],
 )
