@@ -1,1 +1,1 @@
-from ende import FARNET
+from .ende import FARNET
