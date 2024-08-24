@@ -1,6 +1,6 @@
 import base64
-import json 
 import hashlib
+import json
 import random
 import textwrap
 
@@ -13,7 +13,7 @@ class FARNET:
         self.cipher_suite = fernet.Fernet(base64.urlsafe_b64encode(self.key))
 
     def en(self, data, is_dict=False):
-        serialized_data = json.dumps(data).encode('utf-8') if is_dict else textwrap.dedent(data).encode("utf-8")
+        serialized_data = json.dumps(data).encode("utf-8") if is_dict else textwrap.dedent(data).encode("utf-8")
         encrypted_data = self.cipher_suite.encrypt(serialized_data)
         return encrypted_data
 
