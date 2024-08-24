@@ -25,16 +25,7 @@ class FARNET:
             raise Exception(f"[ERROR]: KUNCI - [{self.key}] - TIDAK COCOK")
 
     def logs(self, text):
-        random_color = random.choice(
-            [
-                "\033[91m",
-                "\033[92m",
-                "\033[93m",
-                "\033[94m",
-                "\033[95m",
-                "\033[96m"
-            ]
-        )
+        random_color = random.choice(["\033[91m", "\033[92m", "\033[93m", "\033[94m", "\033[95m", "\033[96m"])
         reset_color = "\033[0m"
         print(f"{random_color}{text}{reset_color}")
 
