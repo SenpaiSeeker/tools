@@ -11,16 +11,16 @@ class FARNET:
         self.key = hashlib.sha256(key.encode()).digest()
         self.cipher_suite = fernet.Fernet(base64.urlsafe_b64encode(self.key))
 
-    def en(self, data):
-        serialized_data = textwrap.dedent(data).encode("utf-8")
+    def en(self, data, is_dict=False):
+        serialized_data = json.dumps(data).encode('utf-8') if is_dict else textwrap.dedent(data).encode("utf-8")
         encrypted_data = self.cipher_suite.encrypt(serialized_data)
         return encrypted_data
 
-    def de(self, encrypted_data):
+    def de(self, encrypted_data, is_dict=False):
         try:
             decrypted_data = self.cipher_suite.decrypt(encrypted_data)
             data = decrypted_data.decode("utf-8")
-            return data
+            return json.loads(data) if is_dict else data
         except fernet.InvalidToken:
             raise Exception(f"[ERROR]: KUNCI - [{self.key}] - TIDAK COCOK")
 
