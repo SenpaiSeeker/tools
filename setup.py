@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="NS_tools",
+    name="mytoolsID",
     version="0.5",
     description="Library of @NorSodikin",
     long_description="A collection of useful tools and utilities.",
