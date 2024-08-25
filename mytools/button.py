@@ -3,7 +3,7 @@ import re
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-class BUTTON:
+class Button:
     def url(text):
         link_pattern = r"(?:https?://)?(?:www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:[/?]\S+)?|tg://\S+$"
         return re.findall(link_pattern, text)
