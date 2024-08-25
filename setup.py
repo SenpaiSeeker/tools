@@ -22,5 +22,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8, <3.13",
-    install_requires=["cryptography"],
+    install_requires=["cryptography", "pyrogram-dev", "tgcrypto", "gpytranslate"],
 )
