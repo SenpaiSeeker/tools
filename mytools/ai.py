@@ -2,6 +2,7 @@ import requests
 
 API_KEY = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"
 
+
 class Chat:
     def gemini(self, question):
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key={API_KEY}"
