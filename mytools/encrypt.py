@@ -7,7 +7,7 @@ import textwrap
 from cryptography import fernet
 
 
-class FARNET:
+class CIPHER:
     def __init__(self, key):
         self.key = hashlib.sha256(key.encode()).digest()
         self.cipher_suite = fernet.Fernet(base64.urlsafe_b64encode(self.key))
