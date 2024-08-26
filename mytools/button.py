@@ -13,15 +13,15 @@ class Button:
         text_matches = re.split(r"\| [^|]+ - [^|]+ \|", text)[0].strip() if "|" in text else text.strip()
         return button_matches, text_matches
 
-    def create(text, is_id=False):
+    def create(text, inline_cmd=None, is_id=None):
         keyboard = []
         button_matches, text_matches = Button.text(text)
 
         for button_text, button_data in button_matches:
             cb_data, *data_parts = button_data.split(";")
 
-            if not Button.url(cb_data):
-                cb_data = f"_gtnote {is_id}_{cb_data}" if is_id else cb_data
+            if not Button.url(cb_data) and if is_id:
+                cb_data = f"_gtnote {is_id}_{cb_data}"
 
             button = (
                 InlineKeyboardButton(button_text, user_id=cb_data)
