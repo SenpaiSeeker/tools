@@ -20,7 +20,7 @@ class Button:
         for button_text, button_data in button_matches:
             cb_data, *data_parts = button_data.split(";")
 
-            if not Button.url(cb_data) and if is_id:
+            if not Button.url(cb_data) and not is_id:
                 cb_data = f"_gtnote {is_id}_{cb_data}"
 
             button = (
