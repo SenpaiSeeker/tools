@@ -21,7 +21,7 @@ class Button:
             cb_data, *data_parts = button_data.split(";")
 
             if not Button.url(cb_data):
-                cb_data = f"{inline_cmd} {is_id}_{cb_data}" if inline_cmd and is_id else cb_data 
+                cb_data = f"{inline_cmd} {is_id}_{cb_data}" if inline_cmd and is_id else cb_data
 
             button = (
                 InlineKeyboardButton(button_text, user_id=cb_data)
