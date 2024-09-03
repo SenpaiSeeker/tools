@@ -2,6 +2,7 @@ import google.generativeai as genai
 
 genai.configure(api_key="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY")
 
+
 class ChatBot:
     def Text(text, name="[nor sodikin](https://t.me/NorSodikin)"):
         model = genai.GenerativeModel(
