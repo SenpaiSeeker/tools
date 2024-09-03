@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="mytoolsID",
-    version="dev-0.5.6",
+    version="dev.0.5.6",
     description="Library of @NorSodikin",
     long_description="A collection of useful tools and utilities.",
     long_description_content_type="text/markdown",
