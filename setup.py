@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="mytoolsID",
-    version="0.5.6",
+    version="dev-0.5.6",
     description="Library of @NorSodikin",
     long_description="A collection of useful tools and utilities.",
     long_description_content_type="text/markdown",
@@ -22,5 +22,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8, <3.13",
-    install_requires=["cryptography", "pyrogram-dev", "tgcrypto", "gpytranslate"],
+    install_requires=["cryptography", "pyrogram-dev", "tgcrypto", "gpytranslate", "google-generativeai"],
 )
