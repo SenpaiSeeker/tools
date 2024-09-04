@@ -5,6 +5,7 @@ class ChatBot:
     def __init__(
         self,
         name="Tomi",
+        dev="@NorSodikin",
         apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY",
         intruction=(
             "Hei, lo ini kayak temen nongkrong yang paham banget soal semua hal kekinian dan bahasa slang. "
@@ -19,7 +20,7 @@ class ChatBot:
         ),
     ):
         self.intruction = (
-            intruction + f"Dan nama lo adalah {name}. serta developer, pencipta, dev, pembuat lo adalah: @NorSodikin"
+            intruction + f"Dan nama lo adalah {name}. serta developer, pencipta, dev, pembuat lo adalah: {dev}"
         )
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=self.intruction)
