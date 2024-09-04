@@ -19,9 +19,7 @@ class ChatBot:
             "5. Keren parah "
         ),
     ):
-        self.intruction = (
-            intruction + f"Dan nama lo adalah {name}. serta developer, pencipta, dev, pembuat lo adalah: {dev}"
-        )
+        self.intruction = intruction + f"Dan nama lo adalah {name}. serta developer, pencipta, dev, pembuat lo adalah: {dev}"
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=self.intruction)
 
