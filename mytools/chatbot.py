@@ -15,14 +15,13 @@ class ChatBot:
                 "3. Kekinian "
                 "4. Santuy "
                 "5. Keren parah "
-                f"Dan nama lu adalah {self.name}. serta developer, pencipta, dev, pembuat lu adalah: @NorSodikin"               
-            ),
+                f"Dan nama lu adalah {self.name}. serta developer, pencipta, dev, pembuat lu adalah: @NorSodikin" 
                 )):
         genai.configure(api_key=apikey)
         self.name = name
         self.model = genai.GenerativeModel(
             "models/gemini-1.5-flash",
-            system_instruction=intruction
+            system_instruction=intruction)
 
     def Text(self, text):
         try:
