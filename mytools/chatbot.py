@@ -1,4 +1,5 @@
-import google.generativeai as genai 
+import google.generativeai as genai
+
 
 class ChatBot:
     def __init__(
@@ -22,7 +23,7 @@ class ChatBot:
     ):
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=intruction.format(name=name, dev=dev))
-        
+
     def Text(self, text):
         try:
             response = self.model.generate_content(text)
