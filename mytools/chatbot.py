@@ -1,4 +1,4 @@
-/eval import google.generativeai as genai
+import google.generativeai as genai
 
 
 class ChatBot:
