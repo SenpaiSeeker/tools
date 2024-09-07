@@ -18,7 +18,13 @@ class ChatBot:
 
     def Text(self, text):
         try:
-            response = self.model.generate_content(text)
+            safety_rate = {
+                "HATE": "BLOCK_NONE",
+                "HARASSMENT": "BLOCK_NONE",
+                "SEX": "BLOCK_NONE",
+                "DANGER": "BLOCK_NONE",
+            }
+            response = self.model.generate_content(text, safety_settings=safety_rate)
             return response.text.strip()
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
