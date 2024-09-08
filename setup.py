@@ -1,10 +1,13 @@
 from setuptools import find_packages, setup
+import re
 
-from mytools import __version__
+with open("mytools/__init__.py", encoding="utf-8") as f:
+    version = re.findall(r"__version__ = \"(.+)\"", f.read())[0]
+
 
 setup(
     name="mytoolsID",
-    version=__version__,
+    version=version,
     description="Library of @NorSodikin",
     long_description="A collection of useful tools and utilities.",
     long_description_content_type="text/markdown",
