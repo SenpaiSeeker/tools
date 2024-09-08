@@ -1,6 +1,6 @@
 import base64
-import google.generativeai as genai
 
+import google.generativeai as genai
 
 instruction = {
     "chatbot": base64.b64decode(
@@ -10,22 +10,25 @@ instruction = {
 
 chat_history = {}
 
+
 class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         genai.configure(api_key=apikey)
-        self.model = genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=instruction["chatbot"].format(name=name, dev=dev))
+        self.model = genai.GenerativeModel(
+            "models/gemini-1.5-flash", system_instruction=instruction["chatbot"].format(name=name, dev=dev)
+        )
 
     def chat_bot(self, text, chat_id):
         try:
             safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
-            
+
             chat_history.setdefault(chat_id, []).append({"role": "user", "parts": text})
-            
+
             chat_session = self.model.start_chat(history=chat_history[chat_id])
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=safety_rate)
-            
+
             chat_history[chat_id].append({"role": "model", "parts": response.text})
-            
+
             return response.text
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
