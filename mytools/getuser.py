@@ -56,10 +56,10 @@ class User:
         member = await message._client.get_chat_member(message.chat.id, message.from_user.id)
         return member.status in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER)
 
-    @staticmethod    
+    @staticmethod
     async def get_id(message):
         return (await User.id_and_reason(message))[0]
-    
+
     @staticmethod
     def mention(user):
         name = f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
