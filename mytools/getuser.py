@@ -53,11 +53,15 @@ class User:
 
     @staticmethod
     async def get_admin(message):
-        return [
-            member.user.id
-            async for member in message._client.get_chat_members(message.chat.id, filter=enums.ChatMembersFilter.ADMINISTRATORS)
-        ]
+        member = await message._client.get_chat_member(message.chat.id, message.from_user.id)
+        return member.status in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER)
 
-    @staticmethod
+    @staticmethod    
     async def get_id(message):
         return (await User.id_and_reason(message))[0]
+    
+    @staticmethod
+    def mention(user):
+        name = f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
+        link = f"tg://user?id={user.id}"
+        return f"[{name}]({link})"
