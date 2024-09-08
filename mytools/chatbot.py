@@ -12,7 +12,7 @@ class Api:
         genai.configure(api_key=apikey) 
         self.model = genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=intruction.get(system, "chatbot").format(name=name, dev=dev))
 
-    def Generate(self, text):
+    def Gemini(self, text):
         try:
             safety_rate = {
                 "HATE": "BLOCK_NONE",
