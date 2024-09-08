@@ -1,8 +1,9 @@
 from setuptools import find_packages, setup
+from mytools import __version__
 
 setup(
     name="mytoolsID",
-    version="0.6.dev7",
+    version=__version__,
     description="Library of @NorSodikin",
     long_description="A collection of useful tools and utilities.",
     long_description_content_type="text/markdown",
