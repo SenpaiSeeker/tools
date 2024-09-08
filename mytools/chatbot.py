@@ -9,6 +9,7 @@ instruction = {
 }
 
 chat_history = {}
+chat_dialogs = []
 
 
 class Api:
@@ -22,7 +23,7 @@ class Api:
         try:
             safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
 
-            chat_history.setdefault(chat_id, []).append({"role": "user", "parts": text})
+            chat_history.setdefault(chat_id, chat_dialogs).append({"role": "user", "parts": text})
 
             chat_session = self.model.start_chat(history=chat_history[chat_id])
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=safety_rate)
