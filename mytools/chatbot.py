@@ -9,8 +9,7 @@ intruction = {"chatbot": base64.b64decode(b"CiBTeXN0ZW0gSW5zdHJ1Y3Rpb24gdW50dWsg
 
 class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY", system=None):
-        genai.configure(api_key=apikey)
-        self.intruction = 
+        genai.configure(api_key=apikey) 
         self.model = genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=intruction.get(system, "chatbot").format(name=name, dev=dev))
 
     def Generate(self, text):
