@@ -18,7 +18,7 @@ class Api:
             "models/gemini-1.5-flash", system_instruction=instruction["chatbot"].format(name=name, dev=dev)
         )
 
-    def chat_bot(self, text, chat_id):
+    def ChatBot(self, text, chat_id):
         try:
             safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
 
