@@ -8,9 +8,6 @@ instruction = {
     ).decode(),
 }
 
-chat_history = {}
-chat_dialogs = []
-
 
 class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
