@@ -9,8 +9,6 @@ instruction = {
 }
 
 chat_history = {}
-chat_dialogs = []
-
 
 class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
@@ -18,18 +16,38 @@ class Api:
         self.model = genai.GenerativeModel(
             "models/gemini-1.5-flash", system_instruction=instruction["chatbot"].format(name=name, dev=dev)
         )
+        self.chat_data = {}
 
-    def ChatBot(self, text, chat_id):
+    def ChatBot(self, text, chat_id, user_id, user_text):
         try:
             safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
-
-            chat_history.setdefault(chat_id, chat_dialogs).append({"role": "user", "parts": text})
-
+            chat_history.setdefault(chat_id, []).append({"role": "user", "parts": text})
             chat_session = self.model.start_chat(history=chat_history[chat_id])
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=safety_rate)
-
             chat_history[chat_id].append({"role": "model", "parts": response.text})
+
+            if chat_id not in self.chat_data:
+                self.chat_data[chat_id] = {}
+            self.chat_data[chat_id][user_id] = {
+                "user_text": user_text,
+                "bot_response": response.text
+            }
 
             return response.text
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
+
+    def HapusData(self, chat_id, user_id):
+        try:
+            if chat_id in self.chat_data:
+                if user_id in self.chat_data[chat_id]:
+                    del self.chat_data[chat_id][user_id]
+                    if not self.chat_data[chat_id]:
+                        del self.chat_data[chat_id]
+                    return f"Data untuk chat_id {chat_id} dan user_id {user_id} berhasil dihapus."
+                else:
+                    return f"Data untuk user_id {user_id} tidak ditemukan di chat_id {chat_id}."
+            else:
+                return f"Data untuk chat_id {chat_id} tidak ditemukan."
+        except Exception as e:
+            return f"Terjadi kesalahan saat menghapus data: {str(e)}"
