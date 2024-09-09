@@ -1,5 +1,3 @@
-tolong perbaiki semua kode berikut ini 
-
 import base64
 
 import google.generativeai as genai
