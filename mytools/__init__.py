@@ -1,3 +1,4 @@
+from .getuser import User
 from .button import Button
 from .chatbot import Api
 from .encrypt import FARNET
