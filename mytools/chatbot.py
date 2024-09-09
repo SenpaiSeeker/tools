@@ -1,3 +1,5 @@
+tolong perbaiki semua kode berikut ini 
+
 import base64
 
 import google.generativeai as genai
@@ -16,20 +18,32 @@ class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel(
-            "models/gemini-1.5-flash", system_instruction=instruction["chatbot"].format(name=name, dev=dev)
+            "models/gemini-1.5-flash",
+            system_instruction=instruction["chatbot"].format(name=name, dev=dev)
         )
+        self.chat_history = {}
 
     def ChatBot(self, text, chat_id):
         try:
             safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
 
-            chat_history.setdefault(chat_id, chat_dialogs).append({"role": "user", "parts": text})
+            if chat_id not in self.chat_history:
+                self.chat_history[chat_id] = []
 
-            chat_session = self.model.start_chat(history=chat_history[chat_id])
+            self.chat_history[chat_id].append({"role": "user", "parts": text})
+            
+            chat_session = self.model.start_chat(history=self.chat_history[chat_id])
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=safety_rate)
 
-            chat_history[chat_id].append({"role": "model", "parts": response.text})
+            self.chat_history[chat_id].append({"role": "model", "parts": response.text})
 
             return response.text
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
+
+    def clear_chat_history(self, chat_id):
+        if chat_id in self.chat_history:
+            del self.chat_history[chat_id]
+            return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
+        else:
+            return f"Chat_id {chat_id} tidak ditemukan."
