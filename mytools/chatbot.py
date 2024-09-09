@@ -16,8 +16,7 @@ class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel(
-            "models/gemini-1.5-flash",
-            system_instruction=instruction["chatbot"].format(name=name, dev=dev)
+            "models/gemini-1.5-flash", system_instruction=instruction["chatbot"].format(name=name, dev=dev)
         )
         self.chat_history = {}
 
@@ -29,7 +28,7 @@ class Api:
                 self.chat_history[chat_id] = []
 
             self.chat_history[chat_id].append({"role": "user", "parts": text})
-            
+
             chat_session = self.model.start_chat(history=self.chat_history[chat_id])
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=safety_rate)
 
