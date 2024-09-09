@@ -40,4 +40,4 @@ class Api:
             del self.chat_history[chat_id]
             return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
         else:
-            return f"Chat_id {chat_id} tidak ditemukan."
+            return "Maaf, kita belum pernah ngobrol sebelumnya.."
