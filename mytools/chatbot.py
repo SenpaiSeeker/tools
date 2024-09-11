@@ -13,7 +13,7 @@ class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel(
-            "models/gemini-1.5-flash", 
+            "models/gemini-1.5-flash",
             system_instruction=instruction["chatbot"].format(name=name, dev=dev),
         )
         self.chat_history = {}
