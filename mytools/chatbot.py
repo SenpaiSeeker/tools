@@ -19,19 +19,25 @@ class Api:
             "models/gemini-1.5-flash",
             system_instruction=instruction["khodam" if is_khodam else "chatbot"].format(name=name, dev=dev),
         )
+        self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
         self.chat_history = {}
+
+    def KhodamCheck(input):
+        try:
+            response = self.model.generate_content(text) 
+            return response.text.strip()
+        except Exception as e:
+            return f"Terjadi kesalahan: {str(e)}"
 
     def ChatBot(self, text, chat_id):
         try:
-            safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
-
             if chat_id not in self.chat_history:
                 self.chat_history[chat_id] = []
 
             self.chat_history[chat_id].append({"role": "user", "parts": text})
 
             chat_session = self.model.start_chat(history=self.chat_history[chat_id])
-            response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=safety_rate)
+            response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=self.safety_rate)
 
             self.chat_history[chat_id].append({"role": "model", "parts": response.text})
 
