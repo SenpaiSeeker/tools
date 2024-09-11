@@ -14,7 +14,7 @@ class Api:
         genai.configure(api_key=apikey)
         self.model = genai.GenerativeModel(
             "models/gemini-1.5-flash", 
-            system_instruction=instruction["chatbot"].format(name=name, dev=dev.)
+            system_instruction=instruction["chatbot"].format(name=name, dev=dev),
         )
         self.chat_history = {}
 
