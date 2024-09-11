@@ -15,10 +15,9 @@ class Translate(SyncTranslator):
         return trans.text
 
     def TextToSpeech(self, text):
-        clean_text = " ".join(text.splitlines())
         filename = random_name()
 
         with open(filename, "wb") as file:
-            self.tts(clean_text, file=file)
+            self.tts(text, file=file, targetlang="id")
 
         return filename
