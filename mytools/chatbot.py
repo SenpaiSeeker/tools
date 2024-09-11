@@ -22,7 +22,7 @@ class Api:
         self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
         self.chat_history = {}
 
-    def KhodamCheck(input):
+    def KhodamCheck(self, input):
         try:
             response = self.model.generate_content(input) 
             return response.text.strip()
