@@ -5,4 +5,4 @@ from .getuser import User
 from .misc import Handler
 from .trans import Translate
 
-__version__ = "0.7.dev0"
+__version__ = "0.8.dev0"
