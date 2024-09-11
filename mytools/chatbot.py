@@ -24,7 +24,7 @@ class Api:
 
     def KhodamCheck(self, input):
         try:
-            response = self.model.generate_content(input) 
+            response = self.model.generate_content(input)
             return response.text.strip()
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
