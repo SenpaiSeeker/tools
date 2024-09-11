@@ -58,7 +58,7 @@ class User:
 
     @staticmethod
     async def get_id(message):
-        return (await User.id_and_reason(message))[0]
+        return (await User.ger_rid(message))[0]
 
     @staticmethod
     def mention(user):
