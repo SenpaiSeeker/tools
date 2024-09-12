@@ -1,13 +1,9 @@
-import asyncio
 import base64
-
-import aiohttp
-import aiofiles
 from typing import List
 
 import aiofiles
+import aiohttp
 import google.generativeai as genai
-import httpx
 from pyrogram.types import InputMediaPhoto
 
 instruction = {
@@ -60,6 +56,7 @@ class Api:
         else:
             return "Maaf, kita belum pernah ngobrol sebelumnya.."
 
+
 class ImageGen:
     def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen", images: List[InputMediaPhoto] = []):
         self.url = url
@@ -85,7 +82,7 @@ class ImageGen:
                             if image_response.status != 200:
                                 raise Exception(f"Error: Failed to download image with status {image_response.status}")
 
-                            async with aiofiles.open(filename, 'wb') as file:
+                            async with aiofiles.open(filename, "wb") as file:
                                 content = await image_response.read()
                                 await file.write(content)
 
