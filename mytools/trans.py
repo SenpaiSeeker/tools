@@ -1,12 +1,12 @@
 import random
 import string
-
+import gtts
 from gpytranslate import SyncTranslator
 
 
 def random_name():
     random_string = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
-    return random_string + ".mp3"
+    return random_string + ".oog"
 
 
 class Translate(SyncTranslator):
@@ -17,7 +17,7 @@ class Translate(SyncTranslator):
     def TextToSpeech(self, text):
         filename = random_name()
 
-        with open(filename, "wb") as file:
-            self.tts(text, file=file, targetlang="id")
+        gtts.gTTS(text, lang="id")
+        speech.save(filename)
 
         return filename
