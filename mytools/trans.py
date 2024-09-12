@@ -1,5 +1,6 @@
 import random
 import string
+
 import gtts
 from gpytranslate import SyncTranslator
 
@@ -17,7 +18,7 @@ class Translate(SyncTranslator):
     def TextToSpeech(self, text):
         filename = random_name()
 
-        speech=gtts.gTTS(text, lang="id")
+        speech = gtts.gTTS(text, lang="id")
         speech.save(filename)
 
         return filename
