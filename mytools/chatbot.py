@@ -1,4 +1,5 @@
 import base64
+import aiofiles
 
 import google.generativeai as genai
 import httpx
@@ -63,32 +64,36 @@ class ImageGen:
 
     async def generate_image(self, prompt: str, caption: bool = False):
         payload = {"prompt": prompt}
-
-        try:
-            async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient() as client:
+            try:
                 response = await client.post(self.url, json=payload)
                 response.raise_for_status()
 
-            try:
-                data = response.json()
-            except httpx.HTTPStatusError:
-                raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
+                try:
+                    data = response.json()
+                except httpx.HTTPStatusError:
+                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
 
-            if "url" in data:
-                for num, image_url in enumerate(data["url"], 1):
-                    filename = f"{num}.jpg"
-                    wget.download(image_url, out=filename)
-                    if num == 1 and caption:
-                        self.images.append(InputMediaPhoto(filename, caption=caption))
+                if "url" in data:
+                    for num, image_url in enumerate(data["url"], 1):
+                        filename = f"{num}.jpg"
+                        async with client.stream("GET", image_url) as image_response:
+                            image_response.raise_for_status()
+                            async with aiofiles.open(filename, 'wb') as file:
+                                async for chunk in image_response.aiter_bytes():
+                                    await file.write(chunk)
+
+                        if num == 1 and caption:
+                            self.images.append(InputMediaPhoto(filename, caption=caption))
+                        else:
+                            self.images.append(InputMediaPhoto(filename))
+
+                    if self.images:
+                        return self.images
                     else:
-                        self.images.append(InputMediaPhoto(filename))
-
-                if self.images:
-                    return self.images
+                        raise Exception("Error: No images generated")
                 else:
-                    raise Exception("Error: No images generated")
-            else:
-                raise Exception(f"Error: Invalid response format. Data: {data}")
+                    raise Exception(f"Error: Invalid response format. Data: {data}")
 
-        except httpx.RequestError as e:
-            raise Exception(f"Error: Request failed. Details: {e}")
+            except httpx.RequestError as e:
+                raise Exception(f"Error: Request failed. Details: {e}")
