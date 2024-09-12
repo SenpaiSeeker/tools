@@ -1,6 +1,11 @@
-import base64
+import base64, requests, random, string 
 
 import google.generativeai as genai
+
+import requests
+import wget
+import os
+from pyrogram.types import InputMediaPhoto
 
 instruction = {
     "chatbot": base64.b64decode(
@@ -51,3 +56,35 @@ class Api:
             return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
         else:
             return "Maaf, kita belum pernah ngobrol sebelumnya.."
+
+class ImageGen:
+    def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen", images: list = []):
+        self.url = url
+        self.images = images
+
+    def generate_image(self, prompt: str):
+        payload = {"prompt": prompt}
+        try:
+            response = requests.post(self.url, json=payload)
+            response.raise_for_status()
+            
+            try:
+                data = response.json()
+            except requests.exceptions.JSONDecodeError:
+                raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
+            
+            if "url" in data:
+                for num, image_url in enumerate(data["url"], 1):
+                    filename = f"{num}.jpg"
+                    wget.download(image_url, out=filename)
+                    self.images.append(InputMediaPhoto(filename))
+                
+                if self.images:
+                    return self.images
+                else:
+                    raise Exception("Error: No images generated")
+            else:
+                raise Exception(f"Error: Invalid response format. Data: {data}")
+        
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Error: Request failed. Details: {e}")
