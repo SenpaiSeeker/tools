@@ -5,6 +5,9 @@ from setuptools import find_packages, setup
 with open("mytools/__init__.py", encoding="utf-8") as f:
     version = re.findall(r"__version__ = \"(.+)\"", f.read())[0]
 
+with open("requirements.txt", encoding="utf-8") as r:
+    requires = [i.strip() for i in r]
+
 
 setup(
     name="mytoolsID",
@@ -28,14 +31,4 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8, <3.13",
-    install_requires=[
-        "cryptography",
-        "pyrogram-dev",
-        "tgcrypto",
-        "gpytranslate",
-        "google-generativeai",
-        "gtts",
-        "wget",
-        "httpx[http2]",
-    ],
-)
+    install_requires=requires)
