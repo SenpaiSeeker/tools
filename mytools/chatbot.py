@@ -1,6 +1,10 @@
 import asyncio
 import base64
 
+import aiohttp
+import aiofiles
+from typing import List
+
 import aiofiles
 import google.generativeai as genai
 import httpx
@@ -56,42 +60,39 @@ class Api:
         else:
             return "Maaf, kita belum pernah ngobrol sebelumnya.."
 
-
 class ImageGen:
-    def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen", images: list = []):
+    def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen", images: List[InputMediaPhoto] = []):
         self.url = url
         self.images = images
 
-    async def download_image(self, image_url: str, filename: str):
-        async with httpx.AsyncClient() as client:
-            response = await client.get(image_url)
-            response.raise_for_status()
-            async with aiofiles.open(filename, "wb") as f:
-                await f.write(response.content)
-
-    async def generate_image(self, prompt: str, caption: str = None):
+    async def generate_image(self, prompt: str, caption: bool = False):
         payload = {"prompt": prompt}
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(self.url, json=payload)
-                response.raise_for_status()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.url, json=payload) as response:
+                if response.status != 200:
+                    raise Exception(f"Error: Request failed with status {response.status}")
 
                 try:
-                    data = response.json()
-                except httpx.HTTPStatusError:
-                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
+                    data = await response.json()
+                except aiohttp.ContentTypeError:
+                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {await response.text()}")
 
                 if "url" in data:
-                    tasks = []
-                    for num, image_url in enumerate(data["url"], 1):
+                    image_urls = data["url"]
+                    for num, image_url in enumerate(image_urls, 1):
                         filename = f"{num}.jpg"
-                        tasks.append(self.download_image(image_url, filename))
+                        async with session.get(image_url) as image_response:
+                            if image_response.status != 200:
+                                raise Exception(f"Error: Failed to download image with status {image_response.status}")
+
+                            async with aiofiles.open(filename, 'wb') as file:
+                                content = await image_response.read()
+                                await file.write(content)
+
                         if num == 1 and caption:
                             self.images.append(InputMediaPhoto(filename, caption=caption))
                         else:
                             self.images.append(InputMediaPhoto(filename))
-
-                    await asyncio.gather(*tasks)
 
                     if self.images:
                         return self.images
@@ -99,6 +100,3 @@ class ImageGen:
                         raise Exception("Error: No images generated")
                 else:
                     raise Exception(f"Error: Invalid response format. Data: {data}")
-
-        except httpx.RequestError as e:
-            raise Exception(f"Error: Request failed. Details: {e}")
