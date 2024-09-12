@@ -1,8 +1,7 @@
 import base64
-import httpx
 
 import google.generativeai as genai
-import requests
+import httpx
 import wget
 from pyrogram.types import InputMediaPhoto
 
@@ -64,7 +63,7 @@ class ImageGen:
 
     async def generate_image(self, prompt: str, caption: bool = False):
         payload = {"prompt": prompt}
-        
+
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.post(self.url, json=payload)
