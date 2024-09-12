@@ -28,5 +28,14 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8, <3.13",
-    install_requires=["cryptography", "pyrogram-dev", "tgcrypto", "gpytranslate", "google-generativeai", "gtts", "wget", "httpx[http2]"],
+    install_requires=[
+        "cryptography",
+        "pyrogram-dev",
+        "tgcrypto",
+        "gpytranslate",
+        "google-generativeai",
+        "gtts",
+        "wget",
+        "httpx[http2]",
+    ],
 )
