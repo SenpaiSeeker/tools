@@ -1,0 +1,8 @@
+cryptography
+pyrogram-dev
+tgcrypto
+gpytranslate
+google-generativeai
+gtts
+aiofiles
+httpx[http2]
