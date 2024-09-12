@@ -1,7 +1,5 @@
-import base64
-import httpx
-import aiofiles
 import asyncio
+import base64
 
 import aiofiles
 import google.generativeai as genai
@@ -59,7 +57,6 @@ class Api:
             return "Maaf, kita belum pernah ngobrol sebelumnya.."
 
 
-
 class ImageGen:
     def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen", images: list = []):
         self.url = url
@@ -69,7 +66,7 @@ class ImageGen:
         async with httpx.AsyncClient() as client:
             response = await client.get(image_url)
             response.raise_for_status()
-            async with aiofiles.open(filename, 'wb') as f:
+            async with aiofiles.open(filename, "wb") as f:
                 await f.write(response.content)
 
     async def generate_image(self, prompt: str, caption: str = None):
