@@ -17,7 +17,7 @@ class Translate(SyncTranslator):
     def TextToSpeech(self, text):
         filename = random_name()
 
-        gtts.gTTS(text, lang="id")
+        speech=gtts.gTTS(text, lang="id")
         speech.save(filename)
 
         return filename
