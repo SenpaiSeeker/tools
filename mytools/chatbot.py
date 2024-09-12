@@ -75,7 +75,7 @@ class ImageGen:
                     raise Exception(f"Error: Failed to decode JSON response. Raw response: {await response.text()}")
 
                 if "url" in data:
-                    image_urls = data["url"]
+                    image_urls = data["url"][:3]
                     for num, image_url in enumerate(image_urls, 1):
                         filename = f"{num}.jpg"
                         async with session.get(image_url) as image_response:
