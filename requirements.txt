@@ -5,4 +5,4 @@ gpytranslate
 google-generativeai
 gtts
 aiofiles
-httpx[http2]
+aiohttp
