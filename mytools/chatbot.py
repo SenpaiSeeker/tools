@@ -70,15 +70,15 @@ class ImageGen:
 
                 try:
                     data = response.json()
-                except httpx.HTTPStatusError:
-                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
+                except httpx.RequestError as json_error:
+                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}. JSON Error: {json_error}")
 
                 if "url" in data:
                     for num, image_url in enumerate(data["url"], 1):
                         filename = f"{num}.jpg"
                         async with client.stream("GET", image_url) as image_response:
                             image_response.raise_for_status()
-                            async with aiofiles.open(filename, "wb") as file:
+                            async with aiofiles.open(filename, 'wb') as file:
                                 async for chunk in image_response.aiter_bytes():
                                     await file.write(chunk)
 
@@ -94,5 +94,9 @@ class ImageGen:
                 else:
                     raise Exception(f"Error: Invalid response format. Data: {data}")
 
-            except httpx.RequestError as e:
-                raise Exception(f"Error: Request failed. Details: {e}")
+            except httpx.HTTPStatusError as http_error:
+                raise Exception(f"HTTP Error: {http_error.response.status_code} - {http_error.response.text}")
+            except httpx.RequestError as request_error:
+                raise Exception(f"Request Error: Failed to communicate with the server. Details: {request_error}")
+            except Exception as general_error:
+                raise Exception(f"General Error: {general_error}")
