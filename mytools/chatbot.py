@@ -61,7 +61,7 @@ class ImageGen:
         self.url = url
         self.images = images
 
-    def generate_image(self, prompt: str):
+    def generate_image(self, prompt: str, caption: bool = False):
         payload = {"prompt": prompt}
         try:
             response = requests.post(self.url, json=payload)
@@ -76,7 +76,10 @@ class ImageGen:
                 for num, image_url in enumerate(data["url"], 1):
                     filename = f"{num}.jpg"
                     wget.download(image_url, out=filename)
-                    self.images.append(InputMediaPhoto(filename))
+                    if num == 1 and caption:
+                        self.images.append(InputMediaPhoto(filename), caption=caption)
+                    else:
+                        self.images.append(InputMediaPhoto(filename))
 
                 if self.images:
                     return self.images
