@@ -1,4 +1,5 @@
 import base64
+import httpx
 
 import google.generativeai as genai
 import requests
@@ -61,15 +62,17 @@ class ImageGen:
         self.url = url
         self.images = images
 
-    def generate_image(self, prompt: str, caption: bool = False):
+    async def generate_image(self, prompt: str, caption: bool = False):
         payload = {"prompt": prompt}
+        
         try:
-            response = requests.post(self.url, json=payload)
-            response.raise_for_status()
+            async with httpx.AsyncClient() as client:
+                response = await client.post(self.url, json=payload)
+                response.raise_for_status()
 
             try:
                 data = response.json()
-            except requests.exceptions.JSONDecodeError:
+            except httpx.HTTPStatusError:
                 raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
 
             if "url" in data:
@@ -88,5 +91,5 @@ class ImageGen:
             else:
                 raise Exception(f"Error: Invalid response format. Data: {data}")
 
-        except requests.exceptions.RequestException as e:
+        except httpx.RequestError as e:
             raise Exception(f"Error: Request failed. Details: {e}")
