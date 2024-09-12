@@ -77,7 +77,7 @@ class ImageGen:
                     filename = f"{num}.jpg"
                     wget.download(image_url, out=filename)
                     if num == 1 and caption:
-                        self.images.append(InputMediaPhoto(filename), caption=caption)
+                        self.images.append(InputMediaPhoto(filename, caption=caption))
                     else:
                         self.images.append(InputMediaPhoto(filename))
 
