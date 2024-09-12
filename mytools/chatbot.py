@@ -1,4 +1,7 @@
 import base64
+import httpx
+import aiofiles
+import asyncio
 
 import aiofiles
 import google.generativeai as genai
@@ -56,38 +59,42 @@ class Api:
             return "Maaf, kita belum pernah ngobrol sebelumnya.."
 
 
+
 class ImageGen:
     def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen", images: list = []):
         self.url = url
         self.images = images
 
-    async def generate_image(self, prompt: str, caption: bool = False):
-        payload = {"prompt": prompt}
+    async def download_image(self, image_url: str, filename: str):
         async with httpx.AsyncClient() as client:
-            try:
+            response = await client.get(image_url)
+            response.raise_for_status()
+            async with aiofiles.open(filename, 'wb') as f:
+                await f.write(response.content)
+
+    async def generate_image(self, prompt: str, caption: str = None):
+        payload = {"prompt": prompt}
+        try:
+            async with httpx.AsyncClient() as client:
                 response = await client.post(self.url, json=payload)
                 response.raise_for_status()
 
                 try:
                     data = response.json()
-                except httpx.RequestError as json_error:
-                    raise Exception(
-                        f"Error: Failed to decode JSON response. Raw response: {response.text}. JSON Error: {json_error}"
-                    )
+                except httpx.HTTPStatusError:
+                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
 
                 if "url" in data:
+                    tasks = []
                     for num, image_url in enumerate(data["url"], 1):
                         filename = f"{num}.jpg"
-                        async with client.stream("GET", image_url) as image_response:
-                            image_response.raise_for_status()
-                            async with aiofiles.open(filename, "wb") as file:
-                                async for chunk in image_response.aiter_bytes():
-                                    await file.write(chunk)
-
+                        tasks.append(self.download_image(image_url, filename))
                         if num == 1 and caption:
                             self.images.append(InputMediaPhoto(filename, caption=caption))
                         else:
                             self.images.append(InputMediaPhoto(filename))
+
+                    await asyncio.gather(*tasks)
 
                     if self.images:
                         return self.images
@@ -96,9 +103,5 @@ class ImageGen:
                 else:
                     raise Exception(f"Error: Invalid response format. Data: {data}")
 
-            except httpx.HTTPStatusError as http_error:
-                raise Exception(f"HTTP Error: {http_error.response.status_code} - {http_error.response.text}")
-            except httpx.RequestError as request_error:
-                raise Exception(f"Request Error: Failed to communicate with the server. Details: {request_error}")
-            except Exception as general_error:
-                raise Exception(f"General Error: {general_error}")
+        except httpx.RequestError as e:
+            raise Exception(f"Error: Request failed. Details: {e}")
