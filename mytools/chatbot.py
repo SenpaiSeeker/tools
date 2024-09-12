@@ -71,14 +71,16 @@ class ImageGen:
                 try:
                     data = response.json()
                 except httpx.RequestError as json_error:
-                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}. JSON Error: {json_error}")
+                    raise Exception(
+                        f"Error: Failed to decode JSON response. Raw response: {response.text}. JSON Error: {json_error}"
+                    )
 
                 if "url" in data:
                     for num, image_url in enumerate(data["url"], 1):
                         filename = f"{num}.jpg"
                         async with client.stream("GET", image_url) as image_response:
                             image_response.raise_for_status()
-                            async with aiofiles.open(filename, 'wb') as file:
+                            async with aiofiles.open(filename, "wb") as file:
                                 async for chunk in image_response.aiter_bytes():
                                     await file.write(chunk)
 
