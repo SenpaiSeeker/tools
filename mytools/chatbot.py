@@ -1,9 +1,8 @@
 import base64
-import aiofiles
 
+import aiofiles
 import google.generativeai as genai
 import httpx
-import wget
 from pyrogram.types import InputMediaPhoto
 
 instruction = {
@@ -79,7 +78,7 @@ class ImageGen:
                         filename = f"{num}.jpg"
                         async with client.stream("GET", image_url) as image_response:
                             image_response.raise_for_status()
-                            async with aiofiles.open(filename, 'wb') as file:
+                            async with aiofiles.open(filename, "wb") as file:
                                 async for chunk in image_response.aiter_bytes():
                                     await file.write(chunk)
 
