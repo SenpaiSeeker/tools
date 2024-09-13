@@ -110,6 +110,6 @@ class ImageGen:
     def _remove_file(self):
         try:
             os.system("rm -rf *.jpg")
-            self._log(files).info("Successfully removed all *.jpg")
+            self._log("FILE").info("Successfully removed all *.jpg")
         except Exception:
             pass
