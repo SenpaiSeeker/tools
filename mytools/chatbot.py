@@ -3,15 +3,10 @@ import logging
 import os
 import random
 import string
-from typing import List
-import httpx
-import aiofiles
-import os
-
 
 import aiofiles
-import aiohttp
 import google.generativeai as genai
+import httpx
 from pyrogram.types import InputMediaPhoto
 
 instruction = {
@@ -75,7 +70,7 @@ class ImageGen:
             async with httpx.AsyncClient() as client:
                 response = await client.post(self.url, json=payload)
                 response.raise_for_status()
-                
+
                 try:
                     data = response.json()
                 except ValueError:
@@ -87,7 +82,7 @@ class ImageGen:
                     random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
                     filename = f"{random_name}_{num}.jpg"
                     await self._download_image(image_url, filename)
-                    
+
                     if num == 1 and caption:
                         image_list.append(InputMediaPhoto(filename, caption=caption))
                     else:
@@ -109,7 +104,7 @@ class ImageGen:
                 response = await client.get(url)
                 response.raise_for_status()
 
-                async with aiofiles.open(filename, 'wb') as f:
+                async with aiofiles.open(filename, "wb") as f:
                     await f.write(response.content)
         except httpx.RequestError as e:
             raise Exception(f"Error: Failed to download image. Details: {e}")
