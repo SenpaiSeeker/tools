@@ -62,6 +62,9 @@ class ImageGen:
         self.url = url
         self.images = images
 
+    def _log(self, record):
+        return logging.getLogger(record)
+
     async def generate_image(self, prompt: str, caption: bool = False):
         payload = {"prompt": prompt}
         async with aiohttp.ClientSession() as session:
@@ -75,9 +78,10 @@ class ImageGen:
                     raise Exception(f"Error: Failed to decode JSON response. Raw response: {await response.text()}")
 
                 if "url" in data:
-                    image_urls = data["url"][:4]
+                    image_urls = data["url"]
                     for num, image_url in enumerate(image_urls, 1):
-                        filename = f"photo_{num}.jpg"
+                        random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+                        filename = f"{random_name}_{num}.jpg"
                         async with session.get(image_url) as image_response:
                             if image_response.status != 200:
                                 raise Exception(f"Error: Failed to download image with status {image_response.status}")
@@ -90,6 +94,7 @@ class ImageGen:
                             self.images.append(InputMediaPhoto(filename, caption=caption))
                         else:
                             self.images.append(InputMediaPhoto(filename))
+                        self._log(filename).info("Successfully saved")
 
                     if self.images:
                         return self.images
@@ -97,3 +102,9 @@ class ImageGen:
                         raise Exception("Error: No images generated")
                 else:
                     raise Exception(f"Error: Invalid response format. Data: {data}")
+
+    def _remove_file(self, filename):
+        for files in filename:
+            if files and os.path.exists(files):
+                os.remove(files)
+                self._log(files).info("Successfully removed)
