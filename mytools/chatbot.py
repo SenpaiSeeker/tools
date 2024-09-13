@@ -109,6 +109,8 @@ class ImageGen:
 
     def _remove_file(self, filename):
         for files in filename:
-            if files and os.path.exists(files):
+            try:
                 os.remove(files)
                 self._log(files).info("Successfully removed")
+            except Exception:
+                pass
