@@ -107,4 +107,4 @@ class ImageGen:
         for files in filename:
             if files and os.path.exists(files):
                 os.remove(files)
-                self._log(files).info("Successfully removed)
+                self._log(files).info("Successfully removed")
