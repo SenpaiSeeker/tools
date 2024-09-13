@@ -5,8 +5,8 @@ import random
 import string
 
 import aiofiles
-import google.generativeai as genai
 import aiohttp
+import google.generativeai as genai
 from pyrogram.types import InputMediaPhoto
 
 instruction = {
@@ -63,7 +63,7 @@ class Api:
 class ImageGen:
     def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen"):
         self.url = url
-        
+
     def _log(self, record):
         return logging.getLogger(record)
 
