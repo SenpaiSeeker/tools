@@ -107,10 +107,9 @@ class ImageGen:
                 else:
                     raise Exception(f"Error: Invalid response format. Data: {data}")
 
-    def _remove_file(self, filename):
-        for files in filename:
-            try:
-                os.remove(files)
-                self._log(files).info("Successfully removed")
-            except Exception:
-                pass
+    def _remove_file(self):
+        try:
+            os.system("rm -rf *.jpg")
+            self._log(files).info("Successfully removed all *.jpg")
+        except Exception:
+            pass
