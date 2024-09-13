@@ -6,7 +6,7 @@ import string
 
 import aiofiles
 import google.generativeai as genai
-import httpx
+import aiohttp
 from pyrogram.types import InputMediaPhoto
 
 instruction = {
@@ -63,58 +63,51 @@ class Api:
 class ImageGen:
     def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen"):
         self.url = url
+        
+    def _log(self, record):
+        return logging.getLogger(record)
 
     async def generate_image(self, prompt: str, caption: str = None):
         payload = {"prompt": prompt}
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(self.url, json=payload)
-                response.raise_for_status()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.url, json=payload) as response:
+                if response.status != 200:
+                    raise Exception(f"Error: Request failed with status {response.status}")
 
                 try:
-                    data = response.json()
-                except ValueError:
-                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {response.text}")
+                    data = await response.json()
+                except aiohttp.ContentTypeError:
+                    raise Exception(f"Error: Failed to decode JSON response. Raw response: {await response.text()}")
 
-            if "url" in data:
-                image_list = []
-                for num, image_url in enumerate(data["url"], 1):
-                    random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
-                    filename = f"{random_name}_{num}.jpg"
-                    await self._download_image(image_url, filename)
+                if "url" in data:
+                    imageList = []
+                    for num, image_url in enumerate(data["url"], 1):
+                        random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+                        filename = f"{random_name}_{num}.jpg"
+                        async with session.get(image_url) as image_response:
+                            if image_response.status != 200:
+                                raise Exception(f"Error: Failed to download image with status {image_response.status}")
 
-                    if num == 1 and caption:
-                        image_list.append(InputMediaPhoto(filename, caption=caption))
+                            async with aiofiles.open(filename, "wb") as file:
+                                content = await image_response.read()
+                                await file.write(content)
+
+                        if num == 1 and caption:
+                            imageList.append(InputMediaPhoto(filename, caption=caption))
+                        else:
+                            imageList.append(InputMediaPhoto(filename))
+                        self._log(filename).info("Successfully saved")
+
+                    if imageList:
+                        return imageList
                     else:
-                        image_list.append(InputMediaPhoto(filename))
-
-                if image_list:
-                    return image_list
+                        raise Exception("Error: No images generated")
                 else:
-                    raise Exception("Error: No images generated")
-            else:
-                raise Exception(f"Error: Invalid response format. Data: {data}")
-
-        except httpx.HTTPStatusError as e:
-            raise Exception(f"Error: Request failed. Details: {e}")
-
-    async def _download_image(self, url: str, filename: str):
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(url)
-                response.raise_for_status()
-
-                async with aiofiles.open(filename, "wb") as f:
-                    await f.write(response.content)
-        except httpx.RequestError as e:
-            raise Exception(f"Error: Failed to download image. Details: {e}")
-
-    def _log(self, record):
-        return logging.getLogger(record)
+                    raise Exception(f"Error: Invalid response format. Data: {data}")
 
     def _remove_file(self, images: list):
         for media in images:
             filename = media.media
             if os.path.exists(filename):
                 os.remove(filename)
-                self._log(filename).info("Successfully cleaned")
+                self._log(filename).info("Successfully removed")
