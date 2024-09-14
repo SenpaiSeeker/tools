@@ -8,7 +8,7 @@ class ColorfulFormatter(logging.Formatter):
         return f"{color}{message}\033[0m"
 
 class LoggerHandler:
-    def __init__(self, message: str = "[%(levelname)s] - %(name)s - %(message)s - %(asctime)s")
+    def __init__(self, message: str = "[%(levelname)s] - %(name)s - %(message)s - %(asctime)s"):
         self.formatter = ColorfulFormatter(message)
 
     def logging(self, error_type=False):
