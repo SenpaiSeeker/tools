@@ -18,12 +18,6 @@ class ColorfulFormatter(logging.Formatter):
         "\033[1;94;47m",  # Biru Terang dengan Background Putih
         "\033[1;95;47m",  # Ungu Terang dengan Background Putih
         "\033[1;96;47m",  # Cyan Terang dengan Background Putih
-        "\033[1;97;41m",  # Putih Terang dengan Background Merah Terang
-        "\033[1;97;42m",  # Putih Terang dengan Background Hijau Terang
-        "\033[1;97;43m",  # Putih Terang dengan Background Kuning Terang
-        "\033[1;97;44m",  # Putih Terang dengan Background Biru Terang
-        "\033[1;97;45m",  # Putih Terang dengan Background Ungu Terang
-        "\033[1;97;46m",  # Putih Terang dengan Background Cyan Terang
         "\033[1;91;43m",  # Merah Terang dengan Background Kuning Terang
         "\033[1;92;44m",  # Hijau Terang dengan Background Biru Terang
         "\033[1;93;45m",  # Kuning Terang dengan Background Ungu Terang
@@ -36,11 +30,6 @@ class ColorfulFormatter(logging.Formatter):
         "\033[1;94;43m",  # Biru Terang dengan Background Kuning Terang
         "\033[1;95;44m",  # Ungu Terang dengan Background Biru Terang
         "\033[1;96;45m",  # Cyan Terang dengan Background Ungu Terang
-        "\033[1;97;40m",  # Putih Terang dengan Background Hitam
-        "\033[1;91;42m",  # Merah Terang dengan Background Hijau Terang
-        "\033[1;92;43m",  # Hijau Terang dengan Background Kuning Terang
-        "\033[1;93;44m",  # Kuning Terang dengan Background Biru Terang
-        "\033[1;94;45m",  # Biru Terang dengan Background Ungu Terang
     ]
 
     def format(self, record):
