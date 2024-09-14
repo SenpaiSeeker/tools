@@ -33,5 +33,5 @@ class LoggerHandler:
             logging.getLogger("pyrogram").setLevel(logging.ERROR)
             logging.getLogger("asyncio").setLevel(logging.CRITICAL)
 
-    def get_logger(name: str):
+    def get_logger(self, name: str):
         return logging.getLogger(name)
