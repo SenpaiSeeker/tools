@@ -1,4 +1,4 @@
-import logging, random
+import logging, random, sys
 
 
 class ColorfulFormatter(logging.Formatter):
