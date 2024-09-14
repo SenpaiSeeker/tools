@@ -5,31 +5,26 @@ import sys
 
 class ColorfulFormatter(logging.Formatter):
     COLORS = [
-        "\033[1;91;40m",  # Merah Terang dengan Background Hitam
-        "\033[1;92;40m",  # Hijau Terang dengan Background Hitam
-        "\033[1;93;40m",  # Kuning Terang dengan Background Hitam
-        "\033[1;94;40m",  # Biru Terang dengan Background Hitam
-        "\033[1;95;40m",  # Ungu Terang dengan Background Hitam
-        "\033[1;96;40m",  # Cyan Terang dengan Background Hitam
-        "\033[1;97;40m",  # Putih Terang dengan Background Hitam
-        "\033[1;91;47m",  # Merah Terang dengan Background Putih
-        "\033[1;92;47m",  # Hijau Terang dengan Background Putih
-        "\033[1;93;47m",  # Kuning Terang dengan Background Putih
-        "\033[1;94;47m",  # Biru Terang dengan Background Putih
-        "\033[1;95;47m",  # Ungu Terang dengan Background Putih
-        "\033[1;96;47m",  # Cyan Terang dengan Background Putih
-        "\033[1;91;43m",  # Merah Terang dengan Background Kuning Terang
-        "\033[1;92;44m",  # Hijau Terang dengan Background Biru Terang
-        "\033[1;93;45m",  # Kuning Terang dengan Background Ungu Terang
-        "\033[1;94;46m",  # Biru Terang dengan Background Cyan Terang
-        "\033[1;95;41m",  # Ungu Terang dengan Background Merah Terang
-        "\033[1;96;42m",  # Cyan Terang dengan Background Hijau Terang
-        "\033[1;91;46m",  # Merah Terang dengan Background Cyan Terang
-        "\033[1;92;41m",  # Hijau Terang dengan Background Merah Terang
-        "\033[1;93;42m",  # Kuning Terang dengan Background Hijau Terang
-        "\033[1;94;43m",  # Biru Terang dengan Background Kuning Terang
-        "\033[1;95;44m",  # Ungu Terang dengan Background Biru Terang
-        "\033[1;96;45m",  # Cyan Terang dengan Background Ungu Terang
+        "\033[1;91m",  # Merah Terang
+        "\033[1;92m",  # Hijau Terang
+        "\033[1;93m",  # Kuning Terang
+        "\033[1;94m",  # Biru Terang
+        "\033[1;95m",  # Ungu Terang
+        "\033[1;96m",  # Cyan Terang
+        "\033[1;97m",  # Putih Terang
+        "\033[1;101m", # Background Merah Terang
+        "\033[1;102m", # Background Hijau Terang
+        "\033[1;103m", # Background Kuning Terang
+        "\033[1;104m", # Background Biru Terang
+        "\033[1;105m", # Background Ungu Terang
+        "\033[1;106m", # Background Cyan Terang
+        "\033[1;107m", # Background Putih Terang
+        "\033[1;91;47m",  # Merah Terang dengan Background Putih Terang
+        "\033[1;92;47m",  # Hijau Terang dengan Background Putih Terang
+        "\033[1;93;47m",  # Kuning Terang dengan Background Putih Terang
+        "\033[1;94;47m",  # Biru Terang dengan Background Putih Terang
+        "\033[1;95;47m",  # Ungu Terang dengan Background Putih Terang
+        "\033[1;96;47m",  # Cyan Terang dengan Background Putih Terang
     ]
 
     def format(self, record):
