@@ -5,8 +5,13 @@ import sys
 
 class ColorfulFormatter(logging.Formatter):
     COLORS = [
-        "\033[1;31m", "\033[1;32m", "\033[1;33m",
-        "\033[1;34m", "\033[1;35m", "\033[1;36m", "\033[1;37m",
+        "\033[1;31m",
+        "\033[1;32m",
+        "\033[1;33m",
+        "\033[1;34m",
+        "\033[1;35m",
+        "\033[1;36m",
+        "\033[1;37m",
     ]
 
     def format(self, record):
@@ -20,10 +25,7 @@ class LoggerHandler:
         self.formatter = ColorfulFormatter(format_str)
 
     def setup_logger(self, error_logging: bool = False, log_level=logging.INFO):
-        logging.basicConfig(
-            level=log_level,
-            handlers=[logging.StreamHandler(sys.stdout)]
-        )
+        logging.basicConfig(level=log_level, handlers=[logging.StreamHandler(sys.stdout)])
         for handler in logging.getLogger().handlers:
             handler.setFormatter(self.formatter)
 
