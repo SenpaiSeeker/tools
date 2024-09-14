@@ -19,12 +19,6 @@ class ColorfulFormatter(logging.Formatter):
         "\033[1;105m",  # Background Ungu Terang
         "\033[1;106m",  # Background Cyan Terang
         "\033[1;107m",  # Background Putih Terang
-        "\033[1;91;47m",  # Merah Terang dengan Background Putih Terang
-        "\033[1;92;47m",  # Hijau Terang dengan Background Putih Terang
-        "\033[1;93;47m",  # Kuning Terang dengan Background Putih Terang
-        "\033[1;94;47m",  # Biru Terang dengan Background Putih Terang
-        "\033[1;95;47m",  # Ungu Terang dengan Background Putih Terang
-        "\033[1;96;47m",  # Cyan Terang dengan Background Putih Terang
     ]
 
     def format(self, record):
