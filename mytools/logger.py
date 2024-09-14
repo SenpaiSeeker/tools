@@ -11,7 +11,7 @@ class LoggerHandler:
     def __init__(self, message: str = "[%(levelname)s] - %(name)s - %(message)s - %(asctime)s")
         self.formatter = ColorfulFormatter(message)
 
-    def logging(self, error_type=False)
+    def logging(self, error_type=False):
         logging.basicConfig(
             level=logging.INFO,
             handlers=[logging.StreamHandler(sys.stdout)],
