@@ -6,4 +6,4 @@ from .logger import LoggerHandler
 from .misc import Handler
 from .trans import Translate
 
-__version__ = "1.dev5"
+__version__ = "1.dev6"
