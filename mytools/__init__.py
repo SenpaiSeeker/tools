@@ -4,5 +4,6 @@ from .encrypt import FARNET
 from .getuser import User
 from .misc import Handler
 from .trans import Translate
+from .logger import LoggerHandler
 
-__version__ = "0.9"
+__version__ = "1.dev0"
