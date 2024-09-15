@@ -29,13 +29,7 @@ class Handler:
     @staticmethod
     async def get_time(seconds):
         """Mengkonversi waktu dari detik ke format yang lebih mudah dibaca."""
-        time_units = [
-            (60, 's'),   # Detik
-            (60, 'm'),   # Menit
-            (24, 'h'),   # Jam
-            (7, 'd'),    # Hari
-            (4.34812, 'w')  # Minggu
-        ]
+        time_units = [(60, "s"), (60, "m"), (24, "h"), (7, "d"), (4.34812, "w")]  # Detik  # Menit  # Jam  # Hari  # Minggu
         result = []
 
         for unit_seconds, suffix in time_units:
