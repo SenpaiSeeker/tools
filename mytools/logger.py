@@ -2,9 +2,7 @@ import logging
 import random
 import sys
 
-
-class ColorfulFormatter(logging.Formatter):
-    COLORS = [
+COLORS = [
         "\033[1;91m",  # Merah Terang
         "\033[1;92m",  # Hijau Terang
         "\033[1;93m",  # Kuning Terang
@@ -13,9 +11,11 @@ class ColorfulFormatter(logging.Formatter):
         "\033[1;96m",  # Cyan Terang
         "\033[1;97m",  # Putih Terangg
     ]
+color = random.choice(COLORS)
 
+            
+class ColorfulFormatter(logging.Formatter):
     def format(self, record):
-        color = random.choice(self.COLORS)
         message = super().format(record)
         return f"{color}{message}\033[0m"
 
