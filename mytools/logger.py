@@ -3,17 +3,17 @@ import random
 import sys
 
 COLORS = [
-        "\033[1;91m",  # Merah Terang
-        "\033[1;92m",  # Hijau Terang
-        "\033[1;93m",  # Kuning Terang
-        "\033[1;94m",  # Biru Terang
-        "\033[1;95m",  # Ungu Terang
-        "\033[1;96m",  # Cyan Terang
-        "\033[1;97m",  # Putih Terangg
-    ]
+    "\033[1;91m",  # Merah Terang
+    "\033[1;92m",  # Hijau Terang
+    "\033[1;93m",  # Kuning Terang
+    "\033[1;94m",  # Biru Terang
+    "\033[1;95m",  # Ungu Terang
+    "\033[1;96m",  # Cyan Terang
+    "\033[1;97m",  # Putih Terangg
+]
 color = random.choice(COLORS)
 
-            
+
 class ColorfulFormatter(logging.Formatter):
     def format(self, record):
         message = super().format(record)
