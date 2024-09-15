@@ -21,7 +21,7 @@ class ColorfulFormatter(logging.Formatter):
 
 
 class LoggerHandler:
-    def __init__(self, format_str: str = "[%(levelname)s] - %(name)s - %(message)s - %(asctime)s"):
+    def __init__(self, format_str: str = "%(asctime)s: [%(levelname)s] - %(name)s - %(message)s"):
         self.formatter = ColorfulFormatter(format_str)
 
     def setup_logger(self, error_logging: bool = False, log_level=logging.INFO):
