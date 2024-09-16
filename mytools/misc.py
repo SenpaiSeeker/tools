@@ -20,7 +20,7 @@ class Handler:
                 out_file.name = "result.txt"
                 await message.reply_document(document=out_file)
 
-    async def getTime(self, seconds):
+    def getTime(self, seconds):
         time_units = [(60, "s"), (60, "m"), (24, "h"), (7, "d"), (4.34812, "w")]
         result = []
 
