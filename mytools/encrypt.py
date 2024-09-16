@@ -52,3 +52,18 @@ class FARNET:
                 exec(self.de(decrypted_data))
         except Exception as error:
             self.logs(error)
+
+
+class BinaryEncryptor:
+    def text_to_binary(self, text):
+        return ''.join(format(ord(char), '08b') for char in text)
+
+    def binary_to_text(self, binary):
+        chars = [binary[i:i+8] for i in range(0, len(binary), 8)]
+        return ''.join(chr(int(char, 2)) for char in chars)
+
+    def encrypt(self, text):
+        return self.text_to_binary(text)
+
+    def decrypt(self, encrypted_binary):
+        return self.binary_to_text(encrypted_binary)
