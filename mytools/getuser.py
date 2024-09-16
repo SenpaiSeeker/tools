@@ -1,31 +1,26 @@
 from pyrogram import enums
 
-
-class User:
-    @staticmethod
-    async def get_user_id(message, username):
+class Extract:
+    async def getUserId(self, message, username):
         entities = message.entities
-        app = message._client
 
         if entities:
             entity_index = 1 if message.text.startswith("/") else 0
             entity = entities[entity_index]
 
             if entity.type == enums.MessageEntityType.MENTION:
-                return (await app.get_chat(username)).id
+                return (await message._client.get_chat(username)).id
             elif entity.type == enums.MessageEntityType.TEXT_MENTION:
                 return entity.user.id
         return username
 
-    @staticmethod
-    async def user_id(message, text):
+    async def userId(self, message, text):
         if text.isdigit():
             return int(text)
         else:
-            return await User.get_user_id(message, text)
+            return await self.getUserId(message, text)
 
-    @staticmethod
-    async def ger_rid(message, sender_chat=False):
+    async def getRid(self, message, sender_chat=False):
         text = message.text.strip()
         args = text.split()
 
@@ -43,25 +38,22 @@ class User:
 
         if len(args) == 2:
             user = args[1]
-            return await User.user_id(message, user), None
+            return await self.userId(message, user), None
 
         if len(args) > 2:
             user, reason = args[1], " ".join(args[2:])
-            return await User.user_id(message, user), reason
+            return await self.userId(message, user), reason
 
         return None, None
 
-    @staticmethod
-    async def get_admin(message):
+    async def getAdmin(self, message):
         member = await message._client.get_chat_member(message.chat.id, message.from_user.id)
         return member.status in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER)
 
-    @staticmethod
-    async def get_id(message):
-        return (await User.ger_rid(message))[0]
+    async def getId(self, message):
+        return (await self.getRid(message))[0]
 
-    @staticmethod
-    def mention(user):
+    def getMention(self, user):
         name = f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
         link = f"tg://user?id={user.id}"
         return f"[{name}]({link})"
