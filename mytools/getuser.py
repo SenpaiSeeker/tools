@@ -1,5 +1,6 @@
 from pyrogram import enums
 
+
 class Extract:
     async def getUserId(self, message, username):
         entities = message.entities
