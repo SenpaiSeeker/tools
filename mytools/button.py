@@ -1,4 +1,5 @@
 import re
+
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
@@ -43,7 +44,7 @@ class Button:
 
     def generateInlineButtonGrid(self, buttons, row_width=2):
         grid_layout = [
-            [InlineKeyboardButton(**button_data) for button_data in buttons[i:i + row_width]]
+            [InlineKeyboardButton(**button_data) for button_data in buttons[i : i + row_width]]
             for i in range(0, len(buttons), row_width)
         ]
         return InlineKeyboardMarkup(grid_layout)
