@@ -1,5 +1,6 @@
 from io import BytesIO
 
+
 class Handler:
     def getArg(self, message):
         if message.reply_to_message and len(message.command) < 2:
