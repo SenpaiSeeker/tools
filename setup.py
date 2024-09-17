@@ -17,7 +17,7 @@ setup(
     long_description_content_type="text/markdown",
     author="NorSodikin",
     author_email="admin@NorSodikin.com",
-    url="https://github.com/SenpaiSeeker/tools",
+    url="https://t.me/NorSodikin",
     license="MIT",
     packages=find_packages(),
     classifiers=[
