@@ -18,7 +18,7 @@ class Api:
             "models/gemini-1.5-flash",
             system_instruction=intruction["khodam" if is_khodam else "chatbot"].format(name=name, dev=dev),
         )
-        self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
+        self.safety_rate = {key: "BLOCK_NONE" for key in ["SEX"]}
         self.chat_history = {}
 
     def KhodamCheck(self, input):
