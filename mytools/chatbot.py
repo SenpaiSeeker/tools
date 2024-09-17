@@ -12,12 +12,7 @@ from .text import intruction
 
 
 class Api:
-    def __init__(
-        self,
-        name: str,
-        dev: str,
-        apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"
-    ):
+    def __init__(self, name: str, dev: str, apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         self.name = name
         self.dev = dev
         self.apikey = apikey
@@ -55,7 +50,6 @@ class Api:
         except Exception as e:
             self._log(__name__).error(f"ChatBot error: {str(e)}")
             return f"Terjadi kesalahan: {str(e)}"
-
 
     def clear_chat_history(self, chat_id):
         if self.chat_history.pop(chat_id, None):
