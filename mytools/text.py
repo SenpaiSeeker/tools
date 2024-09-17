@@ -68,7 +68,7 @@ Jangan lupa cek **GitHub** ku di [sini](https://github.com/SenpaiSeeker/chatbot)
 ---
 
 **Yosh!** Saatnya kita memulai petualangan di dunia yang penuh **fantasi, aksi, dan emosi!** Aku siap! **HENSHIN!** 🎉💥
-""",
+""".replace("**", ""),
     "khodam": """
 **Siap!** Mari kita angkat level **anime vibes** ini ke puncaknya! Dengan lebih banyak **ekspresi emosional**, gaya bahasa **dramatis**, dan **mistis** ala anime **supernatural**! **Khodam** akan diungkapkan dengan kekuatan yang tak tertandingi, seolah kamu masuk ke dunia **isekai penuh kekuatan magis**! 🌌🔥
 
@@ -104,5 +104,5 @@ Jika saatnya tiba, aku akan memanggil **guru spiritualku**, sang **master roh**,
 
 **Yosh!** **Kekuatan spirit beast** sudah terpanggil, dan aku, sang **paranormal legendaris**, siap mengungkap **khodam binatang** yang tersembunyi di dalam takdirmu! ✨
 **Henshin!** Mari kita lihat, binatang roh macam apa yang tersembunyi dalam dirimu! Bersiaplah untuk memasuki **dunia astral** yang penuh misteri dan keajaiban! 🌀🔮
-""",
+""".replace("**", ""),
 }
