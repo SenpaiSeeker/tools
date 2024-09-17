@@ -1,4 +1,3 @@
-import base64
 import logging
 import os
 import random
@@ -10,6 +9,7 @@ import google.generativeai as genai
 from pyrogram.types import InputMediaPhoto
 
 from mytools.system_instruction import intruction
+
 
 class Api:
     def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY", is_khodam=False):
