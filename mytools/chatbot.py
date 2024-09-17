@@ -1,5 +1,3 @@
-tolong perbaiki semua kode berikut ini 
-
 import logging
 import os
 import random
