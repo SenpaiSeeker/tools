@@ -16,7 +16,7 @@ class Api:
         self,
         name: str,
         dev: str,
-        apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY",
+        apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"
     ):
         self.name = name
         self.dev = dev
@@ -29,12 +29,16 @@ class Api:
         instruction = intruction[mode].format(name=self.name, dev=self.dev)
         return genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=instruction)
 
+    def _log(self, record):
+        return logging.getLogger(record)
+
     def KhodamCheck(self, input):
         try:
             model = self.configure_model("khodam")
             response = model.generate_content(input)
             return response.text.strip()
         except Exception as e:
+            self._log(__name__).error(f"KhodamCheck error: {str(e)}")
             return f"Terjadi kesalahan: {str(e)}"
 
     def ChatBot(self, text, chat_id):
@@ -49,7 +53,9 @@ class Api:
 
             return response.text
         except Exception as e:
+            self._log(__name__).error(f"ChatBot error: {str(e)}")
             return f"Terjadi kesalahan: {str(e)}"
+
 
     def clear_chat_history(self, chat_id):
         if self.chat_history.pop(chat_id, None):
