@@ -8,7 +8,7 @@ import aiohttp
 import google.generativeai as genai
 from pyrogram.types import InputMediaPhoto
 
-from mytools.system_instruction import intruction
+from mytools.text import intruction
 
 
 class Api:
