@@ -16,7 +16,7 @@ class Api:
         self.name = name
         self.dev = dev
         self.apikey = apikey
-        self.safety_rate = {"SEX": "BLOCK_NONE"}
+        self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
         self.chat_history = {}
 
     def configure_model(self, mode):
