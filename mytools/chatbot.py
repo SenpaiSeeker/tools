@@ -1,3 +1,5 @@
+tolong perbaiki semua kode berikut ini 
+
 import logging
 import os
 import random
@@ -12,44 +14,49 @@ from .text import intruction
 
 
 class Api:
-    def __init__(self, name="Nor Sodikin", dev="@FakeCodeX", apikey="AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY", is_khodam=False):
-        genai.configure(api_key=apikey)
-        self.model = genai.GenerativeModel(
-            "models/gemini-1.5-flash",
-            system_instruction=intruction["khodam" if is_khodam else "chatbot"].format(name=name, dev=dev),
-        )
-        self.safety_rate = {key: "BLOCK_NONE" for key in ["SEX"]}
+    def __init__(
+        self,
+        name: str,
+        dev: str, 
+        apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY",
+    ):
+        self.name = name
+        self.dev = dev
+        self.apikey = apikey
+        self.safety_rate = {"SEX": "BLOCK_NONE"}
         self.chat_history = {}
+
+    def configure_model(self, mode):
+        genai.configure(api_key=self.apikey)
+        instruction = intruction[mode].format(name=self.name, dev=self.dev)
+        return genai.GenerativeModel("models/gemini-1.5-flash", system_instruction=instruction)
 
     def KhodamCheck(self, input):
         try:
-            response = self.model.generate_content(input)
+            model = self.configure_model("khodam")
+            response = model.generate_content(input)
             return response.text.strip()
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
 
     def ChatBot(self, text, chat_id):
         try:
-            if chat_id not in self.chat_history:
-                self.chat_history[chat_id] = []
+            model = self.configure_model("chatbot")
+            history = self.chat_history.setdefault(chat_id, [])
+            history.append({"role": "user", "parts": text})
 
-            self.chat_history[chat_id].append({"role": "user", "parts": text})
-
-            chat_session = self.model.start_chat(history=self.chat_history[chat_id])
+            chat_session = model.start_chat(history=history)
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=self.safety_rate)
-
-            self.chat_history[chat_id].append({"role": "model", "parts": response.text})
+            history.append({"role": "model", "parts": response.text})
 
             return response.text
         except Exception as e:
             return f"Terjadi kesalahan: {str(e)}"
 
     def clear_chat_history(self, chat_id):
-        if chat_id in self.chat_history:
-            del self.chat_history[chat_id]
+        if self.chat_history.pop(chat_id, None):
             return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
-        else:
-            return "Maaf, kita belum pernah ngobrol sebelumnya.."
+        return "Maaf, kita belum pernah ngobrol sebelumnya."
 
 
 class ImageGen:
