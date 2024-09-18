@@ -58,7 +58,7 @@ class Api:
 
 
 class ImageGen:
-    def __init__(self, url: str = "https://nolimit-api.netlify.app/api/bing-image-gen"):
+    def __init__(self, url: str = "https://mirai-api.netlify.app/api/image-generator/bing-ai"):
         self.url = url
 
     def _log(self, record):
