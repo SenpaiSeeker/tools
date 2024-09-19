@@ -5,13 +5,18 @@ from .encrypt import BinaryEncryptor
 
 class DataBase:
     def __init__(
-        self, mongo_url: str, client_name: str = "mytoolsID", vars_name: str = "dbMyToolsID", bot_collection: str = "dbBot"
+        self,
+        mongo_url: str,
+        client_name: str = "mytoolsID",
+        vars_name: str = "dbMyToolsID",
+        bot_collection: str = "dbBot",
+        binary_keys: int = 14151819154911914,
     ):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
         self.bot = self.data[bot_collection]
-        self.binary = BinaryEncryptor()
+        self.binary = BinaryEncryptor(binary_keys)
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
