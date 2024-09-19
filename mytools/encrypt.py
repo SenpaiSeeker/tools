@@ -61,11 +61,11 @@ class BinaryEncryptor:
         self.key = key
 
     def encrypt(self, plaintext: str):
-        encrypted_bits = ''.join(format(ord(char) ^ (self.key % 256), '08b') for char in plaintext)
+        encrypted_bits = "".join(format(ord(char) ^ (self.key % 256), "08b") for char in plaintext)
         return encrypted_bits
 
     def decrypt(self, encrypted_bits: str):
         if len(encrypted_bits) % 8 != 0:
             raise ValueError("Data biner yang dienkripsi tidak valid.")
-        decrypted_chars = [chr(int(encrypted_bits[i:i+8], 2) ^ (self.key % 256)) for i in range(0, len(encrypted_bits), 8)]
-        return ''.join(decrypted_chars)
+        decrypted_chars = [chr(int(encrypted_bits[i : i + 8], 2) ^ (self.key % 256)) for i in range(0, len(encrypted_bits), 8)]
+        return "".join(decrypted_chars)
