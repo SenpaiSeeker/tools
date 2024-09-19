@@ -7,7 +7,7 @@ from .logger import LoggerHandler
 from .misc import Handler
 from .trans import Translate
 
-__version__ = "1.1.1"
+__version__ = "1.1.1.1"
 
 mytoolsID = """
                     __              __     ________     __       ______  _   __           _____           ___ __   _          
@@ -18,4 +18,4 @@ mytoolsID = """
           /____/                                               \____/                                                         
 """
 
-print(f"\033[1;37;41{mmytoolsID}\033[0m")
+print(f"\033[1;37;41m{mytoolsID}\033[0m")
