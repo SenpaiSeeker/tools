@@ -55,15 +55,17 @@ class FARNET:
 
 
 class BinaryEncryptor:
-    def text_to_binary(self, text):
-        return "".join(format(ord(char), "08b") for char in text)
+    def __init__(self, key: int):
+        if not isinstance(key, int) or key < 0:
+            raise ValueError("Kunci harus berupa integer positif.")
+        self.key = key
 
-    def binary_to_text(self, binary):
-        chars = [binary[i : i + 8] for i in range(0, len(binary), 8)]
-        return "".join(chr(int(char, 2)) for char in chars)
+    def encrypt(self, plaintext: str):
+        encrypted_bits = ''.join(format(ord(char) ^ (self.key % 256), '08b') for char in plaintext)
+        return encrypted_bits
 
-    def encrypt(self, text):
-        return self.text_to_binary(text)
-
-    def decrypt(self, encrypted_binary):
-        return self.binary_to_text(encrypted_binary)
+    def decrypt(self, encrypted_bits: str):
+        if len(encrypted_bits) % 8 != 0:
+            raise ValueError("Data biner yang dienkripsi tidak valid.")
+        decrypted_chars = [chr(int(encrypted_bits[i:i+8], 2) ^ (self.key % 256)) for i in range(0, len(encrypted_bits), 8)]
+        return ''.join(decrypted_chars)
