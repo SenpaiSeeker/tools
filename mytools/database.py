@@ -1,7 +1,10 @@
 from pymongo import MongoClient
 
+
 class DataBase:
-    def __init__(self, mongo_url: str, client_name: str = "mytoolsID", vars_name: str = "dbMyToolsID", bot_collection: str = "dbBot"):
+    def __init__(
+        self, mongo_url: str, client_name: str = "mytoolsID", vars_name: str = "dbMyToolsID", bot_collection: str = "dbBot"
+    ):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
