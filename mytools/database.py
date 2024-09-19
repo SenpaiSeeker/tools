@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 
+from .encrypt import BinaryEncryptor
+
 
 class DataBase:
     def __init__(
@@ -9,6 +11,7 @@ class DataBase:
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
         self.bot = self.data[bot_collection]
+        self.binary = BinaryEncryptor()
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
@@ -49,7 +52,7 @@ class DataBase:
             "$set": {
                 "api_id": api_id,
                 "api_hash": api_hash,
-                "bot_token" if is_token else "session_string": value,
+                "bot_token" if is_token else "session_string": self.binary.encrypt(value),
             }
         }
         return self.bot.update_one({"user_id": user_id}, update_data, upsert=True)
@@ -61,7 +64,7 @@ class DataBase:
                 "name": str(bot_data["user_id"]),
                 "api_id": bot_data["api_id"],
                 "api_hash": bot_data["api_hash"],
-                field: bot_data.get(field),
+                field: self.binary.decrypt(bot_data.get(field)),
             }
             for bot_data in self.bot.find({"user_id": {"$exists": 1}})
         ]
