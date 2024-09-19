@@ -6,3 +6,4 @@ google-generativeai
 gtts
 aiofiles
 aiohttp 
+pyromod
