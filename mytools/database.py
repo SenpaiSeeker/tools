@@ -1,12 +1,13 @@
 from pymongo import MongoClient
 
-
 class DataBase:
-    def __init__(self, mongo_url: str, client_name: str = "mytoolsID", vars_name: str = "dBmyToolsID"):
+    def __init__(self, mongo_url: str, client_name: str = "mytoolsID", vars_name: str = "dbMyToolsID", bot_collection: str = "dbBot"):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
+        self.bot = self.data[bot_collection]
 
+    # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         update_data = {"$set": {f"{var_key}.{query_name}": value}}
         self.vars.update_one({"_id": user_id}, update_data, upsert=True)
@@ -14,10 +15,6 @@ class DataBase:
     def getVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
         result = self.vars.find_one({"_id": user_id})
         return result.get(var_key, {}).get(query_name, None) if result else None
-
-    def allVars(self, user_id: int, var_key: str = "variabel"):
-        result = self.vars.find_one({"_id": user_id})
-        return result.get(var_key, {}) if result else {}
 
     def removeVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
         update_data = {"$unset": {f"{var_key}.{query_name}": ""}}
@@ -38,3 +35,33 @@ class DataBase:
     def removeAllVars(self, user_id: int, var_key: str = "variabel"):
         update_data = {"$unset": {var_key: ""}}
         self.vars.update_one({"_id": user_id}, update_data)
+
+    def allVars(self, user_id: int, var_key: str = "variabel"):
+        result = self.vars.find_one({"_id": user_id})
+        return result.get(var_key, {}) if result else {}
+
+    # Bot-related methods
+    def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = True):
+        update_data = {
+            "$set": {
+                "api_id": api_id,
+                "api_hash": api_hash,
+                "bot_token" if is_token else "session_string": value,
+            }
+        }
+        return self.bot.update_one({"user_id": user_id}, update_data, upsert=True)
+
+    def getBots(self, is_token: bool = True):
+        field = "bot_token" if is_token else "session_string"
+        return [
+            {
+                "name": str(bot_data["user_id"]),
+                "api_id": bot_data["api_id"],
+                "api_hash": bot_data["api_hash"],
+                field: bot_data.get(field),
+            }
+            for bot_data in self.bot.find({"user_id": {"$exists": 1}})
+        ]
+
+    def removeBot(self, user_id: int):
+        return self.bot.delete_one({"user_id": user_id})
