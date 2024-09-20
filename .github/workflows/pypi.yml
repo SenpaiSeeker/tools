@@ -6,9 +6,6 @@ on:
       api_pypi:
         description: 'PyPI API token'
         required: true
-      package_name:
-        description: 'Package name to delete versions from PyPI'
-        required: true
 
 jobs:
   build-n-publish:
@@ -29,17 +26,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
 
-      - name: Delete all existing versions from PyPI
+      - name: Clean old builds
         run: |
-          versions=$(curl -s -H "Authorization: token ${{ github.event.inputs.api_pypi }}" \
-            https://pypi.org/pypi/${{ github.event.inputs.package_name }}/json | jq -r '.releases | keys[]')
-          for version in $versions; do
-            echo "Deleting version $version..."
-            curl -X DELETE -H "Authorization: token ${{ github.event.inputs.api_pypi }}" \
-              https://pypi.org/manage/project/${{ github.event.inputs.package_name }}/release/$version/
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rm -rf dist/
 
       - name: Build and publish
         env:
