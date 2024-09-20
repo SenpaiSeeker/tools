@@ -7,3 +7,4 @@ gtts
 aiofiles
 aiohttp 
 pyromod
+pytz
