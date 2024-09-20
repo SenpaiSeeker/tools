@@ -27,7 +27,6 @@ class LocalDataBase:
     ):
         self.bot_db_path = bot_db_path
         self.vars_db_path = vars_db_path
-        self.backup_dir = backup_dir
         self.github_name = github_name
         self.github_mail = github_mail
         self.timezone = pytz.timezone("Asia/Jakarta")
