@@ -20,7 +20,7 @@ from .encrypt import BinaryEncryptor
 
 class LocalDataBase:
     def __init__(
-        self, bot_db_path: str = "mytoolsBot.db", vars_db_path: str = "mytoolsVars.db", backup_dir: str = "mytoolsBackup"
+        self, bot_db_path: str = "mytoolsBot.db", vars_db_path: str = "mytoolsVars.db", backup_dir: str = "mytoolsBackup",
     ):
         self.bot_db_path = bot_db_path
         self.vars_db_path = vars_db_path
