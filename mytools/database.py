@@ -22,7 +22,6 @@ class LocalDataBase:
         self,
         bot_db_path: str = "mytoolsBot.db",
         vars_db_path: str = "mytoolsVars.db",
-        backup_dir: str = "mytoolsBackup",
         github_name: str = "dependabot[bot]",
         github_mail: str = "49699333+dependabot[bot]@users.noreply.github.com",
     ):
@@ -60,32 +59,29 @@ class LocalDataBase:
         )
 
     def init_git_repo(self):
-        if not os.path.exists(os.path.join(self.backup_dir, ".git")):
+        if not os.path.exists(".git"):
             subprocess.run(["git", "init"], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "user.name", self.github_name], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "user.email", self.github_mail], cwd=self.backup_dir)
-
-    def get_current_time(self):
-        return datetime.now(self.timezone)
+            subprocess.run(["git", "config", "user.name", self.github_name])
+            subprocess.run(["git", "config", "user.email", self.github_mail])
 
     def backup_database(self):
-        current_time = self.get_current_time()
+        current_time = datetime.now(self.timezone)
         timestamp = current_time.strftime("%Y%m%d_%H%M%S")
-        bot_backup_path = os.path.join(self.backup_dir, f"bot_backup_{timestamp}.db")
-        vars_backup_path = os.path.join(self.backup_dir, f"vars_backup_{timestamp}.db")
-
+        bot_backup_path = f"bot_backup_{timestamp}.db"
+        vars_backup_path = f"vars_backup_{timestamp}.db"
+        
         shutil.copy2(self.bot_db_path, bot_backup_path)
         shutil.copy2(self.vars_db_path, vars_backup_path)
-
+        
         self.commit_to_git(bot_backup_path)
         self.commit_to_git(vars_backup_path)
 
     def commit_to_git(self, backup_path):
-        subprocess.run(["git", "add", backup_path], cwd=self.backup_dir)
+        subprocess.run(["git", "add", backup_path])
         current_time = self.get_current_time()
         commit_message = f"Backup database on {current_time.strftime('%Y-%m-%d %H:%M:%S %Z')}"
-        subprocess.run(["git", "commit", "-m", commit_message], cwd=self.backup_dir)
-        subprocess.run(["git", "push"], cwd=self.backup_dir)
+        subprocess.run(["git", "commit", "-m", commit_message])
+        subprocess.run(["git", "push"])
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
