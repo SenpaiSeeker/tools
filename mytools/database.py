@@ -60,8 +60,8 @@ class LocalDataBase:
     def init_git_repo(self):
         if not os.path.exists(".git"):
             subprocess.run(["git", "init"], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "user.name", self.github_name])
-            subprocess.run(["git", "config", "user.email", self.github_mail])
+            subprocess.run(["git", "config", "--global", "user.name", self.github_name])
+            subprocess.run(["git", "config", "--global", "user.email", self.github_mail])
 
     def get_current_time(self):
         return datetime.now(self.timezone)
