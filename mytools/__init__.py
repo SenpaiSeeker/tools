@@ -1,6 +1,6 @@
 from .button import Button
 from .chatbot import Api, ImageGen
-from .database import MongoDataBase, LocalDataBase
+from .database import LocalDataBase, MongoDataBase
 from .encrypt import FARNET, BinaryEncryptor
 from .getuser import Extract
 from .logger import LoggerHandler
