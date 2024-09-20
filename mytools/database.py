@@ -63,15 +63,18 @@ class LocalDataBase:
             subprocess.run(["git", "config", "user.name", self.github_name])
             subprocess.run(["git", "config", "user.email", self.github_mail])
 
+    def get_current_time(self):
+        return datetime.now(self.timezone)
+
     def backup_database(self):
-        current_time = datetime.now(self.timezone)
+        current_time = self.get_current_time()
         timestamp = current_time.strftime("%Y%m%d_%H%M%S")
         bot_backup_path = f"bot_backup_{timestamp}.db"
         vars_backup_path = f"vars_backup_{timestamp}.db"
-
+        
         shutil.copy2(self.bot_db_path, bot_backup_path)
         shutil.copy2(self.vars_db_path, vars_backup_path)
-
+        
         self.commit_to_git(bot_backup_path)
         self.commit_to_git(vars_backup_path)
 
