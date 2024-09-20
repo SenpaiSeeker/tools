@@ -4,7 +4,7 @@ import sqlite3
 import subprocess
 from datetime import datetime
 from typing import Union
-
+import pytz
 from pymongo import MongoClient
 
 from .encrypt import BinaryEncryptor
@@ -15,10 +15,10 @@ class LocalDataBase:
         self.bot_db_path = bot_db_path
         self.vars_db_path = vars_db_path
         self.backup_dir = backup_dir
+        self.timezone = pytz.timezone('Asia/Jakarta')
 
         os.makedirs(self.backup_dir, exist_ok=True)
 
-        # Koneksi ke database bot dan vars secara terpisah
         self.bot_conn = sqlite3.connect(self.bot_db_path)
         self.vars_conn = sqlite3.connect(self.vars_db_path)
 
@@ -27,7 +27,6 @@ class LocalDataBase:
 
         self.init_git_repo()
 
-        # Membuat tabel untuk bot
         self.bot_cursor.execute(
             """CREATE TABLE IF NOT EXISTS bot (
                                    user_id INTEGER PRIMARY KEY,
@@ -37,7 +36,6 @@ class LocalDataBase:
                                    session_string TEXT)"""
         )
 
-        # Membuat tabel untuk vars
         self.vars_cursor.execute(
             """CREATE TABLE IF NOT EXISTS vars (
                                     user_id INTEGER,
@@ -50,11 +48,11 @@ class LocalDataBase:
     def init_git_repo(self):
         if not os.path.exists(os.path.join(self.backup_dir, ".git")):
             subprocess.run(["git", "init"], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "user.name", "BackupBot"], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "user.email", "backupbot@example.com"], cwd=self.backup_dir)
+            subprocess.run(["git", "config", "user.name", "dependabot[bot]"], cwd=self.backup_dir)
+            subprocess.run(["git", "config", "user.email", "49699333+dependabot[bot]@users.noreply.github.com"], cwd=self.backup_dir)
 
     def backup_database(self):
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(self.timezone).strftime("%Y%m%d_%H%M%S")
         bot_backup_path = os.path.join(self.backup_dir, f"bot_backup_{timestamp}.db")
         vars_backup_path = os.path.join(self.backup_dir, f"vars_backup_{timestamp}.db")
 
@@ -66,7 +64,7 @@ class LocalDataBase:
 
     def commit_to_git(self, backup_path):
         subprocess.run(["git", "add", backup_path], cwd=self.backup_dir)
-        commit_message = f"Backup database on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        commit_message = f"Backup database on {datetime.now(self.timezone).strftime('%Y-%m-%d %H:%M:%S')}"
         subprocess.run(["git", "commit", "-m", commit_message], cwd=self.backup_dir)
 
     # Variabel methods
@@ -93,7 +91,7 @@ class LocalDataBase:
         self.vars_conn.commit()
         self.backup_database()
 
-    # Bot methods
+    # Bot-related methods
     def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = True):
         field = "bot_token" if is_token else "session_string"
         self.bot_cursor.execute(
