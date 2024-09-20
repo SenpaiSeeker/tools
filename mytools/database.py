@@ -10,7 +10,6 @@ from pymongo import MongoClient
 
 from .encrypt import BinaryEncryptor
 
-
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
 # | |    / __ \ / ____|   /\   | |      |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
 # | |   | |  | | |       /  \  | |      | |  | | /  \  | |  /  \  | |_) | /  \  | (___ | |__    #
@@ -18,10 +17,11 @@ from .encrypt import BinaryEncryptor
 # | |___| |__| | |____ / ____ \| |____  | |__| / ____ \| |/ ____ \| |_) / ____ \ ____) | |____  #
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
 
-                                                                                              
 
 class LocalDataBase:
-    def __init__(self, bot_db_path: str = "mytoolsBot.db", vars_db_path: str = "mytoolsVars.db", backup_dir: str = "mytoolsBackup"):
+    def __init__(
+        self, bot_db_path: str = "mytoolsBot.db", vars_db_path: str = "mytoolsVars.db", backup_dir: str = "mytoolsBackup"
+    ):
         self.bot_db_path = bot_db_path
         self.vars_db_path = vars_db_path
         self.backup_dir = backup_dir
@@ -134,8 +134,7 @@ class LocalDataBase:
 # | |\/| | |  | | . ` | | |_ | |  | | | |  | |/ /\ \ | | / /\ \ |  _ < / /\ \  \___ \|  __|   #
 # | |  | | |__| | |\  | |__| | |__| | | |__| / ____ \| |/ ____ \| |_) / ____ \ ____) | |____  #
 # |_|  |_|\____/|_| \_|\_____|\____/  |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
-                                                                                            
-                                                                                            
+
 
 class MongoDataBase:
     def __init__(
