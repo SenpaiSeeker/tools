@@ -3,7 +3,6 @@ import shutil
 import sqlite3
 import subprocess
 from datetime import datetime
-from typing import Union
 
 import pytz
 from pymongo import MongoClient
