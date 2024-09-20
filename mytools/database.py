@@ -68,10 +68,10 @@ class LocalDataBase:
         timestamp = current_time.strftime("%Y%m%d_%H%M%S")
         bot_backup_path = f"bot_backup_{timestamp}.db"
         vars_backup_path = f"vars_backup_{timestamp}.db"
-        
+
         shutil.copy2(self.bot_db_path, bot_backup_path)
         shutil.copy2(self.vars_db_path, vars_backup_path)
-        
+
         self.commit_to_git(bot_backup_path)
         self.commit_to_git(vars_backup_path)
 
