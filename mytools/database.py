@@ -3,7 +3,6 @@ import shutil
 import sqlite3
 import subprocess
 
-import pytz
 from pymongo import MongoClient
 
 from .encrypt import BinaryEncryptor
