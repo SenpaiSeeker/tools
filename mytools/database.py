@@ -4,6 +4,7 @@ import sqlite3
 import subprocess
 from datetime import datetime
 from typing import Union
+
 import pytz
 from pymongo import MongoClient
 
@@ -15,7 +16,7 @@ class LocalDataBase:
         self.bot_db_path = bot_db_path
         self.vars_db_path = vars_db_path
         self.backup_dir = backup_dir
-        self.timezone = pytz.timezone('Asia/Jakarta')
+        self.timezone = pytz.timezone("Asia/Jakarta")
 
         os.makedirs(self.backup_dir, exist_ok=True)
 
@@ -49,7 +50,9 @@ class LocalDataBase:
         if not os.path.exists(os.path.join(self.backup_dir, ".git")):
             subprocess.run(["git", "init"], cwd=self.backup_dir)
             subprocess.run(["git", "config", "user.name", "dependabot[bot]"], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "user.email", "49699333+dependabot[bot]@users.noreply.github.com"], cwd=self.backup_dir)
+            subprocess.run(
+                ["git", "config", "user.email", "49699333+dependabot[bot]@users.noreply.github.com"], cwd=self.backup_dir
+            )
 
     def backup_database(self):
         timestamp = datetime.now(self.timezone).strftime("%Y%m%d_%H%M%S")
