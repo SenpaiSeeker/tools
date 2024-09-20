@@ -1,6 +1,6 @@
-from pymongo import MongoClient
 from typing import Union
 
+from pymongo import MongoClient
 
 from .encrypt import BinaryEncryptor
 
