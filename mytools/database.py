@@ -24,8 +24,7 @@ class LocalDataBase:
         vars_db_path: str = "mytoolsVars.db",
         backup_dir: str = "mytoolsBackup",
         github_name: str = "dependabot[bot]",
-        github_mail: str = "49699333+dependabot[bot]@users.noreply.github.com" 
-
+        github_mail: str = "49699333+dependabot[bot]@users.noreply.github.com",
     ):
         self.bot_db_path = bot_db_path
         self.vars_db_path = vars_db_path
@@ -64,9 +63,7 @@ class LocalDataBase:
         if not os.path.exists(os.path.join(self.backup_dir, ".git")):
             subprocess.run(["git", "init"], cwd=self.backup_dir)
             subprocess.run(["git", "config", "user.name", self.github_name], cwd=self.backup_dir)
-            subprocess.run(
-                ["git", "config", "user.email", self.github_mail], cwd=self.backup_dir
-            )
+            subprocess.run(["git", "config", "user.email", self.github_mail], cwd=self.backup_dir)
 
     def get_current_time(self):
         return datetime.now(self.timezone)
