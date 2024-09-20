@@ -15,11 +15,15 @@ from .encrypt import BinaryEncryptor
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
 
 
+import sqlite3
+import os
+import subprocess
+
 class LocalDataBase:
     def __init__(
         self,
-        bot_db_path: str = "mytoolsBot.db",
-        vars_db_path: str = "mytoolsVars.db",
+        bot_db_path: str = "dbBot.db",
+        vars_db_path: str = "dbVars.db",
         github_name: str = "dependabot[bot]",
         github_mail: str = "49699333+dependabot[bot]@users.noreply.github.com",
     ):
@@ -27,6 +31,8 @@ class LocalDataBase:
         self.vars_db_path = vars_db_path
         self.github_name = github_name
         self.github_mail = github_mail
+
+        self.restore_database()
 
         self.bot_conn = sqlite3.connect(self.bot_db_path)
         self.vars_conn = sqlite3.connect(self.vars_db_path)
@@ -36,69 +42,60 @@ class LocalDataBase:
 
         self.init_git_repo()
 
-        self.bot_cursor.execute(
-            """CREATE TABLE IF NOT EXISTS bot (
+        self.bot_cursor.execute('''CREATE TABLE IF NOT EXISTS bot (
                                    user_id INTEGER PRIMARY KEY,
                                    api_id TEXT,
                                    api_hash TEXT,
                                    bot_token TEXT,
-                                   session_string TEXT)"""
-        )
+                                   session_string TEXT)''')
 
-        self.vars_cursor.execute(
-            """CREATE TABLE IF NOT EXISTS vars (
+        self.vars_cursor.execute('''CREATE TABLE IF NOT EXISTS vars (
                                     user_id INTEGER,
                                     var_key TEXT,
                                     query_name TEXT,
                                     value TEXT,
-                                    PRIMARY KEY (user_id, var_key, query_name))"""
-        )
+                                    PRIMARY KEY (user_id, var_key, query_name))''')
 
     def init_git_repo(self):
         if not os.path.exists(".git"):
             subprocess.run(["git", "init"])
-        subprocess.run(["git", "config", "--global", "user.name", self.github_name])
-        subprocess.run(["git", "config", "--global", "user.email", self.github_mail])
+        subprocess.run(["git", "config", "user.name", self.github_name])
+        subprocess.run(["git", "config", "user.email", self.github_mail])
 
-    def backup_database(self):
-        bot_backup_path = self.bot_db_path
-        vars_backup_path = self.vars_db_path
+    def restore_database(self):
+        if os.path.exists(self.bot_db_path):
+            subprocess.run(["git", "checkout", "--", self.bot_db_path])
+        if os.path.exists(self.vars_db_path):
+            subprocess.run(["git", "checkout", "--", self.vars_db_path])
 
-        shutil.copy2(self.bot_db_path, bot_backup_path)
-        shutil.copy2(self.vars_db_path, vars_backup_path)
+    def backup_database(self, isDbVars: bool):
+        db_name self.vars_db_path if isDbVars else self.bot_db_path
+        self.commit_to_git(db_name)
 
-        self.commit_to_git(bot_backup_path)
-        self.commit_to_git(vars_backup_path)
-
-    def commit_to_git(self, backup_path):
-        subprocess.run(["git", "add", backup_path])
-        commit_message = f"Backup database local"
+    def commit_to_git(self, db_path):
+        subprocess.run(["git", "add", db_path])
+        commit_message = f"Backup {os.path.basename(db_path)}"
         subprocess.run(["git", "commit", "-m", commit_message])
         subprocess.run(["git", "push"])
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        self.vars_cursor.execute(
-            """INSERT OR REPLACE INTO vars (user_id, var_key, query_name, value)
-                                    VALUES (?, ?, ?, ?)""",
-            (user_id, var_key, query_name, value),
-        )
+        self.vars_cursor.execute('''INSERT OR REPLACE INTO vars (user_id, var_key, query_name, value)
+                                    VALUES (?, ?, ?, ?)''', (user_id, var_key, query_name, value))
         self.vars_conn.commit()
-        self.backup_database()
+        self.backup_database(isDbVars=True)
 
     def getVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        self.vars_cursor.execute(
-            """SELECT value FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?""", (user_id, var_key, query_name)
-        )
+        self.vars_cursor.execute('''SELECT value FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?''',
+                                 (user_id, var_key, query_name))
         result = self.vars_cursor.fetchone()
         return result[0] if result else None
 
     def removeVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        self.vars_cursor.execute(
-            """DELETE FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?""", (user_id, var_key, query_name)
-        )
+        self.vars_cursor.execute('''DELETE FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?''',
+                                 (user_id, var_key, query_name))
         self.vars_conn.commit()
-        self.backup_database()
+        self.backup_database(isDbVars=True)
 
     def setListVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         current_values = self.getVars(user_id, query_name, var_key)
@@ -120,33 +117,31 @@ class LocalDataBase:
             self.setVars(user_id, query_name, new_values, var_key)
 
     def removeAllVars(self, user_id: int, var_key: str = "variabel"):
-        self.vars_cursor.execute("""DELETE FROM vars WHERE user_id = ? AND var_key = ?""", (user_id, var_key))
+        self.vars_cursor.execute('''DELETE FROM vars WHERE user_id = ? AND var_key = ?''', (user_id, var_key))
         self.vars_conn.commit()
-        self.backup_database()
+        self.backup_database(isDbVars=True)
 
     # Bot-related methods
     def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = True):
         field = "bot_token" if is_token else "session_string"
-        self.bot_cursor.execute(
-            f"""INSERT OR REPLACE INTO bot (user_id, api_id, api_hash, {field})
-                                   VALUES (?, ?, ?, ?)""",
-            (user_id, api_id, api_hash, value),
-        )
+        self.bot_cursor.execute(f'''INSERT OR REPLACE INTO bot (user_id, api_id, api_hash, {field})
+                                   VALUES (?, ?, ?, ?)''', (user_id, api_id, api_hash, value))
         self.bot_conn.commit()
-        self.backup_database()
+        self.backup_database(isDbVars=False)
 
     def getBots(self, is_token: bool = True):
         field = "bot_token" if is_token else "session_string"
-        self.bot_cursor.execute(f"""SELECT user_id, api_id, api_hash, {field} FROM bot WHERE {field} IS NOT NULL""")
+        self.bot_cursor.execute(f'''SELECT user_id, api_id, api_hash, {field} FROM bot WHERE {field} IS NOT NULL''')
         return [
             {"user_id": bot_data[0], "api_id": bot_data[1], "api_hash": bot_data[2], field: bot_data[3]}
             for bot_data in self.bot_cursor.fetchall()
         ]
 
     def removeBot(self, user_id: int):
-        self.bot_cursor.execute("""DELETE FROM bot WHERE user_id = ?""", (user_id,))
+        self.bot_cursor.execute('''DELETE FROM bot WHERE user_id = ?''', (user_id,))
         self.bot_conn.commit()
-        self.backup_database()
+        self.backup_database(isDbVars=False)
+
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
