@@ -1,4 +1,6 @@
 from pymongo import MongoClient
+from typing import Union
+
 
 from .encrypt import BinaryEncryptor
 
@@ -52,7 +54,7 @@ class DataBase:
         return result.get(var_key, {}) if result else {}
 
     # Bot-related methods
-    def saveBot(self, user_id: int, api_id: type(str, int), api_hash: str, value: str, is_token: bool = False):
+    def saveBot(self, user_id: int, api_id: Union(str, int), api_hash: str, value: str, is_token: bool = False):
         update_data = {
             "$set": {
                 "api_id": self.binary.encrypt(api_id),
