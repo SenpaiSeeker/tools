@@ -4,8 +4,110 @@ from pymongo import MongoClient
 
 from .encrypt import BinaryEncryptor
 
+import sqlite3
+import shutil
+import os
+from datetime import datetime
+import subprocess
 
-class DataBase:
+class LocalDataBase:
+    def __init__(self, bot_db_path: str = "bot.db", vars_db_path: str = "vars.db", backup_dir: str = "backup"):
+        self.bot_db_path = bot_db_path
+        self.vars_db_path = vars_db_path
+        self.backup_dir = backup_dir
+
+        os.makedirs(self.backup_dir, exist_ok=True)
+
+        # Koneksi ke database bot dan vars secara terpisah
+        self.bot_conn = sqlite3.connect(self.bot_db_path)
+        self.vars_conn = sqlite3.connect(self.vars_db_path)
+
+        self.bot_cursor = self.bot_conn.cursor()
+        self.vars_cursor = self.vars_conn.cursor()
+
+        self.init_git_repo()
+
+        # Membuat tabel untuk bot
+        self.bot_cursor.execute('''CREATE TABLE IF NOT EXISTS bot (
+                                   user_id INTEGER PRIMARY KEY,
+                                   api_id TEXT,
+                                   api_hash TEXT,
+                                   bot_token TEXT,
+                                   session_string TEXT)''')
+
+        # Membuat tabel untuk vars
+        self.vars_cursor.execute('''CREATE TABLE IF NOT EXISTS vars (
+                                    user_id INTEGER,
+                                    var_key TEXT,
+                                    query_name TEXT,
+                                    value TEXT,
+                                    PRIMARY KEY (user_id, var_key, query_name))''')
+
+    def init_git_repo(self):
+        if not os.path.exists(os.path.join(self.backup_dir, ".git")):
+            subprocess.run(["git", "init"], cwd=self.backup_dir)
+            subprocess.run(["git", "config", "user.name", "BackupBot"], cwd=self.backup_dir)
+            subprocess.run(["git", "config", "user.email", "backupbot@example.com"], cwd=self.backup_dir)
+
+    def backup_database(self):
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        bot_backup_path = os.path.join(self.backup_dir, f"bot_backup_{timestamp}.db")
+        vars_backup_path = os.path.join(self.backup_dir, f"vars_backup_{timestamp}.db")
+        
+        shutil.copy2(self.bot_db_path, bot_backup_path)
+        shutil.copy2(self.vars_db_path, vars_backup_path)
+        
+        self.commit_to_git(bot_backup_path)
+        self.commit_to_git(vars_backup_path)
+
+    def commit_to_git(self, backup_path):
+        subprocess.run(["git", "add", backup_path], cwd=self.backup_dir)
+        commit_message = f"Backup database on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        subprocess.run(["git", "commit", "-m", commit_message], cwd=self.backup_dir)
+
+    # Variabel methods
+    def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
+        self.vars_cursor.execute('''INSERT OR REPLACE INTO vars (user_id, var_key, query_name, value)
+                                    VALUES (?, ?, ?, ?)''', (user_id, var_key, query_name, value))
+        self.vars_conn.commit()
+        self.backup_database()
+
+    def getVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
+        self.vars_cursor.execute('''SELECT value FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?''',
+                                 (user_id, var_key, query_name))
+        result = self.vars_cursor.fetchone()
+        return result[0] if result else None
+
+    def removeVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
+        self.vars_cursor.execute('''DELETE FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?''',
+                                 (user_id, var_key, query_name))
+        self.vars_conn.commit()
+        self.backup_database()
+
+    # Bot methods
+    def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = True):
+        field = "bot_token" if is_token else "session_string"
+        self.bot_cursor.execute(f'''INSERT OR REPLACE INTO bot (user_id, api_id, api_hash, {field})
+                                   VALUES (?, ?, ?, ?)''', (user_id, api_id, api_hash, value))
+        self.bot_conn.commit()
+        self.backup_database()
+
+    def getBots(self, is_token: bool = True):
+        field = "bot_token" if is_token else "session_string"
+        self.bot_cursor.execute(f'''SELECT user_id, api_id, api_hash, {field} FROM bot WHERE {field} IS NOT NULL''')
+        return [
+            {"user_id": bot_data[0], "api_id": bot_data[1], "api_hash": bot_data[2], field: bot_data[3]}
+            for bot_data in self.bot_cursor.fetchall()
+        ]
+
+    def removeBot(self, user_id: int):
+        self.bot_cursor.execute('''DELETE FROM bot WHERE user_id = ?''', (user_id,))
+        self.bot_conn.commit()
+        self.backup_database()
+
+
+
+class MongoDataBase:
     def __init__(
         self,
         mongo_url: str,
