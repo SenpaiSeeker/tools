@@ -2,7 +2,6 @@ import os
 import shutil
 import sqlite3
 import subprocess
-from datetime import datetime
 
 import pytz
 from pymongo import MongoClient
@@ -66,10 +65,10 @@ class LocalDataBase:
     def backup_database(self):
         bot_backup_path = self.bot_db_path
         vars_backup_path = self.vars_db_path
-        
+
         shutil.copy2(self.bot_db_path, bot_backup_path)
         shutil.copy2(self.vars_db_path, vars_backup_path)
-        
+
         self.commit_to_git(bot_backup_path)
         self.commit_to_git(vars_backup_path)
 
