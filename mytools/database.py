@@ -69,7 +69,7 @@ class LocalDataBase:
             subprocess.run(["git", "checkout", "--", self.vars_db_path])
 
     def backup_database(self, isDbVars: bool):
-        db_name self.vars_db_path if isDbVars else self.bot_db_path
+        db_name = self.vars_db_path if isDbVars else self.bot_db_path
         self.commit_to_git(db_name)
 
     def commit_to_git(self, db_path):
