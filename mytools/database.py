@@ -28,7 +28,6 @@ class LocalDataBase:
         self.vars_db_path = vars_db_path
         self.github_name = github_name
         self.github_mail = github_mail
-        self.timezone = pytz.timezone("Asia/Jakarta")
 
         self.bot_conn = sqlite3.connect(self.bot_db_path)
         self.vars_conn = sqlite3.connect(self.vars_db_path)
