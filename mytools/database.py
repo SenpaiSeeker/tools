@@ -59,29 +59,23 @@ class LocalDataBase:
 
     def init_git_repo(self):
         if not os.path.exists(".git"):
-            subprocess.run(["git", "init"], cwd=self.backup_dir)
-            subprocess.run(["git", "config", "--global", "user.name", self.github_name])
-            subprocess.run(["git", "config", "--global", "user.email", self.github_mail])
-
-    def get_current_time(self):
-        return datetime.now(self.timezone)
+            subprocess.run(["git", "init"])
+        subprocess.run(["git", "config", "--global", "user.name", self.github_name])
+        subprocess.run(["git", "config", "--global", "user.email", self.github_mail])
 
     def backup_database(self):
-        current_time = self.get_current_time()
-        timestamp = current_time.strftime("%Y%m%d_%H%M%S")
-        bot_backup_path = f"bot_backup_{timestamp}.db"
-        vars_backup_path = f"vars_backup_{timestamp}.db"
-
+        bot_backup_path = self.bot_db_path
+        vars_backup_path = self.vars_db_path
+        
         shutil.copy2(self.bot_db_path, bot_backup_path)
         shutil.copy2(self.vars_db_path, vars_backup_path)
-
+        
         self.commit_to_git(bot_backup_path)
         self.commit_to_git(vars_backup_path)
 
     def commit_to_git(self, backup_path):
         subprocess.run(["git", "add", backup_path])
-        current_time = self.get_current_time()
-        commit_message = f"Backup database on {current_time.strftime('%Y-%m-%d %H:%M:%S %Z')}"
+        commit_message = f"Backup database local"
         subprocess.run(["git", "commit", "-m", commit_message])
         subprocess.run(["git", "push"])
 
