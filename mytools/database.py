@@ -8,8 +8,8 @@ class DataBase:
         self,
         mongo_url: str,
         client_name: str = "mytoolsID",
-        vars_name: str = "dbMyToolsID",
-        bot_collection: str = "dbBot",
+        vars_name: str = "myDbTools",
+        bot_collection: str = "myBots",
         binary_keys: int = 14151819154911914,
     ):
         self.setup = MongoClient(mongo_url)
