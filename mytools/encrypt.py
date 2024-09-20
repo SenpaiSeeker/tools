@@ -7,19 +7,19 @@ import textwrap
 from cryptography import fernet
 
 
-class FARNET:
+class CryptoEncryptor:
     def __init__(self, key):
         self.key = hashlib.sha256(key.encode()).digest()
         self.cipher_suite = fernet.Fernet(base64.urlsafe_b64encode(self.key))
 
-    def en(self, data):
+    def encrypt(self, data):
         if isinstance(data, dict):
             data = json.dumps(data)
         serialized_data = textwrap.dedent(data).encode("utf-8")
         encrypted_data = self.cipher_suite.encrypt(serialized_data)
         return encrypted_data.decode("utf-8")
 
-    def de(self, encrypted_data):
+    def decrypt(self, encrypted_data):
         try:
             decrypted_data = self.cipher_suite.decrypt(encrypted_data.encode("utf-8"))
             data = decrypted_data.decode("utf-8")
@@ -28,7 +28,7 @@ class FARNET:
             except json.JSONDecodeError:
                 return data
         except fernet.InvalidToken:
-            raise Exception(f"[ERROR]: KUNCI - [{self.key}] - TIDAK COCOK")
+            raise Exception("[ERROR]: KUNCI TIDAK COCOK")
 
     def logs(self, text):
         random_color = random.choice(
@@ -44,7 +44,7 @@ class FARNET:
         reset_color = "\033[0m"
         print(f"{random_color}{text}{reset_color}")
 
-    def run(self, decrypted_data, is_return=False):
+    def running(self, decrypted_data, is_return=False):
         try:
             if is_return:
                 return self.de(decrypted_data)
