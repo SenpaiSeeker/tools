@@ -52,23 +52,23 @@ class DataBase:
         return result.get(var_key, {}) if result else {}
 
     # Bot-related methods
-    def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = True):
+    def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = False):
         update_data = {
             "$set": {
-                "api_id": api_id,
-                "api_hash": api_hash,
+                "api_id": self.binary.encrypt(api_id),
+                "api_hash": self.binary.encrypt(api_hash),
                 "bot_token" if is_token else "session_string": self.binary.encrypt(value),
             }
         }
         return self.bot.update_one({"user_id": user_id}, update_data, upsert=True)
 
-    def getBots(self, is_token: bool = True):
+    def getBots(self, is_token: bool = False):
         field = "bot_token" if is_token else "session_string"
         return [
             {
                 "name": str(bot_data["user_id"]),
-                "api_id": bot_data["api_id"],
-                "api_hash": bot_data["api_hash"],
+                "api_id": self.binary.decrypt(bot_data["api_id"]),
+                "api_hash": self.binary.decrypt(bot_data["api_hash"]),
                 field: self.binary.decrypt(bot_data.get(field)),
             }
             for bot_data in self.bot.find({"user_id": {"$exists": 1}})
