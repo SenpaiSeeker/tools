@@ -175,23 +175,27 @@ class MongoDataBase:
     # Bot-related methods
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         update_data = {
-            "$set": self.binary.encrypt({
-                "api_id": api_id,
-                "api_hash": api_hash,
-                "bot_token" if is_token else "session_string": value,
-            })
+            "$set": self.binary.encrypt(
+                {
+                    "api_id": api_id,
+                    "api_hash": api_hash,
+                    "bot_token" if is_token else "session_string": value,
+                }
+            )
         }
         return self.bot.update_one({"user_id": user_id}, update_data, upsert=True)
 
     def getBots(self, is_token: bool = False):
         field = "bot_token" if is_token else "session_string"
         return [
-            self.binary.decrypt({
-                "name": str(bot_data["user_id"]),
-                "api_id": bot_data["api_id"],
-                "api_hash": bot_data["api_hash"],
-                field: bot_data.get(field),
-            })
+            self.binary.decrypt(
+                {
+                    "name": str(bot_data["user_id"]),
+                    "api_id": bot_data["api_id"],
+                    "api_hash": bot_data["api_hash"],
+                    field: bot_data.get(field),
+                }
+            )
             for bot_data in self.bot.find({"user_id": {"$exists": 1}})
         ]
 
