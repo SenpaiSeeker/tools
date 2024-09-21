@@ -1,11 +1,8 @@
+import json
 import os
-import sqlite3
-import subprocess
 
 from pymongo import MongoClient
 
-import json
-import os
 from .encrypt import BinaryEncryptor
 
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
@@ -18,9 +15,9 @@ from .encrypt import BinaryEncryptor
 
 class LocalDataBase:
     def __init__(
-        self, 
+        self,
         client_name: str = "mytoolsID",
-        vars_name: str = "myDbTools", 
+        vars_name: str = "myDbTools",
         bot_collection: str = "myBots",
         binary_keys: int = 14151819154911914,
     ):
@@ -29,8 +26,8 @@ class LocalDataBase:
         self.bots_file = f"{client_name}_{bot_collection}.json"
         self._initialize_files()
 
-
     # Variable methods
+
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         data = self._load_vars()
         user_data = data.setdefault(str(user_id), {var_key: {}})
@@ -98,19 +95,19 @@ class LocalDataBase:
         self._save_bots([bot for bot in data if bot["user_id"] != user_id])
 
     def _load_vars(self):
-        with open(self.vars_file, 'r') as f:
+        with open(self.vars_file, "r") as f:
             return json.load(f)
 
     def _save_vars(self, data):
-        with open(self.vars_file, 'w') as f:
+        with open(self.vars_file, "w") as f:
             json.dump(data, f, indent=4)
 
     def _load_bots(self):
-        with open(self.bots_file, 'r') as f:
+        with open(self.bots_file, "r") as f:
             return json.load(f)
 
     def _save_bots(self, data):
-        with open(self.bots_file, 'w') as f:
+        with open(self.bots_file, "w") as f:
             json.dump(data, f, indent=4)
 
     def _initialize_files(self):
