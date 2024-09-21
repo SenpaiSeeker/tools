@@ -71,21 +71,20 @@ class LocalDataBase:
         field = "bot_token" if is_token else "session_string"
         entry = {
             "user_id": user_id,
-            "api_id": self.crypto.encrypt(str(api_id)),
-            "api_hash": self.crypto.encrypt(str(api_hash)),
-            field: self.crypto.encrypt(str(value)),
+            "api_id": api_id,
+            "api_hash": api_hash,
+            field: value,
         }
         data.append(entry)
         self._save_bots(data)
 
     def getBots(self, is_token: bool = False):
-        field = "bot_token" if is_token else "session_string"
         return [
             {
                 "name": str(bot_data["user_id"]),
-                "api_id": int(self.crypto.decrypt(str(bot_data["api_id"]))),
-                "api_hash": self.crypto.decrypt(str(bot_data["api_hash"])),
-                field: self.crypto.decrypt(str(bot_data.get(field))),
+                "api_id": int(bot_data["api_id"]),
+                "api_hash": bot_data["api_hash"],
+                "bot_token" if is_token else "session_string": bot_data.get(field),
             }
             for bot_data in self._load_bots()
         ]
