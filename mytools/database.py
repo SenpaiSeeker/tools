@@ -73,7 +73,7 @@ class LocalDataBase:
             "user_id": user_id,
             "api_id": self.crypto.encrypt(str(api_id)),
             "api_hash": self.crypto.encrypt(api_hash),
-            "bot_token" if is_token else "session_string": self.binary.encrypt(value),
+            "bot_token" if is_token else "session_string": self.crypto.encrypt(value),
         }
         data.append(entry)
         self._save_bots(data)
@@ -178,7 +178,7 @@ class MongoDataBase:
             "$set": {
                 "api_id": self.crypto.encrypt(str(api_id)),
                 "api_hash": self.crypto.encrypt(api_hash),
-                "bot_token" if is_token else "session_string": self.binary.encrypt(value),
+                "bot_token" if is_token else "session_string": self.crypto.encrypt(value),
             }
         }
         return self.bot.update_one({"user_id": user_id}, update_data, upsert=True)
