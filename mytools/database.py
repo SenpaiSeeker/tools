@@ -13,7 +13,6 @@ from .encrypt import CryptoEncryptor
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
 
 
-ku buat seperti ini 
 
 class LocalDataBase:
     def __init__(
