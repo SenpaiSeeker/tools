@@ -79,12 +79,13 @@ class LocalDataBase:
         self._save_bots(data)
 
     def getBots(self, is_token: bool = False):
+        field = "bot_token" if is_token else "session_string"
         return [
             {
                 "name": str(bot_data["user_id"]),
                 "api_id": int(bot_data["api_id"]),
                 "api_hash": bot_data["api_hash"],
-                "bot_token" if is_token else "session_string": bot_data.get(field),
+                field: bot_data.get(field),
             }
             for bot_data in self._load_bots()
         ]
