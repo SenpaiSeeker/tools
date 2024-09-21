@@ -83,7 +83,7 @@ class LocalDataBase:
         return [
             {
                 "name": str(bot_data["user_id"]),
-                "api_id": int(self.binary.decrypt(bot_data["api_id"]),
+                "api_id": int(self.binary.decrypt(str(bot_data["api_id"]))),
                 "api_hash": self.binary.decrypt(bot_data["api_hash"]),
                 field: self.binary.decrypt(bot_data.get(field)),
             }
