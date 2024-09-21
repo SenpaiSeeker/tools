@@ -85,7 +85,7 @@ class LocalDataBase:
                 "name": str(bot_data["user_id"]),
                 "api_id": int(self.crypto.decrypt(str(bot_data["api_id"]))),
                 "api_hash": self.crypto.decrypt(bot_data["api_hash"]),
-                field: self.crypto.decrypt(bot_data.get(field)),
+                field: self.crypto.decrypt(bot_data[field]),
             }
             for bot_data in self._load_bots()
         ]
