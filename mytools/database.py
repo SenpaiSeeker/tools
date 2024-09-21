@@ -17,7 +17,7 @@ class LocalDataBase:
     def __init__(
         self,
         client_name: str = "mytoolsID",
-        vars_name: str = "myDbTools",
+        vars_name: str = "myVars",
         bot_collection: str = "myBots",
         crypto_keys: int = 14151819154911914,
     ):
