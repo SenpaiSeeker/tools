@@ -21,7 +21,7 @@ class LocalDataBase:
         bot_collection: str = "myBots",
         binary_keys: int = 14151819154911914,
     ):
-        self.binary = BinaryEncryptor(binary_keys)
+        self.binary = BinaryEncryptor(int(binary_keys))
         self.vars_file = f"{client_name}_{vars_name}.json"
         self.bots_file = f"{client_name}_{bot_collection}.json"
         self._initialize_files()
