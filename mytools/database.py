@@ -4,6 +4,8 @@ import subprocess
 
 from pymongo import MongoClient
 
+import json
+import os
 from .encrypt import BinaryEncryptor
 
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
@@ -16,138 +18,105 @@ from .encrypt import BinaryEncryptor
 
 class LocalDataBase:
     def __init__(
-        self,
-        bot_db_path: str = "dbBot.db",
-        vars_db_path: str = "dbVars.db",
-        github_name: str = "dependabot[bot]",
-        github_mail: str = "49699333+dependabot[bot]@users.noreply.github.com",
+        self, 
+        client_name: str = "mytoolsID",
+        vars_name: str = "myDbTools", 
+        bot_collection: str = "myBots",
+        binary_keys: int = 14151819154911914,
     ):
-        self.bot_db_path = bot_db_path
-        self.vars_db_path = vars_db_path
-        self.github_name = github_name
-        self.github_mail = github_mail
+        self.binary = BinaryEncryptor(binary_keys)
+        self.vars_file = f"{client_name}_{vars_name}.json"
+        self.bots_file = f"{client_name}_{bot_collection}.json"
+        self._initialize_files()
 
-        self.restore_database()
 
-        self.bot_conn = sqlite3.connect(self.bot_db_path)
-        self.vars_conn = sqlite3.connect(self.vars_db_path)
-
-        self.bot_cursor = self.bot_conn.cursor()
-        self.vars_cursor = self.vars_conn.cursor()
-
-        self.init_git_repo()
-
-        self.bot_cursor.execute(
-            """CREATE TABLE IF NOT EXISTS bot (
-                                   user_id INTEGER PRIMARY KEY,
-                                   api_id TEXT,
-                                   api_hash TEXT,
-                                   bot_token TEXT,
-                                   session_string TEXT)"""
-        )
-
-        self.vars_cursor.execute(
-            """CREATE TABLE IF NOT EXISTS vars (
-                                    user_id INTEGER,
-                                    var_key TEXT,
-                                    query_name TEXT,
-                                    value TEXT,
-                                    PRIMARY KEY (user_id, var_key, query_name))"""
-        )
-
-    def init_git_repo(self):
-        if not os.path.exists(".git"):
-            subprocess.run(["git", "init"])
-        subprocess.run(["git", "config", "user.name", self.github_name])
-        subprocess.run(["git", "config", "user.email", self.github_mail])
-
-    def restore_database(self):
-        if os.path.exists(self.bot_db_path):
-            subprocess.run(["git", "checkout", "--", self.bot_db_path])
-        if os.path.exists(self.vars_db_path):
-            subprocess.run(["git", "checkout", "--", self.vars_db_path])
-
-    def backup_database(self, isDbVars: bool):
-        db_name = self.vars_db_path if isDbVars else self.bot_db_path
-        self.commit_to_git(db_name)
-
-    def commit_to_git(self, db_path):
-        subprocess.run(["git", "add", db_path])
-        commit_message = f"Backup {os.path.basename(db_path)}"
-        subprocess.run(["git", "commit", "-m", commit_message])
-        subprocess.run(["git", "push"])
-
-    # Variabel methods
+    # Variable methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        self.vars_cursor.execute(
-            """INSERT OR REPLACE INTO vars (user_id, var_key, query_name, value)
-                                    VALUES (?, ?, ?, ?)""",
-            (user_id, var_key, query_name, value),
-        )
-        self.vars_conn.commit()
-        self.backup_database(isDbVars=True)
+        data = self._load_vars()
+        user_data = data.setdefault(str(user_id), {var_key: {}})
+        user_data[var_key][query_name] = value
+        self._save_vars(data)
 
     def getVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        self.vars_cursor.execute(
-            """SELECT value FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?""", (user_id, var_key, query_name)
-        )
-        result = self.vars_cursor.fetchone()
-        return result[0] if result else None
+        return self._load_vars().get(str(user_id), {}).get(var_key, {}).get(query_name)
 
     def removeVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        self.vars_cursor.execute(
-            """DELETE FROM vars WHERE user_id = ? AND var_key = ? AND query_name = ?""", (user_id, var_key, query_name)
-        )
-        self.vars_conn.commit()
-        self.backup_database(isDbVars=True)
+        data = self._load_vars()
+        if str(user_id) in data:
+            data[str(user_id)][var_key].pop(query_name, None)
+            self._save_vars(data)
 
     def setListVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        current_values = self.getVars(user_id, query_name, var_key)
-        if current_values:
-            new_values = current_values + "," + value
-        else:
-            new_values = value
-        self.setVars(user_id, query_name, new_values, var_key)
+        data = self._load_vars()
+        user_data = data.setdefault(str(user_id), {var_key: {}})
+        user_data[var_key].setdefault(query_name, []).append(value)
+        self._save_vars(data)
 
     def getListVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        current_values = self.getVars(user_id, query_name, var_key)
-        return current_values.split(",") if current_values else []
+        return self._load_vars().get(str(user_id), {}).get(var_key, {}).get(query_name, [])
 
     def removeListVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        current_values = self.getListVars(user_id, query_name, var_key)
-        if value in current_values:
-            current_values.remove(value)
-            new_values = ",".join(current_values)
-            self.setVars(user_id, query_name, new_values, var_key)
+        data = self._load_vars()
+        if str(user_id) in data and query_name in data[str(user_id)][var_key]:
+            data[str(user_id)][var_key][query_name].remove(value)
+            self._save_vars(data)
 
-    def removeAllVars(self, user_id: int, var_key: str = "variabel"):
-        self.vars_cursor.execute("""DELETE FROM vars WHERE user_id = ? AND var_key = ?""", (user_id, var_key))
-        self.vars_conn.commit()
-        self.backup_database(isDbVars=True)
+    def removeAllVars(self, user_id: int):
+        data = self._load_vars()
+        data.pop(str(user_id), None)
+        self._save_vars(data)
+
+    def allVars(self, user_id: int, var_key: str = "variabel"):
+        return self._load_vars().get(str(user_id), {}).get(var_key, {})
 
     # Bot-related methods
-    def saveBot(self, user_id: int, api_id: str, api_hash: str, value: str, is_token: bool = True):
-        field = "bot_token" if is_token else "session_string"
-        self.bot_cursor.execute(
-            f"""INSERT OR REPLACE INTO bot (user_id, api_id, api_hash, {field})
-                                   VALUES (?, ?, ?, ?)""",
-            (user_id, api_id, api_hash, value),
-        )
-        self.bot_conn.commit()
-        self.backup_database(isDbVars=False)
+    def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
+        data = self._load_bots()
+        entry = {
+            "user_id": user_id,
+            "api_id": self.binary.encrypt(api_id),
+            "api_hash": self.binary.encrypt(api_hash),
+            "bot_token" if is_token else "session_string": self.binary.encrypt(value),
+        }
+        data.append(entry)
+        self._save_bots(data)
 
-    def getBots(self, is_token: bool = True):
+    def getBots(self, is_token: bool = False):
         field = "bot_token" if is_token else "session_string"
-        self.bot_cursor.execute(f"""SELECT user_id, api_id, api_hash, {field} FROM bot WHERE {field} IS NOT NULL""")
         return [
-            {"user_id": bot_data[0], "api_id": bot_data[1], "api_hash": bot_data[2], field: bot_data[3]}
-            for bot_data in self.bot_cursor.fetchall()
+            {
+                "name": str(bot_data["user_id"]),
+                "api_id": self.binary.decrypt(bot_data["api_id"]),
+                "api_hash": self.binary.decrypt(bot_data["api_hash"]),
+                field: self.binary.decrypt(bot_data.get(field)),
+            }
+            for bot_data in self._load_bots()
         ]
 
     def removeBot(self, user_id: int):
-        self.bot_cursor.execute("""DELETE FROM bot WHERE user_id = ?""", (user_id,))
-        self.bot_conn.commit()
-        self.backup_database(isDbVars=False)
+        data = self._load_bots()
+        self._save_bots([bot for bot in data if bot["user_id"] != user_id])
+
+    def _load_vars(self):
+        with open(self.vars_file, 'r') as f:
+            return json.load(f)
+
+    def _save_vars(self, data):
+        with open(self.vars_file, 'w') as f:
+            json.dump(data, f, indent=4)
+
+    def _load_bots(self):
+        with open(self.bots_file, 'r') as f:
+            return json.load(f)
+
+    def _save_bots(self, data):
+        with open(self.bots_file, 'w') as f:
+            json.dump(data, f, indent=4)
+
+    def _initialize_files(self):
+        for file in [self.vars_file, self.bots_file]:
+            if not os.path.exists(file):
+                self._save_vars({}) if file == self.vars_file else self._save_bots([])
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
