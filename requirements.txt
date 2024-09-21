@@ -8,4 +8,5 @@ gtts
 aiofiles
 aiohttp 
 pyromod
-pytz
+pytz 
+pymongo 
