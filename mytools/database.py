@@ -13,6 +13,8 @@ from .encrypt import CryptoEncryptor
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
 
 
+ku buat seperti ini 
+
 class LocalDataBase:
     def __init__(
         self,
@@ -27,7 +29,6 @@ class LocalDataBase:
         self._initialize_files()
 
     # Variable methods
-
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         data = self._load_vars()
         user_data = data.setdefault(str(user_id), {var_key: {}})
@@ -69,11 +70,12 @@ class LocalDataBase:
     # Bot-related methods
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         data = self._load_bots()
+        field = "bot_token" if is_token else "session_string"
         entry = {
             "user_id": user_id,
             "api_id": self.crypto.encrypt(str(api_id)),
             "api_hash": self.crypto.encrypt(api_hash),
-            "bot_token" if is_token else "session_string": self.crypto.encrypt(value),
+            field: self.crypto.encrypt(value),
         }
         data.append(entry)
         self._save_bots(data)
@@ -85,7 +87,7 @@ class LocalDataBase:
                 "name": str(bot_data["user_id"]),
                 "api_id": int(self.crypto.decrypt(str(bot_data["api_id"]))),
                 "api_hash": self.crypto.decrypt(bot_data["api_hash"]),
-                field: self.crypto.decrypt(bot_data[field]),
+                field: self.crypto.decrypt(bot_data.get(field)),
             }
             for bot_data in self._load_bots()
         ]
@@ -114,7 +116,6 @@ class LocalDataBase:
         for file in [self.vars_file, self.bots_file]:
             if not os.path.exists(file):
                 self._save_vars({}) if file == self.vars_file else self._save_bots([])
-
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
 # |  \/  |/ __ \| \ | |/ ____|/ __ \  |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
