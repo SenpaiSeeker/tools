@@ -137,7 +137,7 @@ class MongoDataBase:
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
         self.bot = self.data[bot_collection]
-        self.binary = CryptoEncryptor(str(crypto_keys))
+        self.crypto = CryptoEncryptor(str(crypto_keys))
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
