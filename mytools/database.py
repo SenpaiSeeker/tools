@@ -179,8 +179,8 @@ class MongoDataBase:
                 "api_id": api_id,
                 "api_hash": api_hash,
                 "bot_token" if is_token else "session_string": value,
-            }
-        })
+            })
+        }
         return self.bot.update_one({"user_id": user_id}, update_data, upsert=True)
 
     def getBots(self, is_token: bool = False):
