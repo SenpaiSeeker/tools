@@ -176,7 +176,7 @@ class MongoDataBase:
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         update_data = {
             "$set": {
-                "api_id": self.binary.encrypt(str(api_id])),
+                "api_id": self.binary.encrypt(str(api_id)),
                 "api_hash": self.binary.encrypt(api_hash),
                 "bot_token" if is_token else "session_string": self.binary.encrypt(value),
             }
