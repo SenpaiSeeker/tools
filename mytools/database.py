@@ -26,8 +26,8 @@ class LocalDataBase:
         self.bots_file = f"{client_name}_{bot_collection}.json"
         self._initialize_files()
 
-    
     # Variable methods
+
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         data = self._load_vars()
         user_data = data.setdefault(str(user_id), {var_key: {}})
