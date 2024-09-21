@@ -3,7 +3,7 @@ import os
 
 from pymongo import MongoClient
 
-from .encrypt import BinaryEncryptor
+from .encrypt import CryptoEncryptor
 
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
 # | |    / __ \ / ____|   /\   | |      |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
@@ -19,9 +19,9 @@ class LocalDataBase:
         client_name: str = "mytoolsID",
         vars_name: str = "myDbTools",
         bot_collection: str = "myBots",
-        binary_keys: int = 14151819154911914,
+        crypto_keys: int = 14151819154911914,
     ):
-        self.binary = BinaryEncryptor(binary_keys)
+        self.crypto = CryptoEncryptor(crypto_keys)
         self.vars_file = f"{client_name}_{vars_name}.json"
         self.bots_file = f"{client_name}_{bot_collection}.json"
         self._initialize_files()
@@ -71,8 +71,8 @@ class LocalDataBase:
         data = self._load_bots()
         entry = {
             "user_id": user_id,
-            "api_id": self.binary.encrypt(str(api_id)),
-            "api_hash": self.binary.encrypt(api_hash),
+            "api_id": self.crypto.encrypt(str(api_id)),
+            "api_hash": self.crypto.encrypt(api_hash),
             "bot_token" if is_token else "session_string": self.binary.encrypt(value),
         }
         data.append(entry)
@@ -83,9 +83,9 @@ class LocalDataBase:
         return [
             {
                 "name": str(bot_data["user_id"]),
-                "api_id": int(self.binary.decrypt(str(bot_data["api_id"]))),
-                "api_hash": self.binary.decrypt(bot_data["api_hash"]),
-                field: self.binary.decrypt(bot_data.get(field)),
+                "api_id": int(self.crypto.decrypt(str(bot_data["api_id"]))),
+                "api_hash": self.crypto.decrypt(bot_data["api_hash"]),
+                field: self.crypto.decrypt(bot_data.get(field)),
             }
             for bot_data in self._load_bots()
         ]
@@ -131,13 +131,13 @@ class MongoDataBase:
         client_name: str = "mytoolsID",
         vars_name: str = "myDbTools",
         bot_collection: str = "myBots",
-        binary_keys: int = 14151819154911914,
+        crypto_keys: int = 14151819154911914,
     ):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
         self.bot = self.data[bot_collection]
-        self.binary = BinaryEncryptor(binary_keys)
+        self.binary = CryptoEncryptor(crypto_keys)
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
@@ -176,8 +176,8 @@ class MongoDataBase:
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         update_data = {
             "$set": {
-                "api_id": self.binary.encrypt(str(api_id)),
-                "api_hash": self.binary.encrypt(api_hash),
+                "api_id": self.crypto.encrypt(str(api_id)),
+                "api_hash": self.crypto.encrypt(api_hash),
                 "bot_token" if is_token else "session_string": self.binary.encrypt(value),
             }
         }
@@ -188,9 +188,9 @@ class MongoDataBase:
         return [
             {
                 "name": str(bot_data["user_id"]),
-                "api_id": int(self.binary.decrypt(str(bot_data["api_id"]))),
-                "api_hash": self.binary.decrypt(bot_data["api_hash"]),
-                field: self.binary.decrypt(bot_data.get(field)),
+                "api_id": int(self.crypto.decrypt(str(bot_data["api_id"]))),
+                "api_hash": self.crypto.decrypt(bot_data["api_hash"]),
+                field: self.crypto.decrypt(bot_data.get(field)),
             }
             for bot_data in self.bot.find({"user_id": {"$exists": 1}})
         ]
