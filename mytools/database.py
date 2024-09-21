@@ -13,7 +13,6 @@ from .encrypt import CryptoEncryptor
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
 
 
-
 class LocalDataBase:
     def __init__(
         self,
@@ -115,6 +114,7 @@ class LocalDataBase:
         for file in [self.vars_file, self.bots_file]:
             if not os.path.exists(file):
                 self._save_vars({}) if file == self.vars_file else self._save_bots([])
+
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
 # |  \/  |/ __ \| \ | |/ ____|/ __ \  |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
