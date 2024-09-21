@@ -21,13 +21,13 @@ class LocalDataBase:
         bot_collection: str = "myBots",
         crypto_keys: int = 14151819154911914,
     ):
-        self.crypto = CryptoEncryptor(crypto_keys)
+        self.crypto = CryptoEncryptor(str(crypto_keys))
         self.vars_file = f"{client_name}_{vars_name}.json"
         self.bots_file = f"{client_name}_{bot_collection}.json"
         self._initialize_files()
 
+    
     # Variable methods
-
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         data = self._load_vars()
         user_data = data.setdefault(str(user_id), {var_key: {}})
@@ -137,7 +137,7 @@ class MongoDataBase:
         self.data = self.setup[client_name]
         self.vars = self.data[vars_name]
         self.bot = self.data[bot_collection]
-        self.binary = CryptoEncryptor(crypto_keys)
+        self.binary = CryptoEncryptor(str(crypto_keys))
 
     # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
