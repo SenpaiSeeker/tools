@@ -3,7 +3,7 @@ import os
 
 from pymongo import MongoClient
 
-from .encrypt import CryptoEncryptor, BinaryEncryptor
+from .encrypt import BinaryEncryptor, CryptoEncryptor
 
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
 # | |    / __ \ / ____|   /\   | |      |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
