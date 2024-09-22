@@ -87,7 +87,8 @@ class LocalDataBase:
                 "api_hash": bot_data["api_hash"],
                 field: bot_data.get(field),
             }
-            for bot_data in self._load_bots() if bot_data.get(field)
+            for bot_data in self._load_bots()
+            if bot_data.get(field)
         ]
 
     def removeBot(self, user_id: int):
