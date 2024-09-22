@@ -7,7 +7,7 @@ from .logger import LoggerHandler
 from .misc import Handler
 from .trans import Translate
 
-__version__ = "0.0.0.1.dev21"
+__version__ = "0.0.0.1.dev22"
 
 mytoolsID = """
  __    __     __  __     ______   ______     ______     __         ______     __     _____    
