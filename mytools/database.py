@@ -70,7 +70,7 @@ class LocalDataBase:
         data = self._load_bots()
         field = "bot_token" if is_token else "session_string"
         entry = {
-            "user_id": self.binary.encrypt(str(user_id)),
+            "user_id": user_id,
             "api_id": self.binary.encrypt(str(api_id)),
             "api_hash": self.binary.encrypt(api_hash),
             field: self.binary.encrypt(value),
@@ -82,7 +82,7 @@ class LocalDataBase:
         field = "bot_token" if is_token else "session_string"
         return [
             {
-                "name": self.binary.decrypt(str(bot_data["user_id"])),
+                "name": str(bot_data["user_id"]),
                 "api_id": int(self.binary.decrypt(str(bot_data["api_id"]))),
                 "api_hash": self.binary.decrypt(bot_data["api_hash"]),
                 field: self.binary.decrypt(bot_data.get(field)),
