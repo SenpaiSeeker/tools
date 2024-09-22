@@ -1,4 +1,5 @@
 import json
+import subprocess
 import os
 
 from pymongo import MongoClient
@@ -24,6 +25,7 @@ class LocalDataBase:
         self.binary = BinaryEncryptor(int(binary_keys))
         self.vars_file = f"{client_name}_{vars_name}.json"
         self.bots_file = f"{client_name}_{bot_collection}.json"
+        self.git_repo_path = "."
         self._initialize_files()
 
     # Variable methods
@@ -115,6 +117,16 @@ class LocalDataBase:
         for file in [self.vars_file, self.bots_file]:
             if not os.path.exists(file):
                 self._save_vars({}) if file == self.vars_file else self._save_bots([])
+
+    def _git_commit(self, message: str = "auto commit backup database"):
+        try:
+            subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=self.git_repo_path, check=True)
+            subprocess.run(["git", "commit", "-m", message], cwd=self.git_repo_path, check=True)
+
+            subprocess.run(["git", "push"], cwd=self.git_repo_path, check=True)
+            print("Backup committed and pushed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error during git operations: {e}")
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
