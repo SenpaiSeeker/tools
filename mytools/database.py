@@ -3,7 +3,7 @@ import os
 
 from pymongo import MongoClient
 
-from .encrypt import CryptoEncryptor
+from .encrypt import CryptoEncryptor, BinaryEncryptor
 
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
 # | |    / __ \ / ____|   /\   | |      |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
@@ -19,9 +19,9 @@ class LocalDataBase:
         client_name: str = "mytoolsID",
         vars_name: str = "myVars",
         bot_collection: str = "myBots",
-        crypto_keys: int = 14151819154911914,
+        binary_keys: int = 14151819154911914,
     ):
-        self.crypto = CryptoEncryptor(str(crypto_keys))
+        self.binary = BinaryEncryptor(int(binary_keys))
         self.vars_file = f"{client_name}_{vars_name}.json"
         self.bots_file = f"{client_name}_{bot_collection}.json"
         self._initialize_files()
@@ -70,10 +70,10 @@ class LocalDataBase:
         data = self._load_bots()
         field = "bot_token" if is_token else "session_string"
         entry = {
-            "user_id": user_id,
-            "api_id": api_id,
-            "api_hash": api_hash,
-            field: value,
+            "user_id": self.binary.encrypt(str(user_id)),
+            "api_id": self.binary.encrypt(str(api_id)),
+            "api_hash": self.binary.encrypt(api_hash),
+            field: self.binary.encrypt(value),
         }
         data.append(entry)
         self._save_bots(data)
@@ -82,10 +82,10 @@ class LocalDataBase:
         field = "bot_token" if is_token else "session_string"
         return [
             {
-                "name": str(bot_data["user_id"]),
-                "api_id": int(bot_data["api_id"]),
-                "api_hash": bot_data["api_hash"],
-                field: bot_data.get(field),
+                "name": self.binary.decrypt(str(bot_data["user_id"])),
+                "api_id": int(self.binary.decrypt(str(bot_data["api_id"]))),
+                "api_hash": self.binary.decrypt(bot_data["api_hash"]),
+                field: self.binary.decrypt(bot_data.get(field)),
             }
             for bot_data in self._load_bots()
             if bot_data.get(field)
