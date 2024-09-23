@@ -31,5 +31,5 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ github.event.inputs.api_pypi }}
         run: |
-          python setup.py bdist_wheel
-          twine upload --repository pypi dist/*.whl
+          python setup.py sdist bdist_wheel
+          twine upload --repository pypi dist/*
