@@ -1,5 +1,4 @@
 import re
-
 from setuptools import find_packages, setup
 
 with open("mytools/__init__.py", encoding="utf-8") as f:
@@ -7,7 +6,6 @@ with open("mytools/__init__.py", encoding="utf-8") as f:
 
 with open("requirements.txt", encoding="utf-8") as r:
     requires = [i.strip() for i in r]
-
 
 setup(
     name="mytoolsID",
@@ -32,4 +30,6 @@ setup(
     ],
     python_requires=">=3.8, <3.13",
     install_requires=requires,
+    include_package_data=True,
+    zip_safe=False,
 )
