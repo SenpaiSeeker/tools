@@ -17,9 +17,9 @@ from .encrypt import BinaryEncryptor, CryptoEncryptor
 class LocalDataBase:
     def __init__(
         self,
-        client_name: str = "mytoolsID",
-        vars_name: str = "myVars",
-        bot_collection: str = "myBots",
+        client_name: str = "dB",
+        vars_name: str = "vars",
+        bot_collection: str = "bots",
         binary_keys: int = 14151819154911914,
     ):
         self.binary = BinaryEncryptor(int(binary_keys))
