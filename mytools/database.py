@@ -125,9 +125,9 @@ class LocalDataBase:
                 cred_file.write(f"https://{username_github}:{github_token}@github.com\n")
 
             subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=".", check=True)
-            subprocess.run(["git", "commit", "-m", message], cwd=".", check=True)
+            subprocess.run(["git", "commit", "-m", commit_message], cwd=".", check=True)
 
-            subprocess.run(["git", "push"], cwd=self.git_repo_path, check=True)
+            subprocess.run(["git", "push"], cwd=".", check=True)
             print("Backup committed and pushed successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error during git operations: {e}")
