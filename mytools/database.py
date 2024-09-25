@@ -1,6 +1,8 @@
 import json
 import os
 import subprocess
+from typing import List, Dict
+
 
 from pymongo import MongoClient
 
@@ -12,6 +14,7 @@ from .encrypt import BinaryEncryptor, CryptoEncryptor
 # | |   | |  | | |      / /\ \ | |      | |  | |/ /\ \ | | / /\ \ |  _ < / /\ \  \___ \|  __|   #
 # | |___| |__| | |____ / ____ \| |____  | |__| / ____ \| |/ ____ \| |_) / ____ \ ____) | |____  #
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
+
 
 
 class LocalDataBase:
@@ -80,7 +83,7 @@ class LocalDataBase:
         data.append(entry)
         self._save_bots(data)
 
-    def getBots(self, is_token: bool = False):
+    def getBots(self, is_token: bool = False) -> List[Dict]:
         field = "bot_token" if is_token else "session_string"
         return [
             {
@@ -97,19 +100,25 @@ class LocalDataBase:
         data = self._load_bots()
         self._save_bots([bot for bot in data if bot["user_id"] != user_id])
 
-    def _load_vars(self):
-        with open(self.vars_file, "r") as f:
-            return json.load(f)
+    def _load_vars(self) -> dict:
+        try:
+            with open(self.vars_file, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {}
 
-    def _save_vars(self, data):
+    def _save_vars(self, data: dict):
         with open(self.vars_file, "w") as f:
             json.dump(data, f, indent=4)
 
-    def _load_bots(self):
-        with open(self.bots_file, "r") as f:
-            return json.load(f)
+    def _load_bots(self) -> list:
+        try:
+            with open(self.bots_file, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return []
 
-    def _save_bots(self, data):
+    def _save_bots(self, data: list):
         with open(self.bots_file, "w") as f:
             json.dump(data, f, indent=4)
 
@@ -118,15 +127,21 @@ class LocalDataBase:
             if not os.path.exists(file):
                 self._save_vars({}) if file == self.vars_file else self._save_bots([])
 
-    def _git_commit(self, commit_message: str = "auto commit backup database"):
+    def _git_commit(self, username: str, token: str, message: str = "auto commit backup database"):
         try:
-            subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=".", check=True)
-            subprocess.run(["git", "commit", "-m", commit_message], cwd=".", check=True)
-
-            subprocess.run(["git", "push"], cwd=".", check=True)
+            subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=self.git_repo_path, check=True)
+            subprocess.run(["git", "commit", "-m", message], cwd=self.git_repo_path, check=True)
+            
+            subprocess.run(
+                f'echo "{username}:{token}" | git push',
+                cwd=self.git_repo_path,
+                shell=True,
+                check=True
+            )
             print("Backup committed and pushed successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error during git operations: {e}")
+
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
