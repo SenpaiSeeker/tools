@@ -118,12 +118,8 @@ class LocalDataBase:
             if not os.path.exists(file):
                 self._save_vars({}) if file == self.vars_file else self._save_bots([])
 
-    def _git_commit(self, username_github: str, github_token: str, commit_message: str = "auto commit backup database"):
+    def _git_commit(self, commit_message: str = "auto commit backup database"):
         try:
-            subprocess.run(["git", "config", "credential.helper", "store"], cwd=".", check=True)
-            with open(os.path.join(".", ".git-credentials"), "w") as cred_file:
-                cred_file.write(f"https://{username_github}:{github_token}@github.com\n")
-
             subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=".", check=True)
             subprocess.run(["git", "commit", "-m", commit_message], cwd=".", check=True)
 
