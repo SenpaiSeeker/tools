@@ -12,8 +12,6 @@ from .getuser import Extract
 from .misc import Handler
 from .text import intruction
 
-chat_history = {}
-
 
 class Api:
     def __init__(self, name: str, dev: str, apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
@@ -21,6 +19,7 @@ class Api:
         self.dev = dev
         self.apikey = apikey
         self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
+        self.chat_history = {}
 
     def configure_model(self, mode):
         genai.configure(api_key=self.apikey)
@@ -43,10 +42,11 @@ class Api:
         try:
             text = Handler().getMsg(message, is_chatbot=True)
             mention = Extract().getMention(message.from_user)
+            msg = f"gue {mention}, {text}" if message.from_user.id not in self.chat_history else text
 
             model = self.configure_model("chatbot")
-            history = chat_history.setdefault(message.from_user.id, [{"role": "user", "parts": f"aku {mention}"}])
-            history.append({"role": "user", "parts": text})
+            history = self.chat_history.setdefault(message.from_user.id, [])
+            history.append({"role": "user", "parts": msg})
 
             chat_session = model.start_chat(history=history)
             response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=self.safety_rate)
@@ -58,7 +58,7 @@ class Api:
             return f"Terjadi kesalahan: {str(e)}"
 
     def clear_chat_history(self, chat_id):
-        if chat_history.pop(chat_id, None):
+        if self.chat_history.pop(chat_id, None):
             return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
         return "Maaf, kita belum pernah ngobrol sebelumnya."
 
