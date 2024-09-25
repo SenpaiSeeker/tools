@@ -82,7 +82,7 @@ class LocalDataBase:
 
         self._save_vars(data)
 
-    def getExp(self, user_id: int) -> str:
+    def getExp(self, user_id: int):
         data = self._load_vars()
         user_data = data.get(str(user_id), {})
 
