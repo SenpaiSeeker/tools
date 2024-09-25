@@ -36,10 +36,10 @@ class Api:
             self._log(__name__).error(f"KhodamCheck error: {str(e)}")
             return f"Terjadi kesalahan: {str(e)}"
 
-    def ChatBot(self, text, chat_id):
+    def ChatBot(self, text, chat_id, mention):
         try:
             model = self.configure_model("chatbot")
-            history = self.chat_history.setdefault(chat_id, [])
+            history = self.chat_history.setdefault(chat_id, [f"aku {mention}"])
             history.append({"role": "user", "parts": text})
 
             chat_session = model.start_chat(history=history)
