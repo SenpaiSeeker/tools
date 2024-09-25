@@ -54,7 +54,7 @@ class Extract:
     async def getId(self, message):
         return (await self.getRid(message))[0]
 
-    def getMention(self, user):
+    def getMention(self, user, no_tag=False):
         name = f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
         link = f"tg://user?id={user.id}"
-        return f"[{name}]({link})"
+        return name if no_tag else f"[{name}]({link})"
