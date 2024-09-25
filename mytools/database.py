@@ -3,6 +3,9 @@ import os
 import subprocess
 from typing import Dict, List
 
+from datetime import datetime, timedelta
+from pytz import timezone 
+
 from pymongo import MongoClient
 
 from .encrypt import BinaryEncryptor, CryptoEncryptor
@@ -67,6 +70,28 @@ class LocalDataBase:
 
     def allVars(self, user_id: int, var_key: str = "variabel"):
         return self._load_vars().get(str(user_id), {}).get(var_key, {})
+
+    def setExp(self, user_id: int, exp: int = 30):
+        data = self._load_vars()
+        user_data = data.setdefault(str(user_id), {})
+        
+        have_exp = user_data.get("EXPIRED_DATE")
+        now = datetime.now(timezone("Asia/Jakarta")) if not have_exp else datetime.strptime(have_exp, "%Y-%m-%d %H:%M:%S%z")
+        
+        expire_date = now + timedelta(days=exp)
+        user_data["EXPIRED_DATE"] = expire_date.strftime("%Y-%m-%d %H:%M:%S%z")
+        
+        self._save_vars(data)
+
+    def getExp(self, user_id: int) -> str:
+        data = self._load_vars()
+        user_data = data.get(str(user_id), {})
+        
+        expired_date = user_data.get("EXPIRED_DATE")
+        if expired_date:
+            exp_date_obj = datetime.strptime(expired_date, "%Y-%m-%d %H:%M:%S%z")
+            return exp_date_obj.strftime("%d-%m-%Y")
+        return "No expiration date set"
 
     # Bot-related methods
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
