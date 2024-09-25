@@ -9,6 +9,8 @@ import google.generativeai as genai
 from pyrogram.types import InputMediaPhoto
 
 from .text import intruction
+from .getuser import Extract 
+from .misc import Handler 
 
 
 class Api:
@@ -18,7 +20,7 @@ class Api:
         self.apikey = apikey
         self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
         self.chat_history = {}
-
+        
     def configure_model(self, mode):
         genai.configure(api_key=self.apikey)
         instruction = intruction[mode].format(name=self.name, dev=self.dev)
@@ -36,10 +38,12 @@ class Api:
             self._log(__name__).error(f"KhodamCheck error: {str(e)}")
             return f"Terjadi kesalahan: {str(e)}"
 
-    def ChatBot(self, text, chat_id, mention):
+    def ChatBot(self, message):
         try:
+            text = Handler().getMsg(message, is_chatbot=True)
+            
             model = self.configure_model("chatbot")
-            history = self.chat_history.setdefault(chat_id, [f"aku {mention}"])
+            history = self.chat_history.setdefault(message.from_user.id, [{"role": "system", "parts": f"aku {mention}"}])
             history.append({"role": "user", "parts": text})
 
             chat_session = model.start_chat(history=history)
