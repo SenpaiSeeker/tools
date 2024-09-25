@@ -14,6 +14,7 @@ from .text import intruction
 
 chat_history = {}
 
+
 class Api:
     def __init__(self, name: str, dev: str, apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         self.name = name
