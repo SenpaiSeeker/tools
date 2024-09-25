@@ -12,6 +12,7 @@ from .getuser import Extract
 from .misc import Handler
 from .text import intruction
 
+chat_history = {}
 
 class Api:
     def __init__(self, name: str, dev: str, apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
@@ -19,7 +20,6 @@ class Api:
         self.dev = dev
         self.apikey = apikey
         self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
-        self.chat_history = {}
 
     def configure_model(self, mode):
         genai.configure(api_key=self.apikey)
@@ -44,7 +44,7 @@ class Api:
             mention = Extract().getMention(message.from_user)
 
             model = self.configure_model("chatbot")
-            history = self.chat_history.setdefault(message.from_user.id, [{"role": "user", "parts": f"aku {mention}"}])
+            history = chat_history.setdefault(message.from_user.id, [{"role": "user", "parts": f"aku {mention}"}])
             history.append({"role": "user", "parts": text})
 
             chat_session = model.start_chat(history=history)
