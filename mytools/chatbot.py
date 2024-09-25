@@ -8,9 +8,9 @@ import aiohttp
 import google.generativeai as genai
 from pyrogram.types import InputMediaPhoto
 
+from .getuser import Extract
+from .misc import Handler
 from .text import intruction
-from .getuser import Extract 
-from .misc import Handler 
 
 
 class Api:
@@ -20,7 +20,7 @@ class Api:
         self.apikey = apikey
         self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
         self.chat_history = {}
-        
+
     def configure_model(self, mode):
         genai.configure(api_key=self.apikey)
         instruction = intruction[mode].format(name=self.name, dev=self.dev)
@@ -42,7 +42,7 @@ class Api:
         try:
             text = Handler().getMsg(message, is_chatbot=True)
             mention = Extract().getMention(message.from_user)
-            
+
             model = self.configure_model("chatbot")
             history = self.chat_history.setdefault(message.from_user.id, [{"role": "system", "parts": f"aku {mention}"}])
             history.append({"role": "user", "parts": text})
