@@ -1,8 +1,7 @@
 import json
 import os
 import subprocess
-from typing import List, Dict
-
+from typing import Dict, List
 
 from pymongo import MongoClient
 
@@ -14,7 +13,6 @@ from .encrypt import BinaryEncryptor, CryptoEncryptor
 # | |   | |  | | |      / /\ \ | |      | |  | |/ /\ \ | | / /\ \ |  _ < / /\ \  \___ \|  __|   #
 # | |___| |__| | |____ / ____ \| |____  | |__| / ____ \| |/ ____ \| |_) / ____ \ ____) | |____  #
 # |______\____/ \_____/_/    \_\______| |_____/_/    \_\_/_/    \_\____/_/    \_\_____/|______| #
-
 
 
 class LocalDataBase:
@@ -131,17 +129,11 @@ class LocalDataBase:
         try:
             subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=self.git_repo_path, check=True)
             subprocess.run(["git", "commit", "-m", message], cwd=self.git_repo_path, check=True)
-            
-            subprocess.run(
-                f'echo "{username}:{token}" | git push',
-                cwd=self.git_repo_path,
-                shell=True,
-                check=True
-            )
+
+            subprocess.run(f'echo "{username}:{token}" | git push', cwd=self.git_repo_path, shell=True, check=True)
             print("Backup committed and pushed successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error during git operations: {e}")
-
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
