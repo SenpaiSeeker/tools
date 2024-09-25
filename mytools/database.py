@@ -125,15 +125,16 @@ class LocalDataBase:
             if not os.path.exists(file):
                 self._save_vars({}) if file == self.vars_file else self._save_bots([])
 
-    def _git_commit(self, username: str, token: str, message: str = "auto commit backup database"):
+    def _git_commit(self, message: str = "auto commit backup database"):
         try:
-            subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=self.git_repo_path, check=True)
-            subprocess.run(["git", "commit", "-m", message], cwd=self.git_repo_path, check=True)
+            subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=".", check=True)
+            subprocess.run(["git", "commit", "-m", message], cwd=".", check=True)
 
-            subprocess.run(f'echo "{username}:{token}" | git push', cwd=self.git_repo_path, shell=True, check=True)
+            subprocess.run(["git", "push"], cwd=".", check=True)
             print("Backup committed and pushed successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error during git operations: {e}")
+
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
