@@ -41,6 +41,7 @@ class Api:
     def ChatBot(self, message):
         try:
             text = Handler().getMsg(message, is_chatbot=True)
+            mention = Extract().getMention(message.from_user)
             
             model = self.configure_model("chatbot")
             history = self.chat_history.setdefault(message.from_user.id, [{"role": "system", "parts": f"aku {mention}"}])
