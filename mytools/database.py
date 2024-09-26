@@ -19,12 +19,11 @@ from .encrypt import BinaryEncryptor, CryptoEncryptor
 class LocalDataBase:
     def __init__(
         self,
-        client_name: str = "database",
-        file_name: str = "local",
+        file_name: str = "database",
         binary_keys: int = 14151819154911914,
     ):
         self.binary = BinaryEncryptor(int(binary_keys))
-        self.data_file = f"{client_name}_{file_name}.json"
+        self.data_file = f"{file_name}.json"
         self.git_repo_path = "."
         self._initialize_files()
 
@@ -157,11 +156,11 @@ class MongoDataBase:
     def __init__(
         self,
         mongo_url: str,
-        client_name: str = "mytoolsID",
+        file_name: str = "database",
         crypto_keys: int = 14151819154911914,
     ):
         self.setup = MongoClient(mongo_url)
-        self.data = self.setup[client_name]
+        self.data = self.setup[file_name]
         self.crypto = CryptoEncryptor(str(crypto_keys))
 
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
@@ -195,6 +194,26 @@ class MongoDataBase:
     def allVars(self, user_id: int, var_key: str = "variabel"):
         result = self.data.vars.find_one({"_id": user_id})
         return result.get(var_key, {}) if result else {}
+
+    def setExp(self, user_id: int, exp: int = 30):
+        have_exp = self.getVars(user_id, "EXPIRED_DATE")
+
+        if not have_exp:
+            now = datetime.now(timezone("Asia/Jakarta"))
+        else:
+            now = datetime.strptime(have_exp, "%Y-%m-%d %H:%M:%S").astimezone(timezone("Asia/Jakarta"))
+
+        expire_date = now + timedelta(days=exp)
+        self.setVars(user_id, "EXPIRED_DATE", expire_date.strftime("%Y-%m-%d %H:%M:%S"))
+
+    def getExp(self, user_id: int):
+        expired_date = self.getVars(user_id, "EXPIRED_DATE")
+
+        if expired_date:
+            exp_datetime = datetime.strptime(expired_date, "%Y-%m-%d %H:%M:%S").astimezone(timezone("Asia/Jakarta"))
+            return exp_datetime.strftime("%d-%m-%Y")
+        else:
+            return None
 
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         update_data = {
