@@ -13,13 +13,15 @@ from .misc import Handler
 from .text import intruction
 
 
+chat_history = {}
+
+
 class Api:
     def __init__(self, name: str, dev: str, apikey: str = "AIzaSyA99Kj3x3lhYCg9y_hAB8LLisoa9Im4PnY"):
         self.name = name
         self.dev = dev
         self.apikey = apikey
         self.safety_rate = {key: "BLOCK_NONE" for key in ["HATE", "HARASSMENT", "SEX", "DANGER"]}
-        self.chat_history = {}
 
     def configure_model(self, mode):
         genai.configure(api_key=self.apikey)
@@ -45,7 +47,7 @@ class Api:
             msg = f"gue {mention}, {text}" if message.from_user.id not in self.chat_history else text
 
             model = self.configure_model("chatbot")
-            history = self.chat_history.setdefault(message.from_user.id, [])
+            history = chat_history.setdefault(message.from_user.id, [])
             history.append({"role": "user", "parts": msg})
 
             chat_session = model.start_chat(history=history)
