@@ -48,5 +48,5 @@ class Button:
             for i in range(0, len(buttons), row_width)
         ]
         if row_inline:
-            keyboard.append([InlineKeyboardButton(**row_inline)])
+            grid_layout.append([InlineKeyboardButton(**row_inline)])
         return InlineKeyboardMarkup(grid_layout)
