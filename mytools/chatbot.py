@@ -43,14 +43,14 @@ class Api:
         try:
             text = Handler().getMsg(message, is_chatbot=True)
             mention = Extract().getMention(message.from_user)
-            msg = f"gue {mention}, {text}" if message.from_user.id not in self.chat_history else text
+            msg = f"gue {mention}, {text}" if message.from_user.id not in chat_history else text
 
             model = self.configure_model("chatbot")
             history = chat_history.setdefault(message.from_user.id, [])
             history.append({"role": "user", "parts": msg})
 
             chat_session = model.start_chat(history=history)
-            response = chat_session.send_message({"role": "user", "parts": text}, safety_settings=self.safety_rate)
+            response = chat_session.send_message({"role": "user", "parts": msg}, safety_settings=self.safety_rate)
             history.append({"role": "model", "parts": response.text})
 
             return response.text
