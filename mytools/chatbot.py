@@ -12,7 +12,6 @@ from .getuser import Extract
 from .misc import Handler
 from .text import intruction
 
-
 chat_history = {}
 
 
