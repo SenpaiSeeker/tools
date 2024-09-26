@@ -2,13 +2,6 @@ import json
 import os
 import subprocess
 from datetime import datetime, timedelta
-from typing import Dict, List
-
-import os
-import json
-import subprocess
-from datetime import datetime, timedelta
-from pytz import timezone
 
 from pymongo import MongoClient
 from pytz import timezone
@@ -104,9 +97,9 @@ class LocalDataBase:
         self._save_data(data)
 
     def setExp(self, user_id: int, exp: int = 30):
-        data = self._load_data()
+        self._load_data()
         have_exp = self.getVars(user_id, "EXPIRED_DATE")
-        
+
         if not have_exp:
             now = datetime.now(timezone("Asia/Jakarta"))
         else:
@@ -124,7 +117,7 @@ class LocalDataBase:
         else:
             return None
 
-    # instalasi local database 
+    # instalasi local database
     def _initialize_files(self):
         if not os.path.exists(self.data_file):
             self._save_data({"vars": {}, "bots": []})
