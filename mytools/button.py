@@ -42,7 +42,7 @@ class Button:
 
         return InlineKeyboardMarkup(keyboard_layout), extracted_text
 
-    def generateInlineButtonGrid(self, buttons, row_inline={} row_width=2):
+    def generateInlineButtonGrid(self, buttons, row_inline={}, row_width=2):
         grid_layout = [
             [InlineKeyboardButton(**button_data) for button_data in buttons[i : i + row_width]]
             for i in range(0, len(buttons), row_width)
