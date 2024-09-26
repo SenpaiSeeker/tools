@@ -4,6 +4,12 @@ import subprocess
 from datetime import datetime, timedelta
 from typing import Dict, List
 
+import os
+import json
+import subprocess
+from datetime import datetime, timedelta
+from pytz import timezone
+
 from pymongo import MongoClient
 from pytz import timezone
 
@@ -20,81 +26,55 @@ from .encrypt import BinaryEncryptor, CryptoEncryptor
 class LocalDataBase:
     def __init__(
         self,
-        client_name: str = "dB",
-        vars_name: str = "vars",
-        bot_collection: str = "bots",
+        client_name: str = "database",
+        file_name: str = "local",
         binary_keys: int = 14151819154911914,
     ):
         self.binary = BinaryEncryptor(int(binary_keys))
-        self.vars_file = f"{client_name}_{vars_name}.json"
-        self.bots_file = f"{client_name}_{bot_collection}.json"
+        self.data_file = f"{client_name}_{file_name}.json"
         self.git_repo_path = "."
         self._initialize_files()
 
-    # Variable methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        data = self._load_vars()
-        user_data = data.setdefault(str(user_id), {var_key: {}})
+        data = self._load_data()
+        user_data = data["vars"].setdefault(str(user_id), {var_key: {}})
         user_data[var_key][query_name] = value
-        self._save_vars(data)
+        self._save_data(data)
 
     def getVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        return self._load_vars().get(str(user_id), {}).get(var_key, {}).get(query_name)
+        return self._load_data().get("vars", {}).get(str(user_id), {}).get(var_key, {}).get(query_name)
 
     def removeVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        data = self._load_vars()
-        if str(user_id) in data:
-            data[str(user_id)][var_key].pop(query_name, None)
-            self._save_vars(data)
+        data = self._load_data()
+        if str(user_id) in data["vars"]:
+            data["vars"][str(user_id)][var_key].pop(query_name, None)
+            self._save_data(data)
 
     def setListVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        data = self._load_vars()
-        user_data = data.setdefault(str(user_id), {var_key: {}})
+        data = self._load_data()
+        user_data = data["vars"].setdefault(str(user_id), {var_key: {}})
         user_data[var_key].setdefault(query_name, []).append(value)
-        self._save_vars(data)
+        self._save_data(data)
 
     def getListVars(self, user_id: int, query_name: str, var_key: str = "variabel"):
-        return self._load_vars().get(str(user_id), {}).get(var_key, {}).get(query_name, [])
+        return self._load_data().get("vars", {}).get(str(user_id), {}).get(var_key, {}).get(query_name, [])
 
     def removeListVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
-        data = self._load_vars()
-        if str(user_id) in data and query_name in data[str(user_id)][var_key]:
-            data[str(user_id)][var_key][query_name].remove(value)
-            self._save_vars(data)
+        data = self._load_data()
+        if str(user_id) in data["vars"] and query_name in data["vars"][str(user_id)][var_key]:
+            data["vars"][str(user_id)][var_key][query_name].remove(value)
+            self._save_data(data)
 
     def removeAllVars(self, user_id: int):
-        data = self._load_vars()
-        data.pop(str(user_id), None)
-        self._save_vars(data)
+        data = self._load_data()
+        data["vars"].pop(str(user_id), None)
+        self._save_data(data)
 
     def allVars(self, user_id: int, var_key: str = "variabel"):
-        return self._load_vars().get(str(user_id), {}).get(var_key, {})
+        return self._load_data().get("vars", {}).get(str(user_id), {}).get(var_key, {})
 
-    def setExp(self, user_id: int, exp: int = 30):
-        data = self._load_vars()
-        user_data = data.setdefault(str(user_id), {})
-
-        have_exp = user_data.get("EXPIRED_DATE")
-        now = datetime.now(timezone("Asia/Jakarta")) if not have_exp else datetime.strptime(have_exp, "%Y-%m-%d %H:%M:%S%z")
-
-        expire_date = now + timedelta(days=exp)
-        user_data["EXPIRED_DATE"] = expire_date.strftime("%Y-%m-%d %H:%M:%S%z")
-
-        self._save_vars(data)
-
-    def getExp(self, user_id: int):
-        data = self._load_vars()
-        user_data = data.get(str(user_id), {})
-
-        expired_date = user_data.get("EXPIRED_DATE")
-        if expired_date:
-            exp_date_obj = datetime.strptime(expired_date, "%Y-%m-%d %H:%M:%S%z")
-            return exp_date_obj.strftime("%d-%m-%Y")
-        return "No expiration date set"
-
-    # Bot-related methods
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
-        data = self._load_bots()
+        data = self._load_data()
         field = "bot_token" if is_token else "session_string"
         entry = {
             "user_id": user_id,
@@ -102,10 +82,10 @@ class LocalDataBase:
             "api_hash": self.binary.encrypt(api_hash),
             field: self.binary.encrypt(value),
         }
-        data.append(entry)
-        self._save_bots(data)
+        data["bots"].append(entry)
+        self._save_data(data)
 
-    def getBots(self, is_token: bool = False) -> List[Dict]:
+    def getBots(self, is_token: bool = False):
         field = "bot_token" if is_token else "session_string"
         return [
             {
@@ -114,50 +94,62 @@ class LocalDataBase:
                 "api_hash": self.binary.decrypt(bot_data["api_hash"]),
                 field: self.binary.decrypt(bot_data.get(field)),
             }
-            for bot_data in self._load_bots()
+            for bot_data in self._load_data()["bots"]
             if bot_data.get(field)
         ]
 
     def removeBot(self, user_id: int):
-        data = self._load_bots()
-        self._save_bots([bot for bot in data if bot["user_id"] != user_id])
+        data = self._load_data()
+        data["bots"] = [bot for bot in data["bots"] if bot["user_id"] != user_id]
+        self._save_data(data)
 
-    def _load_vars(self) -> dict:
-        try:
-            with open(self.vars_file, "r") as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return {}
+    def setExp(self, user_id: int, exp: int = 30):
+        data = self._load_data()
+        have_exp = self.getVars(user_id, "EXPIRED_DATE")
+        
+        if not have_exp:
+            now = datetime.now(timezone("Asia/Jakarta"))
+        else:
+            now = datetime.strptime(have_exp, "%Y-%m-%d %H:%M:%S").astimezone(timezone("Asia/Jakarta"))
 
-    def _save_vars(self, data: dict):
-        with open(self.vars_file, "w") as f:
-            json.dump(data, f, indent=4)
+        expire_date = now + timedelta(days=exp)
+        self.setVars(user_id, "EXPIRED_DATE", expire_date.strftime("%Y-%m-%d %H:%M:%S"))
 
-    def _load_bots(self) -> list:
-        try:
-            with open(self.bots_file, "r") as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return []
+    def getExp(self, user_id: int):
+        expired_date = self.getVars(user_id, "EXPIRED_DATE")
 
-    def _save_bots(self, data: list):
-        with open(self.bots_file, "w") as f:
-            json.dump(data, f, indent=4)
+        if expired_date:
+            exp_datetime = datetime.strptime(expired_date, "%Y-%m-%d %H:%M:%S").astimezone(timezone("Asia/Jakarta"))
+            return exp_datetime.strftime("%d-%m-%Y")
+        else:
+            return None
 
+    # instalasi local database 
     def _initialize_files(self):
-        for file in [self.vars_file, self.bots_file]:
-            if not os.path.exists(file):
-                self._save_vars({}) if file == self.vars_file else self._save_bots([])
+        if not os.path.exists(self.data_file):
+            self._save_data({"vars": {}, "bots": []})
+
+    def _load_data(self):
+        try:
+            with open(self.data_file, "r") as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return {"vars": {}, "bots": []}
+
+    def _save_data(self, data):
+        with open(self.data_file, "w") as f:
+            json.dump(data, f, indent=4)
 
     def _git_commit(self, username: str, token: str, message: str = "auto commit backup database"):
         try:
-            subprocess.run(["git", "add", self.vars_file, self.bots_file], cwd=self.git_repo_path, check=True)
+            subprocess.run(["git", "add", self.data_file], cwd=self.git_repo_path, check=True)
             subprocess.run(["git", "commit", "-m", message], cwd=self.git_repo_path, check=True)
 
-            subprocess.run(f'echo "{username}:{token}" | git push', cwd=".", shell=True, check=True)
-            print("Backup committed and pushed successfully.")
+            push_command = f'echo "{username}:{token}" | git push'
+            subprocess.run(push_command, shell=True, cwd=self.git_repo_path, check=True)
+            return "Backup committed and pushed successfully."
         except subprocess.CalledProcessError as e:
-            print(f"Error during git operations: {e}")
+            return f"Error during git operations: {e}"
 
 
 #  __  __  ____  _   _  _____  ____    _____       _______       ____           _____ ______  #
@@ -179,7 +171,6 @@ class MongoDataBase:
         self.data = self.setup[client_name]
         self.crypto = CryptoEncryptor(str(crypto_keys))
 
-    # Variabel methods
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         update_data = {"$set": {f"{var_key}.{query_name}": value}}
         self.data.vars.update_one({"_id": user_id}, update_data, upsert=True)
@@ -212,7 +203,6 @@ class MongoDataBase:
         result = self.data.vars.find_one({"_id": user_id})
         return result.get(var_key, {}) if result else {}
 
-    # Bot-related methods
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         update_data = {
             "$set": {
