@@ -29,14 +29,16 @@ class Handler:
 
         return ":".join(result[::-1])
 
-    async def sendLongPres(self, message, output):
+    async def sendLongPres(self, message, output, is_delete=None):
         if len(output) <= 4000:
             await message.reply(output)
         else:
             with BytesIO(output.encode()) as out_file:
                 out_file.name = "result.txt"
                 await message.reply_document(document=out_file)
-
+        if is_delete:
+            await is_delete.delete()
+            
     async def encode(self, string: str):
         string_bytes = string.encode("ascii")
         base64_bytes = base64.urlsafe_b64encode(string_bytes)
