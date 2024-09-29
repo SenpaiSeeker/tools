@@ -38,7 +38,7 @@ class Handler:
                 await message.reply_document(document=out_file)
         if is_delete:
             await is_delete.delete()
-            
+
     async def encode(self, string: str):
         string_bytes = string.encode("ascii")
         base64_bytes = base64.urlsafe_b64encode(string_bytes)
