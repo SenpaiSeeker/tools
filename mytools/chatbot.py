@@ -77,22 +77,12 @@ class ImageGen:
         payload = {"prompt": prompt}
 
         async with aiohttp.ClientSession() as session:
-            while True:
-                async with session.post(self.url, json=payload) as response:
-                    if response.status == 200:
-                        img_data = await response.read()
-
-                        if img_data:
-                            break
-                        else:
-                            self._log("Gambar belum tersedia, menunggu 5 detik...")
-                            await asyncio.sleep(5)
-                    else:
-                        self._log(f"Request failed with status {response.status}. Retrying in 5 seconds...")
-                        await asyncio.sleep(5)
-
+            async with session.post(self.url, json=payload) as response:
+                if response.status == 200:
+                    img_data = await response.read()
+                    
         random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
-        filename = f"{random_name}_image.jpg"
+        filename = f"{random_name}_imageFlux.jpg"
 
         async with aiofiles.open(filename, "wb") as file:
             await file.write(img_data)
