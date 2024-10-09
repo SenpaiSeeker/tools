@@ -97,7 +97,7 @@ class ImageGen:
         async with aiofiles.open(filename, "wb") as file:
             await file.write(img_data)
 
-        self._log(f"Successfully saved image {filename}")
+        self._log(filename).info("Successfully saved image")
         media_photo = [InputMediaPhoto(filename, caption=caption)] if caption else [InputMediaPhoto(filename)]
 
         return media_photo
@@ -107,4 +107,4 @@ class ImageGen:
             filename = media.media
             if os.path.exists(filename):
                 os.remove(filename)
-                self._log(f"Successfully removed {filename}")
+                self._log(filename).info("Successfully removed")
