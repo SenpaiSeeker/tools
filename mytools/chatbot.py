@@ -58,9 +58,10 @@ class Api:
             self._log(__name__).error(f"ChatBot error: {str(e)}")
             return f"Terjadi kesalahan: {str(e)}"
 
-    def clear_chat_history(self, chat_id):
-        if chat_history.pop(chat_id, None):
-            return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
+    def clear_chat_history(self, message):
+        if chat_history.pop(message.from_user.id, None):
+            mention = Extract().getMention(message.from_user)
+            return f"Riwayat obrolan untuk {mention} telah dihapus."
         return "Maaf, kita belum pernah ngobrol sebelumnya."
 
 
