@@ -2,6 +2,7 @@ import logging
 import os
 import random
 import string
+import asyncio 
 
 import aiofiles
 import aiohttp
@@ -74,6 +75,7 @@ class ImageGen:
 
     async def generate_image(self, prompt: str, caption: str = None):
         payload = {"prompt": prompt}
+
         async with aiohttp.ClientSession() as session:
             async with session.post(self.url, json=payload) as response:
                 if response.status != 200:
@@ -84,35 +86,44 @@ class ImageGen:
                 except aiohttp.ContentTypeError:
                     raise Exception(f"Error: Failed to decode JSON response. Raw response: {await response.text()}")
 
-                if "url" in data:
-                    imageList = []
-                    for num, image_url in enumerate(data["url"], 1):
-                        random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
-                        filename = f"{random_name}_{num}.jpg"
-                        async with session.get(image_url) as image_response:
-                            if image_response.status != 200:
-                                raise Exception(f"Error: Failed to download image with status {image_response.status}")
-
-                            async with aiofiles.open(filename, "wb") as file:
-                                content = await image_response.read()
-                                await file.write(content)
-
-                        if num == 1 and caption:
-                            imageList.append(InputMediaPhoto(filename, caption=caption))
-                        else:
-                            imageList.append(InputMediaPhoto(filename))
-                        self._log(filename).info("Successfully saved")
-
-                    if imageList:
-                        return imageList
-                    else:
-                        raise Exception("Error: No images generated")
-                else:
+                image_urls = data.get("url")
+                if not image_urls:
                     raise Exception(f"Error: Invalid response format. Data: {data}")
+
+                imageList = await self._save_images(session, image_urls, caption)
+                if imageList:
+                    return imageList
+                else:
+                    raise Exception("Error: No images generated")
+
+    async def _save_images(self, session, image_urls, caption):
+        imageList = []
+        tasks = [
+            self._download_and_save_image(session, image_url, index, caption if index == 0 else None)
+            for index, image_url in enumerate(image_urls)
+        ]
+        imageList = await asyncio.gather(*tasks)
+        return imageList
+
+    async def _download_and_save_image(self, session, image_url, index, caption):
+        random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+        filename = f"{random_name}_{index+1}.jpg"
+
+        async with session.get(image_url) as image_response:
+            if image_response.status != 200:
+                raise Exception(f"Error: Failed to download image with status {image_response.status}")
+
+            async with aiofiles.open(filename, "wb") as file:
+                content = await image_response.read()
+                await file.write(content)
+
+        media_photo = InputMediaPhoto(filename, caption=caption) if caption else InputMediaPhoto(filename)
+        self._log(f"Successfully saved {filename}")
+        return media_photo
 
     def _remove_file(self, images: list):
         for media in images:
             filename = media.media
             if os.path.exists(filename):
                 os.remove(filename)
-                self._log(filename).info("Successfully removed")
+                self._log(f"Successfully removed {filename}")
