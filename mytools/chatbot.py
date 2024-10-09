@@ -97,13 +97,11 @@ class ImageGen:
                     raise Exception("Error: No images generated")
 
     async def _save_images(self, session, image_urls, caption):
-        imageList = []
         tasks = [
             self._download_and_save_image(session, image_url, index, caption if index == 0 else None)
             for index, image_url in enumerate(image_urls)
         ]
-        imageList = await asyncio.gather(*tasks)
-        return imageList
+        return await asyncio.gather(*tasks)
 
     async def _download_and_save_image(self, session, image_url, index, caption):
         random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
