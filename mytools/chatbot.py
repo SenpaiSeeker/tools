@@ -59,7 +59,7 @@ class Api:
             return f"Terjadi kesalahan: {str(e)}"
 
     def clear_chat_history(self, chat_id):
-        if self.chat_history.pop(chat_id, None):
+        if chat_history.pop(chat_id, None):
             return f"Riwayat obrolan untuk chat_id {chat_id} telah dihapus."
         return "Maaf, kita belum pernah ngobrol sebelumnya."
 
