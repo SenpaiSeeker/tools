@@ -98,7 +98,7 @@ class ImageGen:
             await file.write(img_data)
 
         self._log(f"Successfully saved image {filename}")
-        media_photo = InputMediaPhoto(filename, caption=caption) if caption else InputMediaPhoto(filename)
+        media_photo = [InputMediaPhoto(filename, caption=caption)] if caption else [InputMediaPhoto(filename)]
 
         return media_photo
 
