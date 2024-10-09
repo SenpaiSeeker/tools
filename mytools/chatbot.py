@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 import random
@@ -80,7 +79,7 @@ class ImageGen:
             async with session.post(self.url, json=payload) as response:
                 if response.status == 200:
                     img_data = await response.read()
-                    
+
         random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
         filename = f"{random_name}_imageFlux.jpg"
 
