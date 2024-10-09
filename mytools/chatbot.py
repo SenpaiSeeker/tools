@@ -75,7 +75,7 @@ class ImageGen:
 
     async def generate_image(self, prompt: str, caption: str = None):
         payload = {"prompt": prompt}
-        
+
         async with aiohttp.ClientSession() as session:
             while True:
                 async with session.post(self.url, json=payload) as response:
@@ -93,7 +93,7 @@ class ImageGen:
 
         random_name = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
         filename = f"{random_name}_image.jpg"
-        
+
         async with aiofiles.open(filename, "wb") as file:
             await file.write(img_data)
 
