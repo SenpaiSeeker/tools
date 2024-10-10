@@ -44,7 +44,6 @@ class Handler:
         base64_bytes = base64.urlsafe_b64encode(string_bytes)
         return base64_bytes.decode("ascii").rstrip("=")
 
-    @staticmethod
     async def decode(self, base64_string: str):
         base64_string = base64_string.rstrip("=")
         padding_needed = "=" * (-len(base64_string) % 4)
