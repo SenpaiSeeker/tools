@@ -39,16 +39,14 @@ class Handler:
         if is_delete:
             await is_delete.delete()
 
-    async def encode(self, string: str):
+    async def encode(string: str) -> str:
         string_bytes = string.encode("ascii")
         base64_bytes = base64.urlsafe_b64encode(string_bytes)
-
         return base64_bytes.decode("ascii").rstrip("=")
 
-    async def decode(self, base64_string: str):
+    async def decode(base64_string: str) -> str:
         base64_string = base64_string.rstrip("=")
         padding_needed = "=" * (-len(base64_string) % 4)
         base64_bytes = (base64_string + padding_needed).encode("ascii")
-
         string_bytes = base64.urlsafe_b64decode(base64_bytes)
         return string_bytes.decode("ascii")
