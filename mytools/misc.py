@@ -10,16 +10,11 @@ class Handler:
 
     def getMsg(self, message, is_chatbot=False, is_copy=False):
         if is_copy:
-            return (
-                message.reply_to_message
-                if message.reply_to_message
-                else self.getArg(message)
-            )
-        
-        reply_text = message.reply_to_message.text or message.reply_to_message.caption if message.reply_to_message else ""
-        user_text = message.text if is_chatbot else (message.text.split(None, 1)[1] if len(message.text.split()) >= 2 else "")        
-        return f"{user_text}\n\n{reply_text}".strip() if reply_text and user_text else reply_text + user_text
+            return message.reply_to_message if message.reply_to_message else self.getArg(message)
 
+        reply_text = message.reply_to_message.text or message.reply_to_message.caption if message.reply_to_message else ""
+        user_text = message.text if is_chatbot else (message.text.split(None, 1)[1] if len(message.text.split()) >= 2 else "")
+        return f"{user_text}\n\n{reply_text}".strip() if reply_text and user_text else reply_text + user_text
 
     def getTime(self, seconds):
         time_units = [(60, "s"), (60, "m"), (24, "h"), (7, "d"), (4.34812, "w")]
