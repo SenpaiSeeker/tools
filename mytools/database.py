@@ -53,7 +53,7 @@ class LocalDataBase:
 
     def removeListVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         data = self._load_data()
-        user_data = data.get("vars", {}).get(str(user_id), {}).get(var_key, {})        
+        user_data = data.get("vars", {}).get(str(user_id), {}).get(var_key, {})
         if query_name in user_data and value in user_data[query_name]:
             user_data[query_name].remove(value)
             self._save_data(data)
