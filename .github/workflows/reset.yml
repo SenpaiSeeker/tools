@@ -1,0 +1,17 @@
+name: Run Delete Commit History Script
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Run Delete Commit History Script
+        run: bash <(curl -s https://raw.githubusercontent.com/SenpaiSeeker/tools/refs/heads/main/delete-history-commit.sh)
