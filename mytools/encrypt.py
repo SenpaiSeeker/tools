@@ -63,34 +63,28 @@ class ShiftChipher:
 
 def run_code(method: str, key: int, encrypted_data: str):
     try:
-        if method == "shift":
-            result = ShiftChipher(shift=key).decrypt(encrypted_data)
-        elif method == "binary":
-            result = BinaryEncryptor(key=key).decrypt(encrypted_data)
-        elif method == "bytes":
-            result = BytesCipher(key=key).decrypt(encrypted_data)
-        else:
-            result = encrypted_data
-        return exec(result)
+        cipher_classes = {
+            "shift": ShiftChipher(shift=key),
+            "binary": BinaryEncryptor(key=key),
+            "bytes": BytesCipher(key=key),
+        }
+        cipher = cipher_classes.get(method)
+        return cipher.decrypt(encrypted_data) if cipher else encrypted_data
     except Exception as e:
         log.error(e)
 
 
-def save_code(filename, code, method, key):
+def save_code(filename: str, code: str, method: str, key: int):
     try:
-        if method == "shift":
-            encode = ShiftChipher(shift=key).encrypt(code)
-            result = f"exec(__import__('mytools').ShiftChipher(shift={key}).decrypt('{encode}'))"
-        elif method == "binary":
-            encode = BinaryEncryptor(key=key).encrypt(code)
-            result = f"exec(__import__('mytools').BinaryEncryptor(key={key}).decrypt('{encode}'))"
-        elif method == "bytes":
-            encode = BytesCipher(key=key).encrypt(code)
-            result = f"exec(__import__('mytools').CryptoEncryptor(key='{key}').decrypt('{encode}'))"
-        else:
-            result = code
-
+        cipher_classes = {
+            "shift": ShiftChipher(shift=key),
+            "binary": BinaryEncryptor(key=key),
+            "bytes": BytesCipher(key=key),
+        }
+        cipher = cipher_classes.get(method)
+        encoded_code = cipher.encrypt(code) if cipher else code
+        result = f"exec(__import__('mytools').run_code(method='{method}', key={key}, '{encoded_code}'))"
         with open(filename, "w") as file:
             file.write(result)
     except Exception as e:
-        print(f"Error saving file: {e}")
+        log.error(f"Error saving file: {e}")
