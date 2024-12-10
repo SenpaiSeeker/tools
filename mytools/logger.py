@@ -14,15 +14,10 @@ COLORS = [
 
 
 class LoggerHandler:
-    def __init__(
-        self,
-        name: str = __name__,
-        format_str: str = (
-            "{0}[%(asctime)s] {1}| {2}%(levelname)s {1}| " "{3}%(module)s:%(lineno)d {1}| {4}%(message)s\033[0m"
-        ),
-    ):
+    def __init__(self, name: str = __name__, format_str: str = "{0}[%(asctime)s] {1}| {2}%(levelname)-9s {1}| " "{3}%(module)s:%(lineno)d {1}| {4}%(message)s\033[0m"):
         self.name = name
         self.format_str = format_str.format(COLORS[6], COLORS[4], COLORS[5], COLORS[3], COLORS[1])
+        self.setup = self.setup_logger()
 
     def setup_logger(self, error_logging: bool = False, log_level=logging.INFO):
         formatter = logging.Formatter(self.format_str, datefmt="%Y-%m-%d %H:%M:%S")
@@ -69,14 +64,3 @@ class LoggerHandler:
             log_function(f"{color}{message}\033[0m")
 
         return log_with_color
-
-
-log = LoggerHandler()
-logger = log.setup_logger()
-
-try:
-    for i in ["INFO", "DEBUG", "WARNING", "ERROR", "CRITICAL"]:
-        log.send_message(i, f"Iteration {i}: Halo World!")
-        time.sleep(1)
-except KeyboardInterrupt:
-    log.send_message("WARNING", "Program dihentikan oleh pengguna.")
