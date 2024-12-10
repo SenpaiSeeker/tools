@@ -1,6 +1,5 @@
 import logging
 import sys
-import time
 
 COLORS = {
     "INFO": "\033[1;92m",  # Full Bright Green
