@@ -7,7 +7,7 @@ log = LoggerHandler()
 
 
 class BytesCipher:
-    def __init__(self, key: int):
+    def __init__(self, key: int = 31099):
         if not isinstance(key, int):
             raise ValueError("Key harus berupa integer.")
         self.key = key
@@ -31,7 +31,7 @@ class BytesCipher:
 
 
 class BinaryEncryptor:
-    def __init__(self, key: int):
+    def __init__(self, key: int = 31099):
         if not isinstance(key, int) or key < 0:
             raise ValueError("Kunci harus berupa integer positif.")
         self.key = key
@@ -48,7 +48,7 @@ class BinaryEncryptor:
 
 
 class ShiftChipher:
-    def __init__(self, shift: int = 3, delimiter: str = "/"):
+    def __init__(self, shift: int = 31099, delimiter: str = "/"):
         self.shift = shift
         self.delimiter = delimiter
 
