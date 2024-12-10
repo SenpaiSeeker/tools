@@ -1,6 +1,6 @@
 import base64
-import hashlib
 import textwrap
+
 from mytools.logger import LoggerHandler
 
 log = LoggerHandler()
@@ -60,6 +60,7 @@ class ShiftChipher:
         decoded = "".join(chr(int(code) - self.shift) for code in encoded_text.split(self.delimiter))
         return decoded
 
+
 def run_code(method: str, key: int, encrypted_data: str):
     try:
         if method == "shift":
@@ -73,7 +74,7 @@ def run_code(method: str, key: int, encrypted_data: str):
         return exec(result)
     except Exception as e:
         log.error(e)
-        
+
 
 def save_code(filename, code, method, key):
     try:
