@@ -69,7 +69,7 @@ def run_code(method: str, key: int, encrypted_data: str):
         elif method == "bytes":
             result = BytesCipher(key=key).decrypt(encrypted_data)
         else:
-            result = code
+            result = encrypted_data
         return exec(result)
     except Exception as e:
         log.error(e)
