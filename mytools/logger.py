@@ -16,8 +16,7 @@ class LoggerHandler:
     def __init__(
         self,
         name: str = __name__,
-        format_str: str = "{0}[%(asctime)s] {1}| {2}%(levelname)-9s {1}| "
-        "{3}%(module)s:%(lineno)d {1}| {4}%(message)s\033[0m",
+        format_str: str = "{0}[%(asctime)s] {1}| {2}%(levelname)-9s {1}| {3}%(module)s:%(lineno)d {1}| {4}%(message)s\033[0m"
     ):
         self.name = name
         self.format_str = format_str.format(COLORS[6], COLORS[4], COLORS[5], COLORS[3], COLORS[1])
