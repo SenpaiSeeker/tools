@@ -18,7 +18,7 @@ class LoggerHandler:
         formatter = logging.Formatter(
             "\033[1;97m[%(asctime)s] \033[1;96m| %(levelname)-9s \033[1;94m| %(module)s:%(lineno)s\033[0m %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
-        )
+         )
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
@@ -27,3 +27,4 @@ class LoggerHandler:
         log_function = getattr(self.logger, log_type.lower(), self.logger.warning)
         color = COLORS.get(log_type, COLORS["RESET"])
         log_function(f"{color}| {message}{COLORS['RESET']}")
+
