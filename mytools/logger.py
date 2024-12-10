@@ -1,37 +1,84 @@
 import logging
-import random
 import sys
+import time
 
 COLORS = [
-    "\033[1;91m",  # Merah Terang
-    "\033[1;92m",  # Hijau Terang
-    "\033[1;93m",  # Kuning Terang
-    "\033[1;94m",  # Biru Terang
-    "\033[1;95m",  # Ungu Terang
-    "\033[1;96m",  # Cyan Terang
-    "\033[1;97m",  # Putih Terangg
+    "\033[1;91m",
+    "\033[1;92m",
+    "\033[1;93m",
+    "\033[1;94m",
+    "\033[1;95m",
+    "\033[1;96m",
+    "\033[1;97m",
 ]
-color = random.choice(COLORS)
-
-
-class ColorfulFormatter(logging.Formatter):
-    def format(self, record):
-        message = super().format(record)
-        return f"{color}{message}\033[0m"
-
 
 class LoggerHandler:
-    def __init__(self, format_str: str = "[%(asctime)s]: [%(levelname)s] - %(name)s - %(message)s"):
-        self.formatter = ColorfulFormatter(format_str)
+    def __init__(
+        self,
+        name: str = __name__,
+        format_str: str = (
+            "{0}[%(asctime)s] {1}| {2}%(levelname)s {1}| "
+            "{3}%(module)s:%(lineno)d {1}| {4}%(message)s\033[0m"
+        ),
+    ):
+        self.name = name
+        self.format_str = format_str.format(
+            COLORS[6], COLORS[4], COLORS[5], COLORS[3], COLORS[1]
+        )
 
     def setup_logger(self, error_logging: bool = False, log_level=logging.INFO):
-        logging.basicConfig(level=log_level, handlers=[logging.StreamHandler(sys.stdout)])
-        for handler in logging.getLogger().handlers:
-            handler.setFormatter(self.formatter)
+        formatter = logging.Formatter(self.format_str, datefmt="%Y-%m-%d %H:%M:%S")
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+
+        logger = logging.getLogger(self.name)
+        logger.setLevel(log_level)
+        logger.addHandler(stream_handler)
 
         if error_logging:
             logging.getLogger("pyrogram").setLevel(logging.ERROR)
             logging.getLogger("asyncio").setLevel(logging.CRITICAL)
 
-    def get_logger(self, name: str):
-        return logging.getLogger(name)
+        return logger
+
+    def send_message(self, log_type: str, message: str):
+        logger = logging.getLogger(self.name)
+
+        log_types = {
+            "INFO": self.colorize_log("INFO", logger.info),
+            "DEBUG": self.colorize_log("DEBUG", logger.debug),
+            "WARNING": self.colorize_log("WARNING", logger.warning),
+            "ERROR": self.colorize_log("ERROR", logger.error),
+            "CRITICAL": self.colorize_log("CRITICAL", logger.critical),
+        }
+
+        if log_type in log_types:
+            log_types[log_type](message)
+        else:
+            logger.warning(f"Invalid log type: {log_type}. Message: {message}")
+
+    def colorize_log(self, level: str, log_function):
+        color_map = {
+            "INFO": COLORS[1],
+            "DEBUG": COLORS[3],
+            "WARNING": COLORS[2],
+            "ERROR": COLORS[0],
+            "CRITICAL": COLORS[4],
+        }
+        color = color_map.get(level, COLORS[1])
+
+        def log_with_color(message):
+            log_function(f"{color}{message}\033[0m")
+
+        return log_with_color
+
+
+log = LoggerHandler()
+logger = log.setup_logger()
+
+try:
+    for i in ["INFO", "DEBUG", "WARNING", "ERROR",  "CRITICAL"]:
+        log.send_message(i, f"Iteration {i}: Halo World!")
+        time.sleep(1)
+except KeyboardInterrupt:
+    log.send_message("WARNING", "Program dihentikan oleh pengguna.")
