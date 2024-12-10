@@ -1,33 +1,33 @@
 import base64
 import hashlib
-import json
 import textwrap
+from mytools.logger import LoggerHandler
 
-from cryptography import fernet
+log = LoggerHandler()
 
 
-class CryptoEncryptor:
-    def __init__(self, key):
-        self.key = hashlib.sha256(key.encode()).digest()
-        self.cipher_suite = fernet.Fernet(base64.urlsafe_b64encode(self.key))
+class BytesCipher:
+    def __init__(self, key: int):
+        if not isinstance(key, int):
+            raise ValueError("Key harus berupa integer.")
+        self.key = key
 
-    def encrypt(self, data):
-        if isinstance(data, dict):
-            data = json.dumps(data)
+    def _xor_encrypt_decrypt(self, data: bytes):
+        key_bytes = self.key.to_bytes((self.key.bit_length() + 7) // 8, byteorder="big")
+        return bytes([data[i] ^ key_bytes[i % len(key_bytes)] for i in range(len(data))])
+
+    def encrypt(self, data: str):
         serialized_data = textwrap.dedent(data).encode("utf-8")
-        encrypted_data = self.cipher_suite.encrypt(serialized_data)
-        return encrypted_data.decode("utf-8")
+        encrypted_data = self._xor_encrypt_decrypt(serialized_data)
+        return base64.urlsafe_b64encode(encrypted_data).decode("utf-8")
 
-    def decrypt(self, encrypted_data):
+    def decrypt(self, encrypted_data: str):
         try:
-            decrypted_data = self.cipher_suite.decrypt(encrypted_data.encode("utf-8"))
-            data = decrypted_data.decode("utf-8")
-            try:
-                return json.loads(data)
-            except json.JSONDecodeError:
-                return data
-        except fernet.InvalidToken:
-            raise Exception("[ERROR]: KUNCI TIDAK COCOK")
+            encrypted_bytes = base64.urlsafe_b64decode(encrypted_data.encode("utf-8"))
+            decrypted_bytes = self._xor_encrypt_decrypt(encrypted_bytes)
+            return decrypted_bytes.decode("utf-8")
+        except (ValueError, UnicodeDecodeError) as error:
+            raise Exception(f"\033[1;31m[ERROR] \033[1;35m|| \033[1;37m{error}\033[0m")
 
 
 class BinaryEncryptor:
@@ -60,6 +60,20 @@ class ShiftChipher:
         decoded = "".join(chr(int(code) - self.shift) for code in encoded_text.split(self.delimiter))
         return decoded
 
+def run_code(method: str, key: int, encrypted_data: str):
+    try:
+        if method == "shift":
+            result = ShiftChipher(shift=key).decrypt(encrypted_data)
+        elif method == "binary":
+            result = BinaryEncryptor(key=key).decrypt(encrypted_data)
+        elif method == "bytes":
+            result = BytesCipher(key=key).decrypt(encrypted_data)
+        else:
+            result = code
+        return exec(result)
+    except Exception as e:
+        log.error(e)
+        
 
 def save_code(filename, code, method, key):
     try:
@@ -69,8 +83,8 @@ def save_code(filename, code, method, key):
         elif method == "binary":
             encode = BinaryEncryptor(key=key).encrypt(code)
             result = f"exec(__import__('mytools').BinaryEncryptor(key={key}).decrypt('{encode}'))"
-        elif method == "crypto":
-            encode = CryptoEncryptor(key=key).encrypt(code)
+        elif method == "bytes":
+            encode = BytesCipher(key=key).encrypt(code)
             result = f"exec(__import__('mytools').CryptoEncryptor(key='{key}').decrypt('{encode}'))"
         else:
             result = code
