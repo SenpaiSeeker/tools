@@ -1,6 +1,5 @@
 import logging
 import sys
-import time
 
 COLORS = {
     "INFO": "\033[1;92m",  # Full Bright Green
@@ -31,11 +30,20 @@ class LoggerHandler:
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
 
-    def debug(self, message): self.send_message("DEBUG", message)
-    def info(self, message): self.send_message("INFO", message)
-    def warning(self, message): self.send_message("WARNING", message)
-    def error(self, message): self.send_message("ERROR", message)
-    def critical(self, message): self.send_message("CRITICAL", message)
+    def debug(self, message):
+        self.send_message("DEBUG", message)
+
+    def info(self, message):
+        self.send_message("INFO", message)
+
+    def warning(self, message):
+        self.send_message("WARNING", message)
+
+    def error(self, message):
+        self.send_message("ERROR", message)
+
+    def critical(self, message):
+        self.send_message("CRITICAL", message)
 
     def send_message(self, log_type: str, message: str):
         log_function = getattr(self.logger, log_type.lower(), self.logger.warning)
