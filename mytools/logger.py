@@ -1,6 +1,6 @@
 import logging
 import sys
-import time 
+import time
 
 COLORS = {
     "INFO": "\033[1;92m",  # Full Bright Green
@@ -11,9 +11,10 @@ COLORS = {
     "RESET": "\033[0m",  # Reset color
 }
 
+
 class ColoredFormatter(logging.Formatter):
     def format(self, record):
-        level_color = COLORS.get(record.levelname, COLORS.get('RESET'))
+        level_color = COLORS.get(record.levelname, COLORS.get("RESET"))
         record.levelname = f"{level_color}{record.levelname}{COLORS.get('RESET')}"
         return super().format(record)
 
@@ -34,6 +35,7 @@ class LoggerHandler:
         log_function = getattr(self.logger, log_type.lower(), self.logger.warning)
         color = COLORS.get(log_type, COLORS["RESET"])
         log_function(f"{color}| {message}{COLORS['RESET']}")
+
 
 log = LoggerHandler()
 
