@@ -15,7 +15,7 @@ COLORS = {
 class ColoredFormatter(logging.Formatter):
     def format(self, record):
         level_color = COLORS.get(record.levelname, COLORS.get("RESET"))
-        record.levelname = f"{level_color}{record.levelname}{COLORS.get('RESET')}"
+        record.levelname = f"{level_color}| {record.levelname:<9}{COLORS.get('RESET')}"
         return super().format(record)
 
 
@@ -24,24 +24,20 @@ class LoggerHandler:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(log_level)
         formatter = ColoredFormatter(
-            "\033[1;97m[%(asctime)s] \033[1;96m| %(levelname)-9s \033[1;94m| %(module)s:%(funcName)s:%(lineno)d\033[0m %(message)s",
+            "\033[1;97m[%(asctime)s] %(levelname)s \033[1;96m| %(module)s:%(funcName)s:%(lineno)d\033[0m %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
         )
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
 
+    def debug(self, message): self.send_message("DEBUG", message)
+    def info(self, message): self.send_message("INFO", message)
+    def warning(self, message): self.send_message("WARNING", message)
+    def error(self, message): self.send_message("ERROR", message)
+    def critical(self, message): self.send_message("CRITICAL", message)
+
     def send_message(self, log_type: str, message: str):
         log_function = getattr(self.logger, log_type.lower(), self.logger.warning)
         color = COLORS.get(log_type, COLORS["RESET"])
         log_function(f"{color}| {message}{COLORS['RESET']}")
-
-
-log = LoggerHandler()
-
-try:
-    for log_type in ["INFO", "DEBUG", "WARNING", "ERROR", "CRITICAL"]:
-        log.send_message(log_type, f"Iteration {log_type}: Halo World!")
-        time.sleep(1)
-except KeyboardInterrupt:
-    log.send_message("WARNING", "Program dihentikan oleh pengguna.")
