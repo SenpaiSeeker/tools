@@ -1,5 +1,4 @@
-import logging
-import sys
+import logging, sys, time, pytz, datetime 
 
 COLORS = {
     "INFO": "\033[1;92m",  # Full Bright Green
@@ -12,9 +11,16 @@ COLORS = {
 
 
 class ColoredFormatter(logging.Formatter):
+    def formatTime(self, record, datefmt=None):
+        timezone = pytz.timezone("Asia/Jakarta")
+        utc_time = datetime.datetime.utcfromtimestamp(record.created).replace(tzinfo=pytz.utc)
+        local_time = utc_time.astimezone(timezone)
+
+        return local_time.strftime(datefmt) if datefmt else local_time.strftime("%Y-%m-%d %H:%M:%S")
+        
     def format(self, record):
         level_color = COLORS.get(record.levelname, COLORS.get("RESET"))
-        record.levelname = f"{level_color}| {record.levelname:<9}{COLORS.get('RESET')}"
+        record.levelname = f"{level_color}| {record.levelname:<8}{COLORS.get('RESET')}"
         return super().format(record)
 
 
