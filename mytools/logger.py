@@ -27,5 +27,3 @@ class LoggerHandler:
         log_function = getattr(self.logger, log_type.lower(), self.logger.warning)
         color = COLORS.get(log_type, COLORS["RESET"])
         log_function(f"{color}| {message}{COLORS['RESET']}")
-
-
