@@ -22,7 +22,7 @@ class LocalDataBase:
         file_name: str = "database",
         binary_keys: int = 14151819154911914,
     ):
-        self.binary = BinaryEncryptor(binary_keys)
+        self.binary = BinaryCipher(binary_keys)
         self.data_file = f"{file_name}.json"
         self.git_repo_path = "."
         self._initialize_files()
