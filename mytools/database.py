@@ -158,11 +158,11 @@ class MongoDataBase:
         self,
         mongo_url: str,
         file_name: str = "database",
-        crypto_keys: int = 14151819154911914,
+        bytes_keys: int = 14151819154911914,
     ):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[file_name]
-        self.crypto = BytesCipher(crypto_keys)
+        self.bytes = BytesCipher(crypto_keys)
 
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         update_data = {"$set": {f"{var_key}.{query_name}": value}}
@@ -219,9 +219,9 @@ class MongoDataBase:
     def saveBot(self, user_id: int, api_id: int, api_hash: str, value: str, is_token: bool = False):
         update_data = {
             "$set": {
-                "api_id": self.crypto.encrypt(str(api_id)),
-                "api_hash": self.crypto.encrypt(api_hash),
-                "bot_token" if is_token else "session_string": self.crypto.encrypt(value),
+                "api_id": self.bytes.encrypt(str(api_id)),
+                "api_hash": self.bytes.encrypt(api_hash),
+                "bot_token" if is_token else "session_string": self.bytes.encrypt(value),
             }
         }
         return self.data.bot.update_one({"user_id": user_id}, update_data, upsert=True)
@@ -231,9 +231,9 @@ class MongoDataBase:
         return [
             {
                 "name": str(bot_data["user_id"]),
-                "api_id": int(self.crypto.decrypt(str(bot_data["api_id"]))),
-                "api_hash": self.crypto.decrypt(bot_data["api_hash"]),
-                field: self.crypto.decrypt(bot_data.get(field)),
+                "api_id": int(self.bytes.decrypt(str(bot_data["api_id"]))),
+                "api_hash": self.bytes.decrypt(bot_data["api_hash"]),
+                field: self.bytes.decrypt(bot_data.get(field)),
             }
             for bot_data in self.data.bot.find({"user_id": {"$exists": 1}})
         ]
