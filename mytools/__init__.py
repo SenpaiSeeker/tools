@@ -1,7 +1,7 @@
 from .button import Button
 from .chatbot import Api, ImageGen
 from .database import LocalDataBase, MongoDataBase
-from .encrypt import BinaryEncryptor, CryptoEncryptor, ShiftChipher, save_code
+from .encrypt import BinaryCipher, BytesCipher, ShiftChipher, save_code
 from .getuser import Extract
 from .logger import LoggerHandler
 from .misc import Handler
