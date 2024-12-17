@@ -8,7 +8,6 @@ from .misc import Handler
 from .trans import Translate
 
 __version__ = "0.1.dev5"
-
 mytoolsID = f"""
 {"="*60}
   __  ____   __  _____ ___   ___  _     ____    ___ ____  
