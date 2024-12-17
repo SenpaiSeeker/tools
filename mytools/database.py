@@ -162,7 +162,7 @@ class MongoDataBase:
     ):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[file_name]
-        self.bytes = BytesCipher(crypto_keys)
+        self.bytes = BytesCipher(bytes_keys)
 
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         update_data = {"$set": {f"{var_key}.{query_name}": value}}
