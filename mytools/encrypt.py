@@ -30,7 +30,7 @@ class BytesCipher:
             raise Exception(f"\033[1;31m[ERROR] \033[1;35m|| \033[1;37m{error}\033[0m")
 
 
-class BinaryEncryptor:
+class BinaryCipher:
     def __init__(self, key: int = 31099):
         if not isinstance(key, int) or key < 0:
             raise ValueError("Kunci harus berupa integer positif.")
@@ -65,7 +65,7 @@ def run_code(method: str, key: int, encrypted_data: str):
     try:
         cipher_classes = {
             "shift": ShiftChipher(shift=key),
-            "binary": BinaryEncryptor(key=key),
+            "binary": BinaryCipher(key=key),
             "bytes": BytesCipher(key=key),
         }
         cipher = cipher_classes.get(method)
@@ -78,7 +78,7 @@ def save_code(filename: str, code: str, method: str, key: int):
     try:
         cipher_classes = {
             "shift": ShiftChipher(shift=key),
-            "binary": BinaryEncryptor(key=key),
+            "binary": BinaryCipher(key=key),
             "bytes": BytesCipher(key=key),
         }
         cipher = cipher_classes.get(method)
