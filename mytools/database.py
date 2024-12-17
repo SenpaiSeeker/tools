@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 from pytz import timezone
 
-from .encrypt import BinaryEncryptor, CryptoEncryptor
+from .encrypt import BinaryCipher, BytesCipher
 
 #  _      ____   _____          _        _____       _______       ____           _____ ______  #
 # | |    / __ \ / ____|   /\   | |      |  __ \   /\|__   __|/\   |  _ \   /\    / ____|  ____| #
@@ -22,7 +22,7 @@ class LocalDataBase:
         file_name: str = "database",
         binary_keys: int = 14151819154911914,
     ):
-        self.binary = BinaryEncryptor(int(binary_keys))
+        self.binary = BinaryEncryptor(binary_keys)
         self.data_file = f"{file_name}.json"
         self.git_repo_path = "."
         self._initialize_files()
@@ -162,7 +162,7 @@ class MongoDataBase:
     ):
         self.setup = MongoClient(mongo_url)
         self.data = self.setup[file_name]
-        self.crypto = CryptoEncryptor(str(crypto_keys))
+        self.crypto = BytesCipher(crypto_keys)
 
     def setVars(self, user_id: int, query_name: str, value: str, var_key: str = "variabel"):
         update_data = {"$set": {f"{var_key}.{query_name}": value}}
