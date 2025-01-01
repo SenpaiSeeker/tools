@@ -1,10 +1,13 @@
 import sys
+
 import requests
 
 PYPI_API_BASE_URL = "https://pypi.org"
 
+
 def get_headers(token):
     return {"Authorization": f"Bearer {token}"}
+
 
 def get_package_versions(package_name, token):
     url = f"{PYPI_API_BASE_URL}/pypi/{package_name}/json"
@@ -13,11 +16,13 @@ def get_package_versions(package_name, token):
         print(f"Failed to fetch package versions. HTTP {response.status_code}: {response.text}")
         sys.exit(1)
     data = response.json()
-    return list(data.get('releases', {}).keys())
+    return list(data.get("releases", {}).keys())
+
 
 def delete_version(package_name, version, token):
     print(f"Attempting to delete version {version}... (Not supported via API, skipping)")
     return True
+
 
 def main():
     if len(sys.argv) != 3:
@@ -44,6 +49,7 @@ def main():
             sys.exit(1)
 
     print(f"Processed all versions of {package_name} successfully.")
+
 
 if __name__ == "__main__":
     main()
