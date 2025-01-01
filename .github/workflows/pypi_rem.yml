@@ -33,4 +33,4 @@ jobs:
         env:
           PYPI_TOKEN: ${{ github.event.inputs.api_pypi }}
         run: |
-          python cleanup.py ${{ github.event.inputs.package_name }}
+          python cleanup.py $PYPI_TOKEN ${{ github.event.inputs.package_name }}
