@@ -1,13 +1,10 @@
 import sys
-
 import requests
 
 PYPI_API_BASE_URL = "https://pypi.org"
 
-
 def get_headers(token):
     return {"Authorization": f"Bearer {token}"}
-
 
 def get_package_versions(package_name, token):
     url = f"{PYPI_API_BASE_URL}/pypi/{package_name}/json"
@@ -16,17 +13,11 @@ def get_package_versions(package_name, token):
         print(f"Failed to fetch package versions. HTTP {response.status_code}: {response.text}")
         sys.exit(1)
     data = response.json()
-    return list(data.get("releases", {}).keys())
-
+    return list(data.get('releases', {}).keys())
 
 def delete_version(package_name, version, token):
-    url = f"{PYPI_API_BASE_URL}/manage/project/{package_name}/release/{version}/"
-    response = requests.delete(url, headers=get_headers(token))
-    if response.status_code != 204:
-        print(f"Failed to delete version {version}. HTTP {response.status_code}: {response.text}")
-        return False
+    print(f"Attempting to delete version {version}... (Not supported via API, skipping)")
     return True
-
 
 def main():
     if len(sys.argv) != 3:
@@ -45,15 +36,14 @@ def main():
     print(f"Found versions: {', '.join(versions)}")
 
     for version in versions:
-        print(f"Deleting version {version}...")
+        print(f"Processing version {version}...")
         if delete_version(package_name, version, pypi_token):
-            print(f"Successfully deleted version {version}.")
+            print(f"Skipped deletion of version {version}. (Manual action required)")
         else:
-            print(f"Failed to delete version {version}. Exiting...")
+            print(f"Failed to process version {version}. Exiting...")
             sys.exit(1)
 
-    print(f"All versions of {package_name} have been deleted successfully.")
-
+    print(f"Processed all versions of {package_name} successfully.")
 
 if __name__ == "__main__":
     main()
