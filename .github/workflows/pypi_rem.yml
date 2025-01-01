@@ -1,0 +1,33 @@
+name: PyPi package cleanup
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_pypi:
+        description: 'PyPI API token'
+        required: true
+      package_name:
+        description: 'Nama package di PyPI yang akan dihapus'
+        required: true
+
+jobs:
+  delete-package:
+    name: Delete all versions from PyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run cleanup script
+        env:
+          PYPI_TOKEN: ${{ github.event.inputs.api_pypi }}
+        run: |
+          python cleanup.py ${{ github.event.inputs.package_name }}
