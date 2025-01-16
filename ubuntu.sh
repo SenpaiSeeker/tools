@@ -2,6 +2,9 @@ pkg update && pkg upgrade -y
 pkg install proot-distro git curl wget -y
 
 proot-distro install ubuntu
+
+echo-e "proot-distro login ubuntu" > ~/.bashrc 
+
 proot-distro login ubuntu
 
 apt update && apt upgrade -y
