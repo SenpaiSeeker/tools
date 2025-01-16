@@ -22,7 +22,7 @@ echo '📦 Memperbarui paket di Ubuntu...'
 apt update && apt upgrade -y
 
 echo '🔧 Menginstal alat bantu...'
-apt install -y curl wget software-properties-common
+apt install -y curl nano wget software-properties-common
 
 echo '🐍 Menginstal Python3, pip3, dan virtualenv...'
 apt install -y python3 python3-pip python3-venv
