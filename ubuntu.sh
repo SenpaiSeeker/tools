@@ -1,41 +1,41 @@
-#!/bin/bash
+RED='\033[38;2;255;0;0m'
+GREEN='\033[38;2;0;255;0m'
+YELLOW='\033[38;2;255;255;0m'
+BLUE='\033[38;2;0;0;255m'
+NC='\033[0m'
 
-# Step 1: Perbarui Termux dan Instal Dependensi
-echo "📦 Memperbarui Termux dan menginstal dependensi utama..."
+echo -e "${BLUE}📦 Memperbarui Termux dan menginstal dependensi utama...${NC}"
 pkg update && pkg upgrade -y
 pkg install proot-distro git curl wget -y
 
-# Step 2: Instal Ubuntu Menggunakan proot-distro
-echo "🐧 Menginstal Ubuntu di Termux..."
+echo -e "${YELLOW}🐧 Menginstal Ubuntu di Termux...${NC}"
 proot-distro install ubuntu
 
-# Step 3: Tambahkan Login Otomatis ke Ubuntu Saat Termux Dibuka
-echo "🔗 Menambahkan otomatisasi login Ubuntu..."
+echo -e "${GREEN}🔗 Menambahkan otomatisasi login Ubuntu...${NC}"
 if ! grep -q "proot-distro login ubuntu" ~/.bashrc; then
     echo "proot-distro login ubuntu" >> ~/.bashrc
 fi
 
-# Step 4: Masuk ke Ubuntu dan Jalankan Instalasi
-echo "➡️ Masuk ke Ubuntu dan memulai instalasi perangkat lunak..."
+echo -e "${RED}➡️ Masuk ke Ubuntu dan memulai instalasi perangkat lunak...${NC}"
 proot-distro login ubuntu <<EOF
-echo '📦 Memperbarui paket di Ubuntu...'
-apt update && apt upgrade -y
+    echo -e '${BLUE}📦 Memperbarui paket di Ubuntu...${NC}'
+    apt update && apt upgrade -y
 
-echo '🔧 Menginstal alat bantu...'
-apt install -y curl nano wget software-properties-common
+    echo -e '${GREEN}🔧 Menginstal alat bantu...${NC}'
+    apt install -y curl nano wget software-properties-common
 
-echo '🐍 Menginstal Python3, pip3, dan virtualenv...'
-apt install -y python3 python3-pip python3-venv
+    echo -e '${YELLOW}🐍 Menginstal Python3, pip3, dan virtualenv...${NC}'
+    apt install -y python3 python3-pip python3-venv
 
-echo '🌐 Menginstal Node.js dan npm...'
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-apt install -y nodejs
+    echo -e '${RED}🌐 Menginstal Node.js dan npm...${NC}'
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    apt install -y nodejs
 
-echo '🔧 Menginstal Git dan build-essential...'
-apt install -y git build-essential
+    echo -e '${BLUE}🔧 Menginstal Git dan build-essential...${NC}'
+    apt install -y git build-essential
 
-echo '✅ Semua perangkat lunak berhasil diinstal!'
+    echo -e '${GREEN}✅ Semua perangkat lunak berhasil diinstal!${NC}'
 EOF
 
-# Step 5: Pesan Selesai
-echo "🎉 Instalasi selesai! Setiap kali membuka Termux, Anda akan otomatis masuk ke Ubuntu."
+echo -e "${YELLOW}🎉 Instalasi selesai!${NC}"
+echo -e "${GREEN}Setiap kali membuka Termux, Anda akan otomatis masuk ke Ubuntu.${NC}"
