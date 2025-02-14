@@ -45,3 +45,5 @@ echo -e "${YELLOW}🎉 Instalasi selesai!${NC}"
 echo -e "${GREEN}Setiap kali membuka Termux, Anda akan otomatis masuk ke Ubuntu.${NC}"
 
 source ~/.bashrc
+
+echo -e  "${GREEN}⭐️ SPECIAL THANKS TO @NORSODIKIN"
