@@ -43,7 +43,7 @@ proot-distro login ubuntu -- bash -c "
 
 echo -e "${YELLOW}🎉 Instalasi selesai!${NC}"
 echo -e "${GREEN}Setiap kali membuka Termux, Anda akan otomatis masuk ke Ubuntu.${NC}"
-echo -e  "${GREEN}⭐️ SPECIAL THANKS TO @NORSODIKIN"
+echo -e "${GREEN}⭐️ SPECIAL THANKS TO @NORSODIKIN"
 
 source ~/.bashrc
 
