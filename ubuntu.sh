@@ -16,17 +16,20 @@ if ! grep -q "proot-distro login ubuntu" ~/.bashrc; then
     echo -e "echo -e \"\033[38;2;255;255;0m  🏴‍☠️  SELAMAT DATANG DI TERMUX  🏴‍☠️ \033[0m\"" >> ~/.bashrc
     echo -e "echo -e \"\033[38;2;0;0;255m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\"" >> ~/.bashrc
     echo -e "echo -e \"📌 \033[38;2;0;255;0mHostname:\033[0m \$(hostname)\"" >> ~/.bashrc
-    echo -e "echo -e \"📅 \033[38;2;0;255;0mTanggal :\033[0m \$(date)\"" >> ~/.bashrc
+    echo -e "echo -e \"📅 \033[38;2;0;255;0mTanggal :\033[0m \$(date '+%d/%m/%Y %H:%M:%S')\"" >> ~/.bashrc
     echo -e "echo -e \"📂 \033[38;2;0;255;0mDirektori Kerja :\033[0m \$(pwd)\"" >> ~/.bashrc
     echo -e "echo -e \"💻 \033[38;2;255;255;0mCPU Cores: \033[0m \$(nproc)\"" >> ~/.bashrc
-    echo -e "TOTAL_RAM=\$(grep MemTotal /proc/meminfo | awk '{print \$2 / 1024}') && TOTAL_RAM_MB=\$(printf \"%.0f\" \$TOTAL_RAM)" >> ~/.bashrc
-    echo -e "USED_RAM=\$(free | awk '/Mem:/ {print \$3 / 1024}') && USED_RAM_MB=\$(printf \"%.0f\" \$USED_RAM)" >> ~/.bashrc
-    echo -e "FREE_RAM=\$(free | awk '/Mem:/ {print \$4 / 1024}') && FREE_RAM_MB=\$(printf \"%.0f\" \$FREE_RAM)" >> ~/.bashrc
-    echo -e "RAM_USAGE_PERCENT=\$(free | awk '/Mem:/ {printf \"%.1f\", (\$3/\$2) * 100}')" >> ~/.bashrc
-    echo -e "RAM_FREE_PERCENT=\$(free | awk '/Mem:/ {printf \"%.1f\", (\$4/\$2) * 100}')" >> ~/.bashrc
+    
+    echo -e "TOTAL_RAM_MB=\$(awk '/MemTotal/ {print \$2 / 1024}' /proc/meminfo | xargs printf \"%.0f\")" >> ~/.bashrc
+    echo -e "AVAILABLE_RAM_MB=\$(awk '/MemAvailable/ {print \$2 / 1024}' /proc/meminfo | xargs printf \"%.0f\")" >> ~/.bashrc
+    echo -e "USED_RAM_MB=\$((TOTAL_RAM_MB - AVAILABLE_RAM_MB))" >> ~/.bashrc
+    echo -e "RAM_USAGE_PERCENT=\$(awk \"BEGIN {printf \\\"%.1f\\\", (\$USED_RAM_MB/\$TOTAL_RAM_MB) * 100}\")" >> ~/.bashrc
+    echo -e "RAM_FREE_PERCENT=\$(awk \"BEGIN {printf \\\"%.1f\\\", (\$AVAILABLE_RAM_MB/\$TOTAL_RAM_MB) * 100}\")" >> ~/.bashrc
+    
     echo -e "echo -e \"🧠 \033[38;2;255;255;0mRAM Total: \033[0m \${TOTAL_RAM_MB} MB\"" >> ~/.bashrc
     echo -e "echo -e \"📊 \033[38;2;255;255;0mRAM Digunakan: \033[0m \${USED_RAM_MB} MB (\${RAM_USAGE_PERCENT}%)\"" >> ~/.bashrc
-    echo -e "echo -e \"📊 \033[38;2;255;255;0mRAM Tersisa: \033[0m \${FREE_RAM_MB} MB (\${RAM_FREE_PERCENT}%)\"" >> ~/.bashrc
+    echo -e "echo -e \"📊 \033[38;2;255;255;0mRAM Tersisa: \033[0m \${AVAILABLE_RAM_MB} MB (\${RAM_FREE_PERCENT}%)\"" >> ~/.bashrc
+    
     echo -e "echo -e \"\033[38;2;0;0;255m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\"" >> ~/.bashrc
     echo -e "echo -e \"🛠 \033[38;2;255;255;0mGunakan perintah berikut untuk memulai:\033[0m\"" >> ~/.bashrc
     echo -e "echo -e \"   🔹 \033[38;2;0;255;0mls\033[0m  - Menampilkan daftar file\"" >> ~/.bashrc
