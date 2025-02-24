@@ -37,8 +37,8 @@ if ! grep -q "proot-distro login ubuntu" ~/.bashrc; then
     echo -e "echo -e \"   🔹 \033[38;2;0;255;0mnano <file>\033[0m - Edit file\"" >> ~/.bashrc
     echo -e "echo -e \"   🔹 \033[38;2;0;255;0mexit\033[0m - Keluar dari Termux\"" >> ~/.bashrc
     echo -e "echo -e \"\033[38;2;0;0;255m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\"" >> ~/.bashrc
-    echo -e "echo -e \"⭐️ \033[38;2;255;255;0mSPECIAL THANKS TO @NorSodikin\033[0m\"" >> ~/.bashrc
     echo -e "echo -e \"🚀 \033[38;2;255;255;0mMemasuki Ubuntu secara otomatis...\033[0m\"" >> ~/.bashrc
+    echo -e "echo -e \"⭐️ \033[38;2;255;255;0mSPECIAL THANKS TO @NorSodikin\033[0m\"" >> ~/.bashrc
     echo "proot-distro login ubuntu" >> ~/.bashrc
 fi
 
