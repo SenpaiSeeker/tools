@@ -37,6 +37,7 @@ if ! grep -q "proot-distro login ubuntu" ~/.bashrc; then
     echo -e "echo -e \"   🔹 \033[38;2;0;255;0mnano <file>\033[0m - Edit file\"" >> ~/.bashrc
     echo -e "echo -e \"   🔹 \033[38;2;0;255;0mexit\033[0m - Keluar dari Termux\"" >> ~/.bashrc
     echo -e "echo -e \"\033[38;2;0;0;255m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\"" >> ~/.bashrc
+    echo -e "echo -e \"⭐️ \033[38;2;255;255;0mSPECIAL THANKS TO @NorSodikin\033[0m\"" >> ~/.bashrc
     echo -e "echo -e \"🚀 \033[38;2;255;255;0mMemasuki Ubuntu secara otomatis...\033[0m\"" >> ~/.bashrc
     echo "proot-distro login ubuntu" >> ~/.bashrc
 fi
@@ -61,9 +62,5 @@ proot-distro login ubuntu -- bash -c "
 
     echo -e '\033[38;2;0;255;0m✅ Semua perangkat lunak berhasil diinstal!\033[0m'
 "
-
-echo -e "\033[38;2;255;255;0m🎉 Instalasi selesai!\033[0m"
-echo -e "\033[38;2;0;255;0mSetiap kali membuka Termux, Anda akan otomatis masuk ke Ubuntu.\033[0m"
-echo -e "\033[38;2;0;255;0m⭐️ SPECIAL THANKS TO @NORSODIKIN\033[0m"
 
 source ~/.bashrc
