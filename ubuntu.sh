@@ -13,7 +13,7 @@ echo -e "\033[38;2;0;255;0m🔗 Menambahkan otomatisasi login Ubuntu...\033[0m"
 if ! grep -q "proot-distro login ubuntu" ~/.bashrc; then
     echo -e "clear" >> ~/.bashrc
     echo -e "neofetch"  >> ~/.bashrc
-    echo -e "echo -e \"⭐️ \033[38;2;0;255;0mSPECIAL THANKS TO @NorSodikin\033[0m\""
+    echo -e "echo -e \"⭐️ \033[38;2;0;255;0mSPECIAL THANKS TO @NorSodikin\033[0m\"" >> ~/.bashrc
     echo "proot-distro login ubuntu" >> ~/.bashrc
 fi
 
