@@ -5,4 +5,4 @@ echo '[{"Email": "'"$1"'", "Password": "'"$2"'"}]' > accounts.json
 
 python3 -m venv env && source env/bin/activate && pip3 install -r requirements.txt 
 
-python3 bot.py
+echo -e 3 | python3 bot.py
