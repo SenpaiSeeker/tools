@@ -1,4 +1,4 @@
-PROXY_URLS=("https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&proxy_format=protocolipport&format=text")
+PROXY_URLS=("https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/all.txt")
 
 PROXY_FILE="${1:-proxy.txt}"
 
