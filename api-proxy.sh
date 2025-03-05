@@ -11,8 +11,7 @@ function generate_random_color() {
 function log_message() {
     local type="$1"
     local message="$2"
-    local datetime
-    datetime=$(date +"%Y-%m-%d %H:%M:%S")
+    local datetime=$(date +"%Y-%m-%d %H:%M:%S")
     local color
 
     case "$type" in
@@ -21,7 +20,8 @@ function log_message() {
         *) color="\033[1;37m";;
     esac
 
-    echo -e "\033[1;37m[$datetime] \033[1;35m| ${color}[$type] \033[1;35m| $(generate_random_color)$message\033[0m"
+    local random_color=$(generate_random_color)
+    echo -e "\033[1;37m[$datetime] \033[1;35m| ${color}[$type] \033[1;35m| ${random_color}$message\033[0m"
 }
 
 function fetch_proxies() {
@@ -31,8 +31,6 @@ function fetch_proxies() {
     curl -s -o "$temp_file" -w "%{http_code}" "$url" | {
         read -r status_code
         if [[ "$status_code" -eq 200 ]]; then
-            local count
-            count=$(wc -l < "$temp_file")
             cat "$temp_file" >> "$PROXY_FILE"
         else
             log_message "ERROR" "Failed to fetch proxies from $url. Status code: $status_code"
@@ -48,8 +46,7 @@ function process_proxies() {
 
     fetch_proxies "$PROXY_URLS"
     
-    local total_count
-    total_count=$(wc -l < "$PROXY_FILE")
+    local total_count=$(wc -l < "$PROXY_FILE")
     log_message "INFO" "Total proxies saved to $PROXY_FILE: $total_count."
 }
 
