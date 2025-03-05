@@ -1,5 +1,4 @@
-PROXY_URLS=("https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/all.txt")
-
+PROXY_URLS="https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/all.txt"
 PROXY_FILE="${1:-proxy.txt}"
 
 function log_message() {
@@ -40,12 +39,9 @@ function process_proxies() {
     log_message "INFO" "Starting to fetch proxies..."
     > "$PROXY_FILE"
 
-    for url in "${PROXY_URLS[@]}"; do
-        fetch_proxies "$url"
-    done
+    fetch_proxies "$PROXY_URLS"
 
-    local total_count
-    total_count=$(wc -l < "$PROXY_FILE")
+    local total_count=$(wc -l < "$PROXY_FILE")
     log_message "INFO" "Total proxies saved to $PROXY_FILE: $total_count."
 }
 
