@@ -1,11 +1,20 @@
-function tampilkan_menu() {
-    echo "Pilih opsi:"
-    echo "1) Clone repositori"
-    echo "2) Hosting langsung dari VPS"
-    read -p "Masukkan pilihan Anda (1 atau 2): " PILIHAN
+function generate_random_color() {
+    local r=$(shuf -i 128-255 -n 1)
+    local g=$(shuf -i 128-255 -n 1)
+    local b=$(shuf -i 128-255 -n 1)
+    echo "\033[38;2;${r};${g};${b}m"
+}
+reset="\033[0m"
+
+function display_menu() {
+    local color=$(generate_random_color)
+    echo -e "${color}Pilih opsi:${reset}"
+    echo -e "${color}1) Clone repositori${reset}"
+    echo -e "${color}2) Hosting langsung dari VPS${reset}"
+    read -p "$(echo -e "${color}Masukkan pilihan Anda (1 atau 2): ${reset}")" CHOICE
 }
 
-function clone_repo() {
+function clone_repository() {
     local REPO_CLONE=$1
     local REPO_REMOTE=$2
     local GITHUB_TOKEN=$3
@@ -31,7 +40,7 @@ function clone_repo() {
     git push -u origin main
 }
 
-function host_repo() {
+function host_repository() {
     local REPO_REMOTE=$1
     local GITHUB_TOKEN=$2
     local COMMIT_MESSAGE=${3:-"initial"}
@@ -53,26 +62,32 @@ function host_repo() {
     git push -u origin main
 }
 
-tampilkan_menu
+function handle_user_choice() {
+    case $CHOICE in
+        1)
+            local color=$(generate_random_color)
+            read -p "$(echo -e "${color}Masukkan URL clone repositori: ${reset}")" REPO_CLONE
+            read -p "$(echo -e "${color}Masukkan URL repositori remote: ${reset}")" REPO_REMOTE
+            read -p "$(echo -e "${color}Masukkan token GitHub Anda: ${reset}")" GITHUB_TOKEN
+            read -p "$(echo -e "${color}Masukkan pesan commit (default: 'initial'): ${reset}")" COMMIT_MESSAGE
+            COMMIT_MESSAGE=${COMMIT_MESSAGE:-"initial"}
+            clone_repository "$REPO_CLONE" "$REPO_REMOTE" "$GITHUB_TOKEN" "$COMMIT_MESSAGE"
+            ;;
+        2)
+            local color=$(generate_random_color)
+            read -p "$(echo -e "${color}Masukkan URL repositori remote: ${reset}")" REPO_REMOTE
+            read -p "$(echo -e "${color}Masukkan token GitHub Anda: ${reset}")" GITHUB_TOKEN
+            read -p "$(echo -e "${color}Masukkan pesan commit (default: 'initial'): ${reset}")" COMMIT_MESSAGE
+            COMMIT_MESSAGE=${COMMIT_MESSAGE:-"initial"}
+            host_repository "$REPO_REMOTE" "$GITHUB_TOKEN" "$COMMIT_MESSAGE"
+            ;;
+        *)
+            local color=$(generate_random_color)
+            echo -e "${color}Pilihan tidak valid. Keluar.${reset}"
+            exit 1
+            ;;
+    esac
+}
 
-case $PILIHAN in
-    1)
-        read -p "Masukkan URL clone repositori: " REPO_CLONE
-        read -p "Masukkan URL repositori remote: " REPO_REMOTE
-        read -p "Masukkan token GitHub Anda: " GITHUB_TOKEN
-        read -p "Masukkan pesan commit (default: 'initial'): " COMMIT_MESSAGE
-        COMMIT_MESSAGE=${COMMIT_MESSAGE:-"initial"}
-        clone_repo "$REPO_CLONE" "$REPO_REMOTE" "$GITHUB_TOKEN" "$COMMIT_MESSAGE"
-        ;;
-    2)
-        read -p "Masukkan URL repositori remote: " REPO_REMOTE
-        read -p "Masukkan token GitHub Anda: " GITHUB_TOKEN
-        read -p "Masukkan pesan commit (default: 'initial'): " COMMIT_MESSAGE
-        COMMIT_MESSAGE=${COMMIT_MESSAGE:-"initial"}
-        host_repo "$REPO_REMOTE" "$GITHUB_TOKEN" "$COMMIT_MESSAGE"
-        ;;
-    *)
-        echo "Pilihan tidak valid. Keluar."
-        exit 1
-        ;;
-esac
+display_menu
+handle_user_choice
