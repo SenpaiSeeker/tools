@@ -5,4 +5,4 @@ npm install
 
 echo "$1" > token.txt 
 
-timeout 2m npm start
+timeout 5m npm start
