@@ -2,11 +2,11 @@ coin=$1
 wallet=$2
 
 if [ -z "$coin" ] || [ -z "$wallet" ]; then
-  echo "🚫 Penggunaan: bash mining.sh coin wallet 🚫"
-  exit 1
+	echo "🚫 Penggunaan: bash mining.sh coin wallet 🚫"
+	exit 1
 fi
 
-workers=$(tr -dc 'a-z0-9' < /dev/urandom | head -c 8)
+workers=$(tr -dc 'a-z0-9' </dev/urandom | head -c 8)
 
 echo "🔽 Download XMRig miner 🔽"
 wget https://github.com/xmrig/xmrig/releases/download/v6.21.3/xmrig-6.21.3-linux-static-x64.tar.gz
