@@ -14,7 +14,7 @@ jobs:
         run: sudo apt-get install -y shellcheck
 
       - name: Run ShellCheck
-        run: findfind . -type f \( -name "*.sh" -o -name "*.bash" \) -exec shellcheck {} \;
+        run: find . -type f \( -name "*.sh" -o -name "*.bash" \) -exec shellcheck {} \;
 
       - name: Install shfmt
         run: sudo apt-get install -y shfmt
