@@ -3,6 +3,6 @@ cd Despeed
 
 npm install
 
-echo "$1" >token.txt
+echo "$1" > token.txt
 
 timeout 5m npm start
