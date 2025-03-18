@@ -12,7 +12,6 @@ function log_message() {
     local type="$1"
     local message="$2"
     local datetime=$(date +"%Y-%m-%d %H:%M:%S")
-    local color
 
     case "$type" in
         "INFO") color="\033[1;32m" ;;
@@ -28,21 +27,21 @@ function fetch_proxies() {
     local url="$1"
     local temp_file="temp_proxies.txt"
 
-    curl -s "$url" -o "$temp_file"
-    if [[ $? -eq 0 ]]; then
-        log_message "INFO" "Fetched proxies successfully."
-        cat "$temp_file" > "$PROXY_FILE"
-    else
-        log_message "ERROR" "Failed to fetch proxies from $url."
+    curl -s -o "$temp_file" -w "%{http_code}" "$url" | {
+        read -r status_code
+        if [[ "$status_code" -eq 200 ]]; then
+            cat "$temp_file" >> "$PROXY_FILE"
+        else
+            log_message "ERROR" "Failed to fetch proxies from $url. Status code: $status_code"
+        fi
         rm -f "$temp_file"
-        exit 1
-    fi
-    rm -f "$temp_file"
+    }
 }
 
 function process_proxies() {
     clear
     log_message "INFO" "Starting to fetch proxies..."
+    > "$PROXY_FILE"
 
     fetch_proxies "$PROXY_URLS"
 
