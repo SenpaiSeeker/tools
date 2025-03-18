@@ -1,6 +1,6 @@
 PROXY_URLS="https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/all.txt"
 PROXY_FILE="${1:-proxy.txt}"
-TEST_URL="http://ip-api.com/json"
+TEST_URL="http://httpbin.org/ip"
 
 function generate_random_color() {
     local r=$(shuf -i 128-255 -n 1)
