@@ -1,4 +1,7 @@
-PROXY_URLS="https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/all.txt"
+PROXY_URLS=(
+    "https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&proxy_format=protocolipport&format=text"
+    "https://raw.githubusercontent.com/monosans/proxy-list/refs/heads/main/proxies/all.txt"
+)
 PROXY_FILE="${1:-proxy.txt}"
 
 function generate_random_color() {
@@ -43,7 +46,9 @@ function process_proxies() {
     log_message "INFO" "Starting to fetch proxies..."
     > "$PROXY_FILE"
 
-    fetch_proxies "$PROXY_URLS"
+    for url in "${PROXY_URLS[@]}"; do
+        fetch_proxies "$url"
+    done
 
     local total_count=$(wc -l < "$PROXY_FILE")
     log_message "INFO" "Total proxies saved to $PROXY_FILE: $total_count."
