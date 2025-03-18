@@ -1,5 +1,6 @@
 PROXY_URLS="https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/all.txt"
 PROXY_FILE="${1:-proxy.txt}"
+TEST_URL="http://ip-api.com/json"
 
 function generate_random_color() {
     local r=$(shuf -i 128-255 -n 1)
@@ -40,7 +41,7 @@ function fetch_proxies() {
 
 function check_proxy() {
     local proxy="$1"
-    if curl -s --proxy "$proxy" --max-time 5 "https://www.google.com" > /dev/null; then
+    if curl -s --proxy "$proxy" --max-time 5 "$TEST_URL" >/dev/null; then
         echo "$proxy" >> "$PROXY_FILE"
         log_message "INFO" "Valid proxy: $proxy"
     else
