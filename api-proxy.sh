@@ -41,7 +41,7 @@ function fetch_proxies() {
 
 function check_proxy() {
     local proxy="$1"
-    if curl -s --proxy "$proxy" --max-time 5 "$TEST_URL" >/dev/null; then
+    if curl -s --proxy "$proxy" --max-time 5 "$TEST_URL" > /dev/null; then
         echo "$proxy" >> "$PROXY_FILE"
         log_message "INFO" "Valid proxy: $proxy"
     else
