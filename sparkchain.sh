@@ -1,7 +1,7 @@
 git clone https://github.com/vonssy/Sparkchain-BOT.git
 cd Sparkchain-BOT
 
-echo '[{"Email": "'"$1"'", "Password": "'"$2"'"}]' > accounts.json
+echo "$1" > accounts.json
 
 python3 -m venv env && source env/bin/activate && pip3 install -r requirements.txt
 
