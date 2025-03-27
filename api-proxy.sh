@@ -7,7 +7,7 @@ function log() {
     local level=$1
     shift
     local message="$*"
-    local timestamp=$(TZ="Asia/Jakarta" date +"%Y-%m-%d %H:%M:%S")
+    local timestamp=$(TZ="Asia/Jakarta" date +"%Y-%m-%d %H:%M:%S %Z")
 
     declare -A colors=(
         [RESET]="\\e[0m" [RED]="\\e[1;91m" [GREEN]="\\e[1;92m"
@@ -23,7 +23,7 @@ function log() {
         CRITICAL) color=${colors[MAGENTA]} ;;
     esac
 
-    printf "${colors[WHITE]}[${timestamp}]${colors[RESET]} ${colors[PURPLE]}|${colors[RESET]} ${color}%-8s${colors[RESET]} ${colors[PURPLE]}|${colors[RESET]} ${colors[BLUE]}${BASH_SOURCE[1]:-unknown}:${FUNCNAME[1]:-unknown}:${BASH_LINENO[1]:-0}${colors[RESET]} ${colors[PURPLE]}|${colors[RESET]} ${color}%s${colors[RESET]}\n" "$level" "$message"
+    printf "${colors[WHITE]}[ ${timestamp} ]${colors[RESET]} ${colors[PURPLE]}|${colors[RESET]} ${color}%-8s${colors[RESET]} ${colors[PURPLE]}|${colors[RESET]} ${colors[BLUE]}${BASH_SOURCE[1]:-unknown}:${FUNCNAME[1]:-unknown}:${BASH_LINENO[1]:-0}${colors[RESET]} ${colors[PURPLE]}|${colors[RESET]} ${color}%s${colors[RESET]}\n" "$level" "$message"
 }
 
 function fetch_proxies() {
