@@ -6,29 +6,31 @@ function generate_random_color() {
 }
 reset="\033[0m"
 
-function setup_termux_ubuntu() {
+function setup_termux_system() {
+    local distro=$1
+
     echo -e "$(generate_random_color)📦 Memperbarui Termux dan menginstal dependensi utama...$reset"
     pkg update && pkg upgrade -y
     pkg install -y proot-distro neofetch
 
-    echo -e "$(generate_random_color)🐧 Menginstal Ubuntu di Termux...$reset"
-    proot-distro install ubuntu
+    echo -e "$(generate_random_color)🐧 Menginstal $distro di Termux...$reset"
+    proot-distro install "$distro"
 
     if [ ! -f ~/.bashrc ]; then
         touch ~/.bashrc
     fi
 
-    echo -e "$(generate_random_color)🔗 Menambahkan otomatisasi login Ubuntu...$reset"
-    if ! grep -q "proot-distro login ubuntu" ~/.bashrc; then
+    echo -e "$(generate_random_color)🔗 Menambahkan otomatisasi login $distro...$reset"
+    if ! grep -q "proot-distro login $distro" ~/.bashrc; then
         echo -e "clear" >> ~/.bashrc
         echo -e "neofetch" >> ~/.bashrc
         echo -e "echo -e \"⭐️ \033[38;2;0;255;0mSPECIAL THANKS TO @NorSodikin\033[0m\"" >> ~/.bashrc
-        echo "proot-distro login ubuntu" >> ~/.bashrc
+        echo "proot-distro login $distro" >> ~/.bashrc
     fi
 
-    echo -e "$(generate_random_color)➡️ Masuk ke Ubuntu dan memulai instalasi perangkat lunak...$reset"
-    proot-distro login ubuntu -- bash -c "
-        echo -e '$(generate_random_color)📦 Memperbarui paket di Ubuntu...$reset'
+    echo -e "$(generate_random_color)➡️ Masuk ke $distro dan memulai instalasi perangkat lunak...$reset"
+    proot-distro login "$distro" -- bash -c "
+        echo -e '$(generate_random_color)📦 Memperbarui paket di $distro...$reset'
         apt update && apt upgrade -y
 
         echo -e '$(generate_random_color)🔧 Menginstal alat bantu...$reset'
@@ -47,4 +49,14 @@ function setup_termux_ubuntu() {
     source ~/.bashrc
 }
 
-setup_termux_ubuntu
+echo -e "$(generate_random_color)===== MENU INSTALLASI LINUX DI TERMUX =====$reset"
+echo -e "1. Ubuntu"
+echo -e "2. Debian"
+echo -ne "$(generate_random_color)Pilih sistem (1/2): $reset"
+read choice
+
+case $choice in
+    1) setup_termux_system "ubuntu" ;;
+    2) setup_termux_system "debian" ;;
+    *) echo -e "$(generate_random_color)❌ Pilihan tidak valid!$reset" ;;
+esac
