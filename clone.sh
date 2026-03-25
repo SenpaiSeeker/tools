@@ -46,7 +46,7 @@ function clone_repository() {
     git remote add origin "https://$GITHUB_TOKEN@$REPO_REMOTE_CLEAN"
 
     echo "Mendorong perubahan ke repositori remote..."
-    git push -u origin main || {
+    git push -u origin selfbot || {
         echo "Gagal mendorong perubahan."
         exit 1
     }
