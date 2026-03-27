@@ -40,7 +40,7 @@ function clone_repository() {
 
     git add .
     git commit -m "$COMMIT_MESSAGE"
-    git branch -M main 
+    git branch -M main
 
     REPO_REMOTE_CLEAN="${REPO_REMOTE#https://}"
     git remote add origin "https://$GITHUB_TOKEN@$REPO_REMOTE_CLEAN"
