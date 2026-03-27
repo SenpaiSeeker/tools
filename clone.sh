@@ -46,7 +46,7 @@ function clone_repository() {
     git remote add origin "https://$GITHUB_TOKEN@$REPO_REMOTE_CLEAN"
 
     echo "Mendorong perubahan ke repositori remote..."
-    git push -u origin main --forse || {
+    git push -u origin main || {
         echo "Gagal mendorong perubahan."
         exit 1
     }
@@ -73,7 +73,7 @@ function host_repository() {
     git remote add origin "https://$GITHUB_TOKEN@$REPO_REMOTE_CLEAN"
 
     echo "Mendorong perubahan ke repositori remote..."
-    git push -u origin main --force || {
+    git push -u origin main || {
         echo "Gagal mendorong perubahan."
         exit 1
     }
