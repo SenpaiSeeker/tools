@@ -18,7 +18,8 @@ function clone_repository() {
     local REPO_CLONE=$1
     local REPO_REMOTE=$2
     local GITHUB_TOKEN=$3
-    local COMMIT_MESSAGE=${4:-"initial"}
+    local BRANCH=${4:-"main"}
+    local COMMIT_MESSAGE=${5:-"initial"}
 
     echo "Mengkloning repositori..."
     git clone "$REPO_CLONE" || {
@@ -40,13 +41,13 @@ function clone_repository() {
 
     git add .
     git commit -m "$COMMIT_MESSAGE"
-    git branch -M main
+    git branch -M "$BRANCH"
 
     REPO_REMOTE_CLEAN="${REPO_REMOTE#https://}"
     git remote add origin "https://$GITHUB_TOKEN@$REPO_REMOTE_CLEAN"
 
-    echo "Mendorong perubahan ke repositori remote..."
-    git push -u origin main || {
+    echo "Push ke branch $BRANCH..."
+    git push -u origin "$BRANCH" || {
         echo "Gagal mendorong perubahan."
         exit 1
     }
@@ -55,7 +56,8 @@ function clone_repository() {
 function host_repository() {
     local REPO_REMOTE=$1
     local GITHUB_TOKEN=$2
-    local COMMIT_MESSAGE=${3:-"initial"}
+    local BRANCH=${3:-"main"}
+    local COMMIT_MESSAGE=${4:-"initial"}
 
     if [ ! -d ".git" ]; then
         rm -rf .git
@@ -67,13 +69,13 @@ function host_repository() {
 
     git add .
     git commit -m "$COMMIT_MESSAGE"
-    git branch -M main
+    git branch -M "$BRANCH"
 
     REPO_REMOTE_CLEAN="${REPO_REMOTE#https://}"
     git remote add origin "https://$GITHUB_TOKEN@$REPO_REMOTE_CLEAN"
 
-    echo "Mendorong perubahan ke repositori remote..."
-    git push -u origin main || {
+    echo "Push ke branch $BRANCH..."
+    git push -u origin "$BRANCH" || {
         echo "Gagal mendorong perubahan."
         exit 1
     }
@@ -86,17 +88,25 @@ function handle_user_choice() {
             read -p "$(echo -e "${color}Masukkan URL clone repositori: ${reset}")" REPO_CLONE
             read -p "$(echo -e "${color}Masukkan URL repositori remote: ${reset}")" REPO_REMOTE
             read -p "$(echo -e "${color}Masukkan token GitHub Anda: ${reset}")" GITHUB_TOKEN
+            read -p "$(echo -e "${color}Masukkan branch (default: main): ${reset}")" BRANCH
             read -p "$(echo -e "${color}Masukkan pesan commit (default: 'initial'): ${reset}")" COMMIT_MESSAGE
+
+            BRANCH=${BRANCH:-"main"}
             COMMIT_MESSAGE=${COMMIT_MESSAGE:-"initial"}
-            clone_repository "$REPO_CLONE" "$REPO_REMOTE" "$GITHUB_TOKEN" "$COMMIT_MESSAGE"
+
+            clone_repository "$REPO_CLONE" "$REPO_REMOTE" "$GITHUB_TOKEN" "$BRANCH" "$COMMIT_MESSAGE"
             ;;
         2)
             local color=$(generate_random_color)
             read -p "$(echo -e "${color}Masukkan URL repositori remote: ${reset}")" REPO_REMOTE
             read -p "$(echo -e "${color}Masukkan token GitHub Anda: ${reset}")" GITHUB_TOKEN
+            read -p "$(echo -e "${color}Masukkan branch (default: main): ${reset}")" BRANCH
             read -p "$(echo -e "${color}Masukkan pesan commit (default: 'initial'): ${reset}")" COMMIT_MESSAGE
+
+            BRANCH=${BRANCH:-"main"}
             COMMIT_MESSAGE=${COMMIT_MESSAGE:-"initial"}
-            host_repository "$REPO_REMOTE" "$GITHUB_TOKEN" "$COMMIT_MESSAGE"
+
+            host_repository "$REPO_REMOTE" "$GITHUB_TOKEN" "$BRANCH" "$COMMIT_MESSAGE"
             ;;
         *)
             local color=$(generate_random_color)
